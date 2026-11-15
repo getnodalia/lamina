@@ -22,9 +22,9 @@ pub fn open_sample(s: &mut Session) -> Result<()> {
     run(s, "text.set", json!({"id": title, "text": "Northern Lights"}))?;
     run(s, "text.set", json!({"id": sub, "text": "A short tour of the aurora — where it comes from, when to look, and how to photograph it"}))?;
     run(s, "slide.notes", json!({"text": "Welcome everyone. This deck was made in Lámina."}))?;
-    // Decorative bands on the title slide.
-    let b = run(s, "shape.insert", json!({"preset": "rect", "rect": [0, 470, 960, 70]}))?;
-    run(s, "shape.fill", json!({"id": last_id(&b), "gradient": {"stops": [[0, "accent1"], [0.5, "accent4"], [1, "accent2"]], "angle": 0}}))?;
+    // A quiet band of aurora green along the foot of the title slide.
+    let b = run(s, "shape.insert", json!({"preset": "rect", "rect": [0, 516, 960, 24]}))?;
+    run(s, "shape.fill", json!({"id": last_id(&b), "color": "accent3"}))?;
     run(s, "shape.line", json!({"id": last_id(&b), "none": true}))?;
     run(s, "shape.rename", json!({"id": last_id(&b), "name": "Aurora Band"}))?;
     run(s, "transition.set", json!({"kind": "fade"}))?;
@@ -53,22 +53,23 @@ pub fn open_sample(s: &mut Session) -> Result<()> {
 
     // Process diagram from shapes.
     run(s, "slide.new", json!({"layout": "titleOnly", "title": "From the Sun to your sky"}))?;
-    let steps = [("Solar wind", "accent2"), ("Magnetosphere", "accent1"), ("Particles collide", "accent4"), ("Light!", "accent3")];
+    // Two colours only: the steps in the deck's dark blue, the result in aurora green.
+    let steps = [("Solar wind", "dk2"), ("Magnetosphere", "dk2"), ("Particles collide", "dk2"), ("Light!", "accent3")];
     let mut prev: Option<u64> = None;
     for (i, (label, color)) in steps.iter().enumerate() {
         let x = 60.0 + i as f64 * 220.0;
-        let v = run(s, "shape.insert", json!({"preset": if i == 3 { "star5" } else { "roundRect" }, "rect": [x, 210, 190, 120], "text": label}))?;
+        let v = run(s, "shape.insert", json!({"preset": if i == 3 { "ellipse" } else { "roundRect" }, "rect": [x, 210, 190, 120], "text": label}))?;
         let id = last_id(&v);
         run(s, "shape.fill", json!({"id": id, "color": color}))?;
         run(s, "shape.line", json!({"id": id, "none": true}))?;
-        run(s, "shape.effects", json!({"id": id, "shadow": "bottom"}))?;
         run(s, "edit.select", json!({"ids": [id]}))?;
         run(s, "format.size", json!({"size": 17}))?;
         run(s, "format.bold", json!({"on": true}))?;
+        run(s, "format.color", json!({"color": "#FFFFFF"}))?;
         run(s, "animation.add", json!({"effect": "zoom", "class": "entrance", "start": if i == 0 { "onClick" } else { "afterPrevious" }}))?;
         if let Some(p) = prev {
             let _ = p;
-            let a = run(s, "shape.insert", json!({"preset": "rightArrow", "rect": [x - 36.0, 255, 32, 30]}))?;
+            let a = run(s, "shape.insert", json!({"preset": "rightArrow", "rect": [x - 30.0, 262, 20, 16]}))?;
             run(s, "shape.fill", json!({"id": last_id(&a), "color": "tx2"}))?;
             run(s, "shape.line", json!({"id": last_id(&a), "none": true}))?;
         }
@@ -118,7 +119,6 @@ pub fn open_sample(s: &mut Session) -> Result<()> {
     let moon = run(s, "shape.insert", json!({"preset": "moon", "rect": [820, 40, 80, 120]}))?;
     run(s, "shape.fill", json!({"id": last_id(&moon), "color": "accent6"}))?;
     run(s, "shape.line", json!({"id": last_id(&moon), "none": true}))?;
-    run(s, "shape.effects", json!({"id": last_id(&moon), "glow": {"color": "accent6", "radius": 10}}))?;
     run(s, "transition.set", json!({"kind": "fade"}))?;
 
     run(s, "section.add", json!({"name": "Introduction", "at": 0}))?;
