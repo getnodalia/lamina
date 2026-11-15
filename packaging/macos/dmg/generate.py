@@ -24,7 +24,7 @@ from PIL import Image, ImageCms
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 # Keep in sync with package.sh (volume name) and README.md (layout).
-VOLUME = "Lámina"
+VOLUME = "Lamina"  # ASCII: HFS+ stores names decomposed and Finder then misses an "á" alias
 WIDTH, HEIGHT = 660, 400  # window content, pt; the background's 1x size
 TITLE_BAR = 32
 ICON_SIZE = 128

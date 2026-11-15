@@ -11,7 +11,7 @@
   <key>CFBundleName</key>
   <string>Lámina</string>
   <key>CFBundleExecutable</key>
-  <string>Lámina</string>
+  <string>Lamina</string>
   <key>CFBundleIdentifier</key>
   <string>dev.danielmiguelt.Lamina</string>
   <key>CFBundleInfoDictionaryVersion</key>
@@ -29,7 +29,7 @@
   <key>LaminaBuildCommit</key>
   <string>@BUILD_SHA@</string>
   <key>CFBundleIconFile</key>
-  <string>Lámina</string>
+  <string>Lamina</string>
   <key>LSApplicationCategoryType</key>
   <string>public.app-category.productivity</string>
   <!-- Must match MACOSX_DEPLOYMENT_TARGET in package.sh. Big Sur is the first release on
@@ -60,7 +60,7 @@
       <key>LSHandlerRank</key>
       <string>Owner</string>
       <key>CFBundleTypeIconFile</key>
-      <string>Lámina</string>
+      <string>Lamina</string>
       <key>LSItemContentTypes</key>
       <array>
         <string>dev.danielmiguelt.lamina.presentation</string>
@@ -130,7 +130,7 @@
         <string>public.presentation</string>
       </array>
       <key>UTTypeIconFile</key>
-      <string>Lámina</string>
+      <string>Lamina</string>
       <key>UTTypeTagSpecification</key>
       <dict>
         <key>public.filename-extension</key>

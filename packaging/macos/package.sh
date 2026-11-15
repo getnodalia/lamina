@@ -115,7 +115,7 @@ notarize() {
 # ---- Lamina.app ----------------------------------------------------------------------------
 echo "==> assembling $APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
-# Executable and icon carry the display name (CFBundleExecutable / CFBundleIconFile).
+# Executable and icon are ASCII; Info.plist names them (CFBundleExecutable / CFBundleIconFile).
 cp "$WORK/bin/lamina" "$APP/Contents/MacOS/Lamina"
 cp "$ROOT/assets/app-icon/lamina.icns" "$APP/Contents/Resources/Lamina.icns"
 # The licences and README, as in the CLI zip, plus the licences of the embedded craft-fonts
@@ -125,6 +125,19 @@ sed -e "s/@VERSION@/$VERSION/g" -e "s/@SHORT_VERSION@/$SHORT_VERSION/g" \
   -e "s/@BUILD_SHA@/${LAMINA_BUILD_SHA:-unknown}/g" \
   "$HERE/Info.plist.in" >"$APP/Contents/Info.plist"
 plutil -lint "$APP/Contents/Info.plist"
+# An executable or icon name that doesn't match a file leaves the app unable to open, with a
+# crossed-out icon in the DMG. Check them here rather than on someone's Mac.
+python3 - "$APP" <<'PY'
+import os, plistlib, sys
+app = sys.argv[1]
+with open(os.path.join(app, "Contents", "Info.plist"), "rb") as f:
+    info = plistlib.load(f)
+missing = [p for p in (os.path.join("MacOS", info["CFBundleExecutable"]),
+                       os.path.join("Resources", info["CFBundleIconFile"] + ".icns"))
+           if not os.path.isfile(os.path.join(app, "Contents", p))]
+if missing:
+    sys.exit(f"error: Info.plist names files the bundle lacks: {missing}")
+PY
 printf 'APPL????' >"$APP/Contents/PkgInfo"
 
 # Sign inside-out: nested code first, then the bundle itself (no --deep on the final signature).
@@ -150,12 +163,21 @@ ln -s /Applications "$STAGE/Applications"
 # Finder window layout: background, icon size and positions (packaging/macos/dmg/README.md).
 mkdir -p "$STAGE/.background"
 cp "$HERE/dmg/background.tiff" "$STAGE/.background/background.tiff"
+# The layout names the volume (the background's alias) and the app (its icon position). A layout
+# left over from another name opens a plain window with no background, so stop the build instead.
+python3 - "$HERE/dmg/dmg-layout.DS_Store" "Lamina" "Lamina.app" <<'PY'
+import sys
+path, volume, app = sys.argv[1:4]
+data = open(path, "rb").read()
+if f"/Volumes/{volume}".encode() not in data or app.encode("utf-16-be") not in data:
+    sys.exit(f"error: {path} is laid out for another volume or app; run packaging/macos/dmg/generate.py")
+PY
 cp "$HERE/dmg/dmg-layout.DS_Store" "$STAGE/.DS_Store"
 rm -f "$DMG" "$WORK/raw.dmg"
 # makehybrid + convert builds the image without attaching a device, unlike `create -srcfolder`,
 # which is flaky on CI runners ("Resource busy") and hangs in sandboxed sessions.
 # The volume name has no version: .DS_Store finds the background through an alias that includes it.
-hdiutil makehybrid -hfs -hfs-volume-name "Lámina" -hfs-openfolder "$STAGE" -o "$WORK/raw.dmg" "$STAGE"
+hdiutil makehybrid -hfs -hfs-volume-name "Lamina" -hfs-openfolder "$STAGE" -o "$WORK/raw.dmg" "$STAGE"
 hdiutil convert "$WORK/raw.dmg" -format UDZO -imagekey zlib-level=9 -o "$DMG"
 rm -f "$WORK/raw.dmg"
 sign "$DMG"
