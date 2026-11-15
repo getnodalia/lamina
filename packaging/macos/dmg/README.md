@@ -9,12 +9,15 @@ Finder scripting on CI, nothing extra installed in the signing job).
 |---|---|
 | `background.svg` | Source of the background, drawn by `tools/dmg-background/draw_background.py` in [nodalia-design](https://github.com/getnodalia/nodalia-design): two Nodalia islands on the window colour, the left one in the Lámina colour (`#B03C67`) with a flat picture of what Lámina does, the right one white under the icons. Its text (Sora) is outlined, so rendering it needs no fonts. |
 | `background.tiff` | The background at 1x (660 × 400 px, 72 dpi) and 2x (1320 × 800 px, 144 dpi) in one HiDPI TIFF (16-colour palette, Deflate, sRGB). Goes to `.background/background.tiff`. |
-| `dmg-layout.DS_Store` | Finder's view settings for the volume: window size, icon size 128, Lámina.app at (326, 205), `Applications` at (574, 205), and the background. Goes to `.DS_Store` in the image; named so it isn't mistaken for (or ignored like) a Finder-generated `.DS_Store`. |
+| `dmg-layout.DS_Store` | Finder's view settings for the volume: window size, icon size 128, Lamina.app at (326, 205), `Applications` at (574, 205), and the background. Goes to `.DS_Store` in the image; named so it isn't mistaken for (or ignored like) a Finder-generated `.DS_Store`. |
 | `generate.py` | Writes `background.tiff` and `dmg-layout.DS_Store` from the SVG and the layout above. |
 
 ## The volume name has no version
 
-The mounted volume is called `Lámina`, not `Lámina <version>`. The layout points at the background
+The mounted volume is called `Lamina`, not `Lamina <version>`, and it is ASCII on purpose: HFS+
+stores a volume name decomposed (`a` plus a combining accent), so an alias naming `Lámina` with a
+precomposed `á` never matches it and the window opens with no background (Lámina 0.1.1). Ágora and
+Ánima use ASCII volume names for the same reason. The layout points at the background
 through an alias that includes the volume name, and Finder resolves it by that name: with a
 versioned name the window keeps its size and icon positions but shows no background (tested).
 The DMG file name (`lamina-<version>-macos-<arch>.dmg`) still carries the version.
