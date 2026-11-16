@@ -773,6 +773,19 @@ fn options_in_backstage_opens_preferences_page() {
     assert_ne!(h.state().session.prefs.smart_guides, before);
 }
 
+/// Spanish affects both navigation and preferences without translating command IDs.
+#[test]
+fn preferences_page_can_be_shown_in_spanish() {
+    let mut app = new_app();
+    app.ui.language = Some(crate::i18n::Language::Es);
+    let mut h = harness(app);
+    h.state_mut().run("app.preferences", json!({})).unwrap();
+    h.run_steps(3);
+    assert_eq!(page(&h), Some(Page::Options));
+    assert!(h.query_by_label("Mostrar guías inteligentes").is_some());
+    assert!(h.query_all_by_label("Preferencias").any(|n| in_nav(n.rect())));
+}
+
 /// About replaces the account entry and opens the About dialog.
 #[test]
 fn about_has_product_links_without_account_controls() {

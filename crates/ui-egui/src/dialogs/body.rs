@@ -1337,29 +1337,47 @@ fn dlg_preferences(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) -> bool {
 
 /// Shared controls for the Preferences page and the legacy dialog.
 pub(crate) fn preference_controls(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) -> bool {
+    ui.horizontal(|ui| {
+        let lang = app.ui.language.unwrap_or_else(crate::i18n::Language::system);
+        let name = ui.label(lang.tr("Interface language:"));
+        let label = match app.ui.language {
+            None => lang.tr("Automatic"),
+            Some(crate::i18n::Language::En) => "English",
+            Some(crate::i18n::Language::Es) => "Español",
+        };
+        let response = egui::ComboBox::from_id_salt("interface-language")
+            .selected_text(label)
+            .show_ui(ui, |ui| {
+                ui.selectable_value(&mut app.ui.language, None, lang.tr("Automatic"));
+                ui.selectable_value(&mut app.ui.language, Some(crate::i18n::Language::En), "English");
+                ui.selectable_value(&mut app.ui.language, Some(crate::i18n::Language::Es), "Español");
+            });
+        let _ = response.response.labelled_by(name.id);
+    });
+    let lang = app.ui.language.unwrap_or_else(crate::i18n::Language::system);
     // The office apps share this order: General (the one theme selector, and the window
     // controls where Lámina draws its own frame), then Editing.
-    ui.label(egui::RichText::new("General").font(theme::bold(15.0)));
+    ui.label(egui::RichText::new(lang.tr("General")).font(theme::bold(15.0)));
     ui.add_space(4.0);
     ui.horizontal(|ui| {
-        ui.label("Display theme:");
+        ui.label(lang.tr("Display theme:"));
         let dark = app.ui.brightness == theme::Brightness::Dark;
-        if ui.radio(!dark, "Light").clicked() && dark {
+        if ui.radio(!dark, lang.tr("Light")).clicked() && dark {
             let _ = app.run("view.dark", json!({"on": false}));
         }
-        if ui.radio(dark, "Dark").clicked() && !dark {
+        if ui.radio(dark, lang.tr("Dark")).clicked() && !dark {
             let _ = app.run("view.dark", json!({"on": true}));
         }
     });
     if app.client_frame {
         ui.horizontal(|ui| {
-            ui.label("Window controls:");
+            ui.label(lang.tr("Window controls:"));
             let wc = &mut app.ui.window_controls;
             ui.radio_value(wc, crate::WindowControls::Nodalia, "Nodalia");
-            ui.radio_value(wc, crate::WindowControls::System, "Use the desktop's");
+            ui.radio_value(wc, crate::WindowControls::System, lang.tr("Use the desktop's"));
         });
     }
-    ui.checkbox(&mut app.ui.start_screen, "Show the Start screen when Lámina starts");
+    ui.checkbox(&mut app.ui.start_screen, lang.tr("Show the Start screen when Lámina starts"));
     // While the pointer holds the slider its value only waits in the dialog: applying it
     // would rescale the slider under the pointer and run it to an end (#767). It applies
     // on release, and at once from the keyboard.
@@ -1367,12 +1385,12 @@ pub(crate) fn preference_controls(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialo
     let mut scale = pending.unwrap_or(app.ui.ui_scale);
     let r = ui
         .horizontal(|ui| {
-            ui.label("Interface size:");
+            ui.label(lang.tr("Interface size:"));
             ui.add(egui::Slider::new(&mut scale, 0.75..=1.75))
         })
         .inner;
     let enabled = r.enabled();
-    r.widget_info(|| egui::WidgetInfo::slider(enabled, f64::from(scale), "Interface size"));
+    r.widget_info(|| egui::WidgetInfo::slider(enabled, f64::from(scale), lang.tr("Interface size")));
     if r.is_pointer_button_down_on() {
         if r.changed() || pending.is_some() {
             d.fields.insert("uiScale".into(), scale.to_string());
@@ -1385,20 +1403,20 @@ pub(crate) fn preference_controls(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialo
     }
     // PowerPoint takes the unit from the system's measurement setting; Lámina asks here.
     ui.horizontal(|ui| {
-        ui.label("Measurement units:");
+        ui.label(lang.tr("Measurement units:"));
         let units = &mut app.session.prefs.units;
-        ui.radio_value(units, lamina_geom::Unit::Inches, "Inches");
-        ui.radio_value(units, lamina_geom::Unit::Centimeters, "Centimeters");
+        ui.radio_value(units, lamina_geom::Unit::Inches, lang.tr("Inches"));
+        ui.radio_value(units, lamina_geom::Unit::Centimeters, lang.tr("Centimeters"));
     });
     ui.add_space(18.0);
-    ui.label(egui::RichText::new("Editing").font(theme::bold(15.0)));
+    ui.label(egui::RichText::new(lang.tr("Editing")).font(theme::bold(15.0)));
     ui.add_space(4.0);
-    ui.checkbox(&mut app.session.prefs.smart_guides, "Show smart guides");
-    ui.checkbox(&mut app.session.prefs.snap_to_grid, "Snap objects to grid");
-    ui.checkbox(&mut app.session.prefs.smart_quotes, "Replace straight quotes with smart quotes");
+    ui.checkbox(&mut app.session.prefs.smart_guides, lang.tr("Show smart guides"));
+    ui.checkbox(&mut app.session.prefs.snap_to_grid, lang.tr("Snap objects to grid"));
+    ui.checkbox(&mut app.session.prefs.smart_quotes, lang.tr("Replace straight quotes with smart quotes"));
     ui.horizontal(|ui| {
-        ui.checkbox(&mut app.session.prefs.autocorrect, "AutoCorrect as you type");
-        if ui.button("AutoCorrect Options…").clicked() {
+        ui.checkbox(&mut app.session.prefs.autocorrect, lang.tr("AutoCorrect as you type"));
+        if ui.button(lang.tr("AutoCorrect Options…")).clicked() {
             *d = Dialog::new("autocorrect");
         }
     });
@@ -1406,7 +1424,7 @@ pub(crate) fn preference_controls(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialo
         return false;
     }
     ui.horizontal(|ui| {
-        let label = ui.label("Your name (comments):");
+        let label = ui.label(lang.tr("Your name (comments):"));
         // Name the field for assistive technology; a bare text edit next to a label is an
         // unnamed input in egui 0.37's accessibility tree.
         let _ = ui.add(egui::TextEdit::singleline(&mut app.session.prefs.author)).labelled_by(label.id);

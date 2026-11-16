@@ -62,6 +62,8 @@ pub enum WindowControls {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(default, rename_all = "camelCase")]
 pub struct UiState {
+    /// None follows the desktop language; an explicit choice survives restarts.
+    pub language: Option<crate::i18n::Language>,
     pub brightness: theme::Brightness,
     pub tab: String,
     pub ribbon_collapsed: bool,
@@ -116,6 +118,7 @@ pub struct UiState {
 impl Default for UiState {
     fn default() -> Self {
         UiState {
+            language: None,
             brightness: theme::Brightness::Light,
             tab: "Home".into(),
             ribbon_collapsed: false,
