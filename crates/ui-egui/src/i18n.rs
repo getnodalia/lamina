@@ -30,7 +30,9 @@ impl Language {
     }
 
     pub fn tr(self, english: &'static str) -> &'static str {
-        if self != Self::Es { return english; }
+        if self != Self::Es {
+            return english;
+        }
         match english {
             "Home" => "Inicio",
             "New" => "Nuevo",

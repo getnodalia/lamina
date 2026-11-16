@@ -1345,13 +1345,11 @@ pub(crate) fn preference_controls(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialo
             Some(crate::i18n::Language::En) => "English",
             Some(crate::i18n::Language::Es) => "Español",
         };
-        let response = egui::ComboBox::from_id_salt("interface-language")
-            .selected_text(label)
-            .show_ui(ui, |ui| {
-                ui.selectable_value(&mut app.ui.language, None, lang.tr("Automatic"));
-                ui.selectable_value(&mut app.ui.language, Some(crate::i18n::Language::En), "English");
-                ui.selectable_value(&mut app.ui.language, Some(crate::i18n::Language::Es), "Español");
-            });
+        let response = egui::ComboBox::from_id_salt("interface-language").selected_text(label).show_ui(ui, |ui| {
+            ui.selectable_value(&mut app.ui.language, None, lang.tr("Automatic"));
+            ui.selectable_value(&mut app.ui.language, Some(crate::i18n::Language::En), "English");
+            ui.selectable_value(&mut app.ui.language, Some(crate::i18n::Language::Es), "Español");
+        });
         let _ = response.response.labelled_by(name.id);
     });
     let lang = app.ui.language.unwrap_or_else(crate::i18n::Language::system);
