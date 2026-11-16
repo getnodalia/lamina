@@ -328,13 +328,13 @@ impl Nav {
 }
 
 /// The shared office entries for `list`, with the separator after Open as in Celdas and Letra.
-fn office_entries(list: &[Nav]) -> Vec<nodalia_theme::office::Entry<'static>> {
+fn office_entries(list: &[Nav], language: crate::i18n::Language) -> Vec<nodalia_theme::office::Entry<'static>> {
     let mut out = Vec::new();
     for (k, nav) in list.iter().enumerate() {
         if k == 3 {
             out.push(nodalia_theme::office::Entry::Separator);
         }
-        out.push(nodalia_theme::office::Entry::item(nav.id(), nav.label(), nav.icon().ndl_name()));
+        out.push(nodalia_theme::office::Entry::item(nav.id(), language.tr(nav.label()), nav.icon().ndl_name()));
     }
     out
 }
@@ -350,11 +350,12 @@ pub fn show(app: &mut SlideApp, ui: &mut Ui) {
     }
     let mut out = Outcome::default();
     let (top, bottom) = entries(has_doc);
+    let language = app.ui.language.unwrap_or_else(crate::i18n::Language::system);
     let look = nodalia_theme::office::Look::new(theme::palette(t.dark)).with_bold(egui::FontFamily::Name("bold".into()));
     let nav = nodalia_theme::office::Nav {
-        back: if has_doc { "Back" } else { "" },
-        top: office_entries(&top),
-        bottom: bottom.iter().map(|n| nodalia_theme::office::Entry::item(n.id(), n.label(), n.icon().ndl_name())).collect(),
+        back: if has_doc { language.tr("Back") } else { "" },
+        top: office_entries(&top, language),
+        bottom: bottom.iter().map(|n| nodalia_theme::office::Entry::item(n.id(), language.tr(n.label()), n.icon().ndl_name())).collect(),
         selected: Some(bs.page.id()),
     };
     let picked = nodalia_theme::office::file_view(ui, &look, &nav, |ui| {
@@ -366,7 +367,7 @@ pub fn show(app: &mut SlideApp, ui: &mut Ui) {
         w.inactive.bg_stroke = Stroke::new(1.0, t.border);
         w.hovered.bg_stroke = Stroke::new(1.0, t.accent);
         w.active.bg_stroke = Stroke::new(1.0, t.accent);
-        nodalia_theme::office::page(ui, &look, bs.page.label(), |ui| {
+        nodalia_theme::office::page(ui, &look, language.tr(bs.page.label()), |ui| {
             // Errors raised on a backstage page (a missing recent file, a failed open) would
             // otherwise vanish: the status bar only draws once the backstage is closed (#172).
             // A real label, not painted text, so screen readers see it too.

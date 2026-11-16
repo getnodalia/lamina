@@ -3,6 +3,7 @@ use super::{Dialog, SlideApp, Value, json, theme};
 /// What the Preferences dialog can change, as it was when the dialog opened.
 pub(super) fn preferences_snapshot(app: &SlideApp) -> Value {
     json!({
+        "language": app.ui.language,
         "dark": app.ui.brightness == theme::Brightness::Dark,
         "uiScale": app.ui.ui_scale,
         "windowControls": serde_json::to_value(app.ui.window_controls).unwrap_or(Value::Null),
@@ -14,6 +15,9 @@ pub(super) fn preferences_snapshot(app: &SlideApp) -> Value {
 /// Puts back the settings the Preferences dialog opened with (Cancel, Esc, the close button).
 pub(super) fn restore_preferences(app: &mut SlideApp, d: &Dialog) {
     let Some(before) = d.params.get("before") else { return };
+    if let Some(language) = before.get("language") {
+        app.ui.language = serde_json::from_value(language.clone()).unwrap_or(None);
+    }
     if let Some(dark) = before.get("dark").and_then(Value::as_bool)
         && dark != (app.ui.brightness == theme::Brightness::Dark)
     {

@@ -18,6 +18,7 @@ pub mod control;
 pub mod dialogs;
 pub mod doc_window;
 pub mod eyedropper;
+pub mod i18n;
 pub mod icons;
 pub mod media;
 pub mod menus;
