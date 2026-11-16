@@ -35,6 +35,27 @@ impl Language {
         }
         match english {
             "Home" => "Inicio",
+            "File" => "Archivo",
+            "File (Alt+F)" => "Archivo (Alt+F)",
+            "Insert" => "Insertar",
+            "Draw" => "Dibujar",
+            "Design" => "Diseño",
+            "Transitions" => "Transiciones",
+            "Animations" => "Animaciones",
+            "Slide Show" => "Presentación",
+            "Record" => "Grabar",
+            "Review" => "Revisar",
+            "View" => "Vista",
+            "Handout Master" => "Patrón de documentos",
+            "Notes Master" => "Patrón de notas",
+            "Slide Master" => "Patrón de diapositivas",
+            "Shape Format" => "Formato de forma",
+            "Picture Format" => "Formato de imagen",
+            "Table Design" => "Diseño de tabla",
+            "Layout" => "Disposición",
+            "SmartArt Design" => "Diseño de SmartArt",
+            "Chart Design" => "Diseño de gráfico",
+            "Playback" => "Reproducción",
             "New" => "Nuevo",
             "Open" => "Abrir",
             "Info" => "Información",
@@ -92,6 +113,28 @@ mod tests {
         assert_eq!(Language::from_locale("ES-MX"), Language::Es);
         assert_eq!(Language::from_locale("en-US"), Language::En);
         assert_eq!(Language::Es.tr("Preferences"), "Preferencias");
+        assert_eq!(Language::Es.tr("Transitions"), "Transiciones");
+        assert_eq!(Language::En.tr("Transitions"), "Transitions");
         assert_eq!(Language::Es.tr("not translated"), "not translated");
+    }
+
+    #[test]
+    fn spanish_ribbon_labels_keep_the_original_tab_identity() {
+        use egui_kittest::{Harness, kittest::Queryable};
+
+        let mut app = crate::SlideApp::new(lamina_engine::Session::with_new(), crate::Services::default());
+        app.ui.language = Some(Language::Es);
+        let mut h = Harness::builder().with_size(egui::vec2(1400.0, 900.0)).build_ui_state(
+            |ui, app: &mut crate::SlideApp| {
+                app.logic(ui.ctx());
+                app.ui(ui);
+            },
+            app,
+        );
+        h.run_steps(3);
+        h.get_by_label("Insertar").click();
+        h.run_steps(3);
+        assert_eq!(h.state().ui.tab, "Insert");
+        assert!(h.query_by_label("Archivo").is_some());
     }
 }
