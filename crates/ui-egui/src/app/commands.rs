@@ -233,7 +233,7 @@ impl SlideApp {
                 return Err("updates are handled by the browser: reload the page".into());
             }
             "app.palette" => self.palette = Some((String::new(), 0)),
-            "app.preferences" => self.dialog = Some(dialogs::Dialog::new("preferences")),
+            "app.preferences" => self.open_backstage(backstage::Page::Options),
             "app.shortcuts" => self.dialog = Some(dialogs::Dialog::new("shortcuts")),
             "app.openDialog" => self.pick_and_open(),
             "app.insertPictureDialog" => self.pick_and_insert("picture", "insert.picture"),
