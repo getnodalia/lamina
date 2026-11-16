@@ -161,7 +161,7 @@ fn alt_f_arrows_enter_and_esc_drive_the_side_menu() {
 fn every_page_renders() {
     let mut h = harness(new_app());
     let last_theme = lamina_model::theme::builtin_themes().last().map(|t| t.name.clone()).unwrap();
-    let checks: [(Page, &str); 8] = [
+    let checks: [(Page, &str); 9] = [
         (Page::Home, "Recent"),
         (Page::New, &last_theme),
         (Page::Open, "Browse"),
@@ -170,6 +170,7 @@ fn every_page_renders() {
         (Page::Print, "Print Hidden Slides"),
         (Page::Export, "Create PDF Document"),
         (Page::About, "Product Information"),
+        (Page::Options, "Show smart guides"),
     ];
     for (p, marker) in checks {
         h.state_mut().run("app.backstage", json!({"page": p.id()})).unwrap();
@@ -573,7 +574,7 @@ fn start_screen_opens_the_palette_and_preferences() {
     let mut h = harness(SlideApp::new(Session::new(), Services::default()));
     h.key_press_modifiers(Modifiers::COMMAND, Key::Comma);
     h.run_steps(3);
-    assert_eq!(h.state().dialog.as_ref().map(|d| d.id.as_str()), Some("preferences"), "Ctrl+, opens Preferences");
+    assert_eq!(page(&h), Some(Page::Options), "Ctrl+, opens Preferences");
     assert!(h.state().session.active().is_none(), "without creating a presentation");
 }
 
@@ -752,21 +753,24 @@ fn print_slides_follow_the_settings() {
     assert_eq!(print_page_size(&bs, &doc), (doc.slide_size.width as f32, doc.slide_size.height as f32), "slides print slide-shaped");
 }
 
-/// Preferences in the File tab opens the Preferences dialog, and Cancel closes it (#782, #752).
+/// Preferences opens inside the File page and applies changes immediately.
 #[test]
-fn options_in_backstage_opens_preferences_and_cancel_closes_it() {
+fn options_in_backstage_opens_preferences_page() {
     let mut h = harness(new_app());
     h.get_by_label("File").click();
     h.run_steps(3);
-    assert!(h.state().backstage_open());
     h.get_by_label("Preferences").click();
     h.run_steps(3);
-    assert!(h.state().dialog.is_some(), "Preferences opens the Preferences dialog");
-    assert_eq!(h.state().dialog.as_ref().map(|d| d.id.as_str()), Some("preferences"));
-    h.query_all_by_role_and_label(Role::Button, "Cancel").next().expect("Cancel button").click_accesskit();
-    h.run_steps(3);
-    assert!(h.state().dialog.is_none(), "Cancel closes Preferences dialog");
-    assert!(h.state().backstage_open(), "Backstage remains open");
+    assert_eq!(page(&h), Some(Page::Options));
+    assert!(h.state().dialog.is_none());
+    let before = h.state().session.prefs.smart_guides;
+    h.get_by_label("Show smart guides").click();
+    h.run_steps(2);
+    assert_ne!(h.state().session.prefs.smart_guides, before);
+    h.key_press(Key::Escape);
+    h.run_steps(2);
+    assert!(!h.state().backstage_open());
+    assert_ne!(h.state().session.prefs.smart_guides, before);
 }
 
 /// About replaces the account entry and opens the About dialog.

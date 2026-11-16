@@ -674,7 +674,7 @@ fn preferences_cancel_restores_the_settings_done_keeps_them() {
     let before = harness.state().session.prefs.clone();
     let dark_before = harness.state().ui.brightness;
     let change = |harness: &mut egui_kittest::Harness<'static, SlideApp>| {
-        harness.state_mut().run("app.preferences", json!({})).unwrap();
+        harness.state_mut().run("app.dialog", json!({"id": "preferences"})).unwrap();
         harness.run_steps(2);
         let style = if harness.state().ui.brightness == theme::Brightness::Dark { "Light" } else { "Dark" };
         harness
@@ -1712,7 +1712,7 @@ fn interface_size_applies_when_the_slider_is_let_go() {
         SlideApp::new(Session::with_new(), Services::default()),
     );
     harness.run_steps(2);
-    harness.state_mut().run("app.preferences", json!({})).unwrap();
+    harness.state_mut().run("app.dialog", json!({"id": "preferences"})).unwrap();
     harness.run_steps(4);
     let before = harness.state().ui.ui_scale;
     let rect = harness.query_all_by_role_and_label(egui::accesskit::Role::Slider, "Interface size").next().expect("the Interface size slider").rect();
@@ -1774,7 +1774,7 @@ fn preferences_and_format_pane_name_every_input() {
         SlideApp::new(Session::with_new(), Services::default()),
     );
     harness.run_steps(3);
-    harness.state_mut().run("app.preferences", json!({})).unwrap();
+    harness.state_mut().run("app.dialog", json!({"id": "preferences"})).unwrap();
     harness.run_steps(3);
     harness.check_accessibility();
     harness.key_press(egui::Key::Escape);

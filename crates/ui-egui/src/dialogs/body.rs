@@ -1325,6 +1325,18 @@ fn dlg_preferences(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) -> bool {
     if d.params.get("before").is_none() {
         d.params = json!({ "before": preferences_snapshot(app) });
     }
+    if !preference_controls(app, ui, d) {
+        return false;
+    }
+    let (ok, cancel) = buttons(ui, "Done");
+    if cancel {
+        restore_preferences(app, d);
+    }
+    ok || cancel
+}
+
+/// Shared controls for the Preferences page and the legacy dialog.
+pub(crate) fn preference_controls(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) -> bool {
     // The office apps share this order: General (the one theme selector, and the window
     // controls where Lámina draws its own frame), then Editing.
     ui.label(egui::RichText::new("General").font(theme::bold(15.0)));
@@ -1399,11 +1411,7 @@ fn dlg_preferences(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) -> bool {
         // unnamed input in egui 0.37's accessibility tree.
         let _ = ui.add(egui::TextEdit::singleline(&mut app.session.prefs.author)).labelled_by(label.id);
     });
-    let (ok, cancel) = buttons(ui, "Done");
-    if cancel {
-        restore_preferences(app, d);
-    }
-    ok || cancel
+    true
 }
 
 /// Keyboard Shortcuts: every command that has one, searchable, in the platform's notation.

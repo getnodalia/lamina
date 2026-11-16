@@ -245,6 +245,7 @@ mod zoom;
 
 pub use about::{about, paint_logo, version_line};
 use body::body;
+pub(crate) use body::preference_controls;
 #[cfg(test)]
 use hyperlink::{
     CurrentLink, HyperlinkSeed, common_click, hyperlink_command, hyperlink_seed_of, hyperlink_should_apply, link_covering, seed_from, seed_of_link,

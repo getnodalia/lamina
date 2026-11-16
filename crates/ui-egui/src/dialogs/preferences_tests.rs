@@ -31,7 +31,7 @@ fn harness() -> Harness<'static, SlideApp> {
 }
 
 fn open_options(h: &mut Harness<'_, SlideApp>) {
-    h.state_mut().run("app.preferences", json!({})).expect("open Options");
+    h.state_mut().run("app.dialog", json!({"id": "preferences"})).expect("open Options");
     h.run_steps(3);
 }
 

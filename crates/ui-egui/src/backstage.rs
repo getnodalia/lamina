@@ -45,10 +45,11 @@ pub enum Page {
     Print,
     Export,
     About,
+    Options,
 }
 
 impl Page {
-    pub const ALL: [Page; 8] = [Page::Home, Page::New, Page::Open, Page::Info, Page::SaveAs, Page::Print, Page::Export, Page::About];
+    pub const ALL: [Page; 9] = [Page::Home, Page::New, Page::Open, Page::Info, Page::SaveAs, Page::Print, Page::Export, Page::About, Page::Options];
 
     /// The id `app.backstage {page}` takes.
     pub fn id(self) -> &'static str {
@@ -61,6 +62,7 @@ impl Page {
             Page::Print => "print",
             Page::Export => "export",
             Page::About => "about",
+            Page::Options => "options",
         }
     }
 
@@ -84,6 +86,7 @@ impl Page {
             Page::Print => "Print",
             Page::Export => "Export",
             Page::About => "About",
+            Page::Options => "Preferences",
         }
     }
 
@@ -97,6 +100,7 @@ impl Page {
             Page::Print => Icon::Print,
             Page::Export => Icon::Export,
             Page::About => Icon::Help,
+            Page::Options => Icon::Settings,
         }
     }
 
@@ -170,6 +174,8 @@ pub struct Backstage {
     pub focus: Option<usize>,
     /// Search text on Home, New and Open.
     pub query: String,
+    /// Keeps in-progress preference controls across frames.
+    preferences: crate::dialogs::Dialog,
     /// Info: property drafts while a field is being edited.
     props: Vec<String>,
     pub print_scope: PrintScope,
@@ -200,6 +206,7 @@ impl Backstage {
             docs,
             focus: None,
             query: String::new(),
+            preferences: crate::dialogs::Dialog::new("preferences"),
             props: vec![String::new(); PROPERTIES.len()],
             print_scope: PrintScope::All,
             print_range: String::new(),
@@ -255,10 +262,7 @@ fn act(app: &mut SlideApp, nav: Nav, current: Page) -> Option<Page> {
             app.close_presentation();
             Some(current)
         }
-        Nav::Options => {
-            let _ = app.run("app.preferences", json!({}));
-            Some(current)
-        }
+        Nav::Options => Some(Page::Options),
     }
 }
 
@@ -279,7 +283,7 @@ pub fn key(app: &mut SlideApp, key: Key, mods: lamina_engine::Mods) -> bool {
             true
         }
         Key::ArrowDown | Key::ArrowUp => {
-            let cur = bs.focus.or_else(|| all.iter().position(|n| *n == Nav::Page(bs.page)));
+            let cur = bs.focus.or_else(|| all.iter().position(|n| n.id() == bs.page.id()));
             let n = all.len();
             let next = match (cur, key == Key::ArrowDown) {
                 (None, _) => 0,
@@ -287,8 +291,10 @@ pub fn key(app: &mut SlideApp, key: Key, mods: lamina_engine::Mods) -> bool {
                 (Some(i), false) => (i + n - 1) % n,
             };
             bs.focus = Some(next);
-            if let Some(Nav::Page(p)) = all.get(next) {
-                bs.go(*p);
+            match all.get(next) {
+                Some(Nav::Page(p)) => bs.go(*p),
+                Some(Nav::Options) => bs.go(Page::Options),
+                _ => {}
             }
             true
         }
@@ -378,6 +384,12 @@ pub fn show(app: &mut SlideApp, ui: &mut Ui) {
                 Page::Print => print(app, ui, &mut bs),
                 Page::Export => export(app, ui, &mut bs),
                 Page::About => about(app, ui),
+                Page::Options => {
+                    if !crate::dialogs::preference_controls(app, ui, &mut bs.preferences) {
+                        app.dialog = Some(bs.preferences.clone());
+                        bs.preferences = crate::dialogs::Dialog::new("preferences");
+                    }
+                }
             }
         });
     });
