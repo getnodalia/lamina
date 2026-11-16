@@ -94,3 +94,9 @@ project developed in public by [Daniel Miguel Tejedor](https://danielmigueltejed
 
 `MIT OR Apache-2.0`. See [`LICENSE-MIT`](LICENSE-MIT), [`LICENSE-APACHE`](LICENSE-APACHE) and
 [`NOTICE`](NOTICE).
+
+### Interface language
+
+Preferences lets you choose English, Spanish or the desktop language. Spanish currently covers
+File navigation and the Preferences controls; other parts of the interface remain in English.
+The web build defaults to English unless a language is chosen explicitly.
