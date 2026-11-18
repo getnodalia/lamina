@@ -9,4 +9,4 @@ description = "Lámina colour: RGB/HSL, theme colour slots, DrawingML-style colo
 workspace = true
 
 [dependencies]
-craft-drawingml = { workspace = true }
+nodalia-drawingml = { workspace = true }

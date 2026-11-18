@@ -1,6 +1,6 @@
 //! The host bridge, for pages that embed Lámina and keep its files (a Nextcloud app, a personal
-//! file server). The messages and the two transports are `craft-web-host`'s
-//! (getnodalia/foundation (vendor/craft-libs)), the same contract as the other Craft apps' bridges, with the
+//! file server). The messages and the two transports are `nodalia-web-host`'s
+//! (getnodalia/foundation (nodalia/libs)), the same contract as the other Craft apps' bridges, with the
 //! `lamina:` prefix. This module is Lámina's part of it.
 //!
 //! - `?host=parent` (an `<iframe>`) talks to the same-origin parent over `postMessage`;
@@ -36,13 +36,13 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use craft_web_host::web::{FileData, Host, Message};
+use nodalia_web_host::web::{FileData, Host, Message};
 use lamina_ui_egui::{Services, SlideApp};
 
 /// The app id in the host messages (`lamina:ready`).
 const APP: &str = "lamina";
 
-/// The name `craft-web-host` gives an open request that carries none (it cleans a host's name and
+/// The name `nodalia-web-host` gives an open request that carries none (it cleans a host's name and
 /// falls back to this): no name is no file, so the presentation opens untitled.
 const NAMELESS: &str = "document";
 
@@ -68,7 +68,7 @@ impl Bridge {
     pub fn detect(canvas: &web_sys::HtmlCanvasElement) -> Option<Self> {
         let host = Host::connect(APP, canvas)?;
         // An opaque origin (a file:// page in some browsers) can't be a postMessage target.
-        if host.mode() == craft_web_host::Mode::Parent && web_sys::window()?.location().origin().ok()? == "null" {
+        if host.mode() == nodalia_web_host::Mode::Parent && web_sys::window()?.location().origin().ok()? == "null" {
             return None;
         }
         Some(Self { host: Rc::new(host), opened: Rc::default() })

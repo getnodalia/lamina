@@ -35,7 +35,7 @@ impl Class {
 pub const TABLE: &[(&str, Class)] = &[
     ("geom", Class::Layer(0)),
     // `media` (probe, decode, playback mixer) at L2. Containers, the Opus decoder and the video
-    // decoders come from craft-libs (craft-media, craft-audio, craft-video).
+    // decoders come from nodalia-libs (nodalia-media, nodalia-audio, nodalia-video).
     ("media", Class::Layer(2)),
     ("color", Class::Layer(0)),
     ("model", Class::Layer(1)),

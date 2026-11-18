@@ -1,10 +1,10 @@
 //! DrawingML colours for Lámina: `Rgba`, scheme slots, colour schemes and colour transforms.
-//! They live in craft-libs (`craft_drawingml::color`, craft-libs#778 and #792), shared with the
+//! They live in nodalia-libs (`nodalia_drawingml::color`, nodalia-libs#778 and #792), shared with the
 //! PPTX reader and writer; this crate re-exports them under the name the app uses.
 #![deny(clippy::unwrap_used, clippy::expect_used, clippy::panic, clippy::unimplemented, clippy::todo, clippy::unreachable)]
 #![forbid(unsafe_code)]
 
-pub use craft_drawingml::color::*;
+pub use nodalia_drawingml::color::*;
 
 #[cfg(test)]
 mod tests {

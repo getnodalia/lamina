@@ -134,11 +134,11 @@ beside it. The page guards leaving itself (Lámina adds no guard of its own), an
 </script>
 ```
 
-The messages and both transports are the shared contract of [`craft-web-host`](https://github.com/getnodalia/foundation/tree/vendor/craft-libs/main/crates/web-host) (storytold/craft-libs#420), the same for every Nodalia app: its README lists every message, including `saved`, with the compatibility notes. In `lamina:ready`, `version` is the contract's (`"1"`) and `appVersion` is this app's release. Lámina reads bytes, so a host sends `bytes`, not a `File`.
+The messages and both transports are the shared contract of [`nodalia-web-host`](https://github.com/getnodalia/foundation/tree/nodalia/libs/crates/web-host) (storytold/craft-libs#420), the same for every Nodalia app: its README lists every message, including `saved`, with the compatibility notes. In `lamina:ready`, `version` is the contract's (`"1"`) and `appVersion` is this app's release. Lámina reads bytes, so a host sends `bytes`, not a `File`.
 
 ### Driving it from the page (`window.lamina`)
 
-Every Lámina web build puts `window.lamina` on the page, from [`craft-web-api`](https://github.com/getnodalia/foundation/tree/vendor/craft-libs/main/crates/web-api) (storytold/craft-libs#413), the same shape in every Nodalia app. `lamina.request(method, params)` calls any method of the control channel the desktop app serves (`docs/control-protocol.md`), and `execute(command, params)`, `commands()`, `docInspect(params)`, `uiInspect(params)` and `screenshot(params)` are shortcuts for the common ones. Each returns a Promise that resolves with the method's result and rejects with an `Error`; a call the app does not answer within 30 seconds rejects.
+Every Lámina web build puts `window.lamina` on the page, from [`nodalia-web-api`](https://github.com/getnodalia/foundation/tree/nodalia/libs/crates/web-api) (storytold/craft-libs#413), the same shape in every Nodalia app. `lamina.request(method, params)` calls any method of the control channel the desktop app serves (`docs/control-protocol.md`), and `execute(command, params)`, `commands()`, `docInspect(params)`, `uiInspect(params)` and `screenshot(params)` are shortcuts for the common ones. Each returns a Promise that resolves with the method's result and rejects with an `Error`; a call the app does not answer within 30 seconds rejects.
 
 ```js
 const deck = await lamina.docInspect();                 // a summary of the open presentation

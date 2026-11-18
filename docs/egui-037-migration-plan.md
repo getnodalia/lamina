@@ -1,6 +1,6 @@
 # Lámina: egui 0.37 migration plan
 
-Current candidate font pin: `37827adc41fd165f9a9234ac40f94dbad353aa69` restores the complete prior Latin catalog alongside the migration fallbacks. All three workflows use that published revision.
+Current candidate font pin: `9e13bf6e232a13661469a46157aff67eda350e91` restores the complete prior Latin catalog alongside the migration fallbacks. All three workflows use that published revision.
 
 Status update (2026-10-25): the candidate includes main `80f13011d5a3c353369c6e38250df6e5a260f3e0`, preserving its table-cell selection, text AutoFormat, edit-point history, fill controls, status accessibility and GPU-test serialization. IME deletion's undo entry retains main's new point-type state. Status-control assertions locate the actual laid-out status row, avoiding the identically named ribbon control without assuming fixed UI zoom. Managed run `egui037-lamina-status-row-ci-20261025-0753` passed the focused status regression and all eight CI stages: 2,045 passing test executions, zero failures and six ignored across 61 summaries. These are execution counts, including repeated tests. Required font coverage was separately validated in run 0724; the merged tree retains it and its tests. Cargo dependency pins and lockfile are unchanged by this refresh. Native/browser GUI, native IME and paired application performance remain open. Publication requires separate explicit approval; human review and human merge are required.
 
@@ -84,11 +84,11 @@ therefore mostly:
    Wayland clipboard and the egui-wgpu surface fixes;
 4. measured UI regressions and performance, with explicit acceptance thresholds.
 
-Do **not** adopt `craft-ui`, `craft-window`, `egui_dock` or a new generic compatibility layer as part
-of this migration. Lámina does not depend on `craft-ui` today; `craft-ui` PR 199 and language
+Do **not** adopt `nodalia-ui`, `nodalia-window`, `egui_dock` or a new generic compatibility layer as part
+of this migration. Lámina does not depend on `nodalia-ui` today; `nodalia-ui` PR 199 and language
 work #198 are useful precedent and the eventual shared home, not a reason to replace Lámina's
-ribbon, panes, canvas, dialogs, commands or persistence. The only `craft-libs` dependencies in
-Lámina remain `craft-pdf` and the `krilla` patch at their current immutable revision.
+ribbon, panes, canvas, dialogs, commands or persistence. The only `nodalia-libs` dependencies in
+Lámina remain `nodalia-pdf` and the `krilla` patch at their current immutable revision.
 
 ---
 
@@ -103,13 +103,13 @@ Lámina remain `craft-pdf` and the `krilla` patch at their current immutable rev
 | winit | `0.30.13` from crates.io (`a6755fa58a9f8350bd1e472d4c3fcc25f824ec358933bba33306d0b63df5978d`) |
 | wgpu | `30.0.1` in this lock. Upstream egui `0.37.0` holds `30.0.0` (its `Cargo.toml` comment keeps that version for `wasm-bindgen-futures`); they are semver-compatible but a different lock, so the wasm dependency set must be re-verified after the bump |
 | accesskit | `0.24.1`; `accesskit_consumer` 0.35.0, 0.36.0 and 0.38.0 both present; `kittest` 0.4.0 |
-| craft-libs | `craft-pdf = "=0.1.0"` and `[patch.crates-io] krilla = "=0.8.2"`, both at rev `c3487320b2d1de657b860b3c8abb44e1f2b32bd8` |
+| nodalia-libs | `nodalia-pdf = "=0.1.0"` and `[patch.crates-io] krilla = "=0.8.2"`, both at rev `c3487320b2d1de657b860b3c8abb44e1f2b32bd8` |
 | MSRV | workspace `rust-version = "1.95"`, same as egui 0.37.0 |
 | Stock experiment target | upstream tag `0.37.0`, peeled commit `841a328ba2dd8f6996beb7189ebb7fc00e668a2a`. This is a local comparison experiment, never a staged consumer release |
 | Candidate fork sources (comparison only) | `aiongg/egui` `craft/0.37` at `a4f9a17f64a6bae61350fb85804c9df0d9865916`; `aiongg/winit` `craft/0.30.13-lang` at `8b35388bd719e8cc86a95971ba0bc026c9a8f058`. These personal-fork SHAs are not production pins |
 | Production pin requirement | reviewed, published, immutable **storytold** full SHAs for the complete egui family **and** winit, including W15P PRIMARY; one coherent atomically landed graph. No `aiongg`/personal fork in a production manifest and no stock-only intermediate release |
 | Prior published 0.36.2 | storytold/egui `craft/0.36.2` at `767b1cad294120689a514bb4bd68c077e46679b9` |
-| craft-libs reference | merged PR 199 base `3832c47ef68a0e6214f2c1e85f3526b6adcb686e` (current shared-library implementation base). Historical plan-only source `8614e4a04fae516fba16c22b31ff1008cb6be10b`/README `1764bca` and main `49190884278f16c9a9f5823d7698a8ffb5deb062` are superseded. Do not use PR head `b68de8c5f4f1c060904d211a7b1320aa0f7bce78` or audit merge `ec8840af8c5fda695cf195cdd05e5ae078415c07` as trees |
+| nodalia-libs reference | merged PR 199 base `3832c47ef68a0e6214f2c1e85f3526b6adcb686e` (current shared-library implementation base). Historical plan-only source `8614e4a04fae516fba16c22b31ff1008cb6be10b`/README `1764bca` and main `49190884278f16c9a9f5823d7698a8ffb5deb062` are superseded. Do not use PR head `b68de8c5f4f1c060904d211a7b1320aa0f7bce78` or audit merge `ec8840af8c5fda695cf195cdd05e5ae078415c07` as trees |
 
 The contract's `0.37.0` annotated tag object SHA is not the peeled commit SHA; all pins in this
 plan use the peeled commit. A branch name is not a publication pin. The `aiongg` revisions above
@@ -338,7 +338,7 @@ Concrete placement:
 ### 4.3 Screenshots and control-channel replies
 
 This is the largest concrete refactor because `UserData`/`Event::Screenshot` is gone. Follow the
-shared completion-slot contract in `craft-libs/docs/egui-037-suite-rollout.md` rather than inventing
+shared completion-slot contract in `nodalia-libs/docs/egui-037-suite-rollout.md` rather than inventing
 a second global token map.
 
 **Target design in `crates/ui-egui/src/lib.rs`, `control.rs` and `media.rs`:**
@@ -431,7 +431,7 @@ Actions:
 - 0.37's parent-clip fix (#8562) can change nested panel/Scene clipping. Assert `canvasRect`,
   `slideRect`, pane widths, and that no content draws over the title bar/status bar at 900×560
   and 1440×900, at 1× and 2× DPI.
-- Never overwrite a saved preferred panel size with a clamped displayed size (craft-ui guidance);
+- Never overwrite a saved preferred panel size with a clamped displayed size (nodalia-ui guidance);
   keep `pane_width`/`thumbs_width`/`notes_height` semantics unchanged.
 
 ### 4.6 Viewports and docking
@@ -480,7 +480,7 @@ Actions:
   `apps/lamina-web` enable it; `crates/ui-egui/Cargo.toml:21` does not, and in 0.37
   `FontDefinitions::default()` is empty without the feature. `theme::font_definitions` builds the
   UI families from it, and `examples/icon_gallery.rs` is affected too. Test
-  `cargo test -p lamina-ui-egui` standalone with and without `CRAFT_FONTS_DIR`; do not rely on
+  `cargo test -p lamina-ui-egui` standalone with and without `NODALIA_FONTS_DIR`; do not rely on
   app feature unification.
 - Update `crates/fonts/Cargo.toml` `epaint_default_fonts` to `0.37.0` (or the same reviewed
   storytold source). Its constants (`HACK_REGULAR`, `UBUNTU_LIGHT`) remain the last-resort face.
@@ -717,12 +717,12 @@ workflow pins currently name `b076417b5880bd4154bd22f00695b1d28c6bea83`, whose t
 reviewed Chinese manifest but has no `fonts/latin-manifest.txt` or Inter. The earlier
 `43913056ce82a3fdad0ef69f6b88d1dc922a8104` tree carried the Latin manifest/Inter but not the
 Chinese input. The parent is restoring the licensed Inter faces in the central
-`craft-fonts-implementation` checkout; that work is unpublished and must not be committed from the
+`nodalia-fonts-implementation` checkout; that work is unpublished and must not be committed from the
 Lámina checkout. Therefore this approval packet is **stale**: do not approve or publish it until
-the reviewed Latin manifest/faces and Chinese manifest are committed together in `craft-fonts`, an
+the reviewed Latin manifest/faces and Chinese manifest are committed together in `nodalia-fonts`, an
 immutable full SHA is obtained, and **all three** pins move together:
 `.github/workflows/ci.yml` (`CRAFT_FONTS_REF`), `.github/workflows/freebsd.yml` and
-`.github/workflows/release.yml` (`craft-fonts-ref`). Do not invent or pre-commit a future SHA, and do
+`.github/workflows/release.yml` (`nodalia-fonts-ref`). Do not invent or pre-commit a future SHA, and do
 not advance only one workflow. `crates/fonts/build.rs` now validates required builds after exclusion
 and, for wasm, the web filter: Inter Regular/Bold (or a supported Variable face) and BIZ UDPGothic
 Regular must actually be embedded, plus BIZ UDPGothic Bold natively for the weight pair; wasm keeps
@@ -733,18 +733,18 @@ The required-input gate is explicit, but CI and FreeBSD qualification remain par
 
 - `ci.yml` runs the `Font pin gate` as a local preflight job before the shared gate. It checks the
   Chinese manifest but not the Latin manifest, so the build script's required-mode validation is
-  the guard for Inter. The shared `gate.yml` job does not accept a `CRAFT_FONTS_REQUIRED` input or
+  the guard for Inter. The shared `gate.yml` job does not accept a `NODALIA_FONTS_REQUIRED` input or
   another workflow's exported environment, so the CI job verifies the pin but cannot yet force
   the required-font environment into `cargo xtask ci`; release and FreeBSD notes below apply.
-- The shared release workflow already sets `CRAFT_FONTS_REQUIRED=1` in every packaging step, so a
+- The shared release workflow already sets `NODALIA_FONTS_REQUIRED=1` in every packaging step, so a
   release on a pin without the Chinese manifest or the required Inter/BIZ faces fails instead of
   shipping without them.
-- The shared FreeBSD workflow passes `CRAFT_FONTS_DIR` to `cargo test` but currently exposes no
-  `CRAFT_FONTS_REQUIRED` input. Its required-font gate therefore remains **pending** until
+- The shared FreeBSD workflow passes `NODALIA_FONTS_DIR` to `cargo test` but currently exposes no
+  `NODALIA_FONTS_REQUIRED` input. Its required-font gate therefore remains **pending** until
   `craft-common-actions` adds one (or the caller can otherwise set that environment); do not cite
   FreeBSD as required-font evidence before then.
 
-The font assets stay in the central `getnodalia/foundation (vendor/craft-fonts)` repository; no font file is added to
+The font assets stay in the central `getnodalia/foundation (vendor/nodalia-fonts)` repository; no font file is added to
 this checkout.
 
 ### 5.2 Fork patch ledger and Lámina decisions
@@ -774,15 +774,15 @@ Winit W1–W27 are inherited through the reviewed winit series, plus the new **W
 Lámina-relevant ones are W1/W11 (DPI/X11 scaling), W2/W3/W5–W10/W12/W13/W18–W27 (IME, clipboard,
 drag, shortcuts, hidden windows), W15 (regular Wayland clipboard, needed by E4) and W15P (PRIMARY).
 Do not remove any of them independently; removal is tied to an upstream release and the tests
-named in the craft-libs ledger. W11 can change `pixels_per_point`, so every geometry/perf run
+named in the nodalia-libs ledger. W11 can change `pixels_per_point`, so every geometry/perf run
 records the exact winit SHA.
 
-### 5.3 craft-libs PR 199 and language PR 198
+### 5.3 nodalia-libs PR 199 and language PR 198
 
-- PR 199 updates `craft-ui` (and its dev dependencies) to 0.37 and applies the same `WidgetType`
+- PR 199 updates `nodalia-ui` (and its dev dependencies) to 0.37 and applies the same `WidgetType`
   -> `Role`, `UiBuilder::id` -> `scope_id`, `Id::new` -> `Id::unique` mapping. It is useful
   precedent and should remain the shared UI library's migration, but Lámina does not consume
-  `craft-ui`; do not add it just to align versions.
+  `nodalia-ui`; do not add it just to align versions.
 - **Use the reconciled shared-library base.** The implementation builds on merged PR 199 at
   `3832c47ef68a0e6214f2c1e85f3526b6adcb686e`; the reviewed 0.37 API changes are already part of
   that merge. Never merge or cherry-pick PR head `b68de8c`/audit merge `ec8840a` as trees. The
@@ -794,8 +794,8 @@ records the exact winit SHA.
 - Language work (#198) and the fork's E5/E12/E13/E17/E18/E19/E20 are the relevant source for
   RTL/IME/grapheme behavior. Lámina's slide text renderer already has its own bidi/line
   breaking; this migration only changes the egui UI/text-edit layer. Do not move slide layout
-  policy into `craft-ui` or an egui compatibility layer.
-- `craft-pdf`/`krilla` stay at their existing revision. They do not depend on egui; do not update
+  policy into `nodalia-ui` or an egui compatibility layer.
+- `nodalia-pdf`/`krilla` stay at their existing revision. They do not depend on egui; do not update
   them in this migration.
 
 ### 5.4 Lockfile, compatibility and rollback checks
@@ -808,7 +808,7 @@ Before merging any dependency stage:
   `cargo tree -i winit@0.30.13`, `cargo tree -e features -i eframe`.
 - Inspect `Cargo.lock` git entries: every egui-family git entry must have the exact full **storytold**
   rev and no `branch =` or path; there must be no `aiongg` source. The `krilla` entry and
-  `craft-pdf` source stay unchanged.
+  `nodalia-pdf` source stay unchanged.
 - Check the feature graph: native `default_fonts`, `clipboard`, `wgpu`, `accesskit`, `links`, `wayland`,
   `x11`; web `default_fonts`, `wgpu`, `accesskit`; no accidental `system_fonts`, `glow`,
   `persistence`, `inspection` or `experimental`. The library's own `egui` dependency must carry
@@ -872,7 +872,7 @@ it, tests. Stock 0.37 remains an isolated comparison workspace, never a producti
   assets, and all gate updates. Do not defer names/glyph/feature/attribution/gate work to a later
   stage, and verify app-owned settings sizes without an invented PanelState migration.
 - Gate: workspace `cargo xtask ci`; UI kittest suite; wasm check; native smoke; review every
-  changed golden/geometry; standalone library tests with and without `CRAFT_FONTS_DIR`. This is the first publishable coherent compatibility stage.
+  changed golden/geometry; standalone library tests with and without `NODALIA_FONTS_DIR`. This is the first publishable coherent compatibility stage.
 
 ### D2 — Lifecycle, hidden logic, multi-pass and screenshots
 
@@ -974,7 +974,7 @@ Required new/updated tests:
    over neighboring panels; app-owned settings dimensions survive save/reopen without an egui
    PanelState migration, and session-local outline resizing works.
 8. **Fonts/glyphs:** standalone `cargo test -p lamina-ui-egui` renders with the library's own
-   `default_fonts`, with and without `CRAFT_FONTS_DIR`; curated screens use kittest's default
+   `default_fonts`, with and without `NODALIA_FONTS_DIR`; curated screens use kittest's default
    missing-glyph panic; fallback faces added once and `UiFonts` enforces its per-face and aggregate
    budget under adversarial multi-script input; soak test uses `allow_missing_glyphs()` only for
    arbitrary input.
@@ -1037,7 +1037,7 @@ Run each as a temporary local patch, never commit, and record the failure output
   --control`; `ui.screenshot`, `ui.resize`, input/IME, regular clipboard, W15P PRIMARY, viewports.
 - **Windows native:** fresh clone from `VMs/craft-windows`, new ports, separate source/target,
   `Build-Pliego` equivalent for Lámina (`cargo build --release -p lamina` with
-  `CRAFT_FONTS_DIR`), DX12/FXC, Windows IME/layout, screenshot/GUI via `vm.py`/`guest-exec.py`,
+  `NODALIA_FONTS_DIR`), DX12/FXC, Windows IME/layout, screenshot/GUI via `vm.py`/`guest-exec.py`,
   `ui.screenshot`, doc window, save/reopen.
 - **Web:** `trunk build --release` in `apps/lamina-web`; Chrome/Chromium with WebGPU and
   `?webgl`; load sample, open/save/download, keyboard/IME, CJK/emoji rendering, hidden-tab
@@ -1054,15 +1054,15 @@ For each implementation stage:
 ```
 cargo xtask ci
 cargo xtask bench          # after a baseline exists; evidence copy
-cargo test -p lamina-ui-egui   # with the reviewed CRAFT_FONTS_DIR
-cargo test -p lamina-ui-egui   # without CRAFT_FONTS_DIR, separate job
+cargo test -p lamina-ui-egui   # with the reviewed NODALIA_FONTS_DIR
+cargo test -p lamina-ui-egui   # without NODALIA_FONTS_DIR, separate job
 cargo test -p lamina
 cargo check -p lamina-web --target wasm32-unknown-unknown
 trunk build --release      # apps/lamina-web, when web behavior changed
 ```
 
 Run through `task.py run/status/finish` with the stage's unique task and evidence; do not run a
-build/test directly outside that workflow. Use the repository's `CRAFT_FONTS_DIR` and the same
+build/test directly outside that workflow. Use the repository's `NODALIA_FONTS_DIR` and the same
 font revision for baseline and candidate where the comparison requires fonts.
 
 ---
@@ -1077,7 +1077,7 @@ and investigated regressions, not only the #8731 microbenchmark.
 
 ### 8.1 Environment and fixtures
 
-Record for every run: exact source SHA and lock digest, feature set, `CRAFT_FONTS_DIR`/font SHA,
+Record for every run: exact source SHA and lock digest, feature set, `NODALIA_FONTS_DIR`/font SHA,
 fixture (sample deck, a 20-slide business deck, a 200-slide and 800-slide synthetic deck), OS and
 kernel, CPU/GPU/adapter/driver, renderer (native wgpu DX12/Vulkan/GL vs Microsoft Basic Render
 Driver software), DPI (`pixels_per_point`), viewport size, window state (visible/fullscreen/
@@ -1156,7 +1156,7 @@ clamp-only shortcut.
   `docs/localization-parity.md` only for actual landed behavior. Do not claim a parity row or
   close a gap from a plan.
 - No new assets: screenshots are evidence, not repo assets; if a font/glyph replacement adds an
-  asset, follow `ATTRIBUTION.md`/`craft-fonts` rules. Do not add Microsoft/Adobe/Avid/Autodesk
+  asset, follow `ATTRIBUTION.md`/`nodalia-fonts` rules. Do not add Microsoft/Adobe/Avid/Autodesk
   material.
 - Cleanup: after all stages and reviews, remove only the task's disposable Cargo target and
   rebuildable outputs (see AGENTS.md), preserving source, evidence, screenshots, locks and any
@@ -1212,7 +1212,7 @@ clamp-only shortcut.
 9. **PR 199 / #198 merge state.** They are external work; this plan does not merge, rebase or
    publish them. The implementation is based on merged PR 199 at `3832c47ef68a0e6214f2c1e85f3526b6adcb686e`
    (the older `8614e4a`/`1764bca`/`4919088` references are superseded); never merge
-   `b68de8c`/`ec8840a` as trees. Lámina does not depend on `craft-ui`; if that changes,
+   `b68de8c`/`ec8840a` as trees. Lámina does not depend on `nodalia-ui`; if that changes,
    re-plan the DAG.
 10. **Nix/flake.** The repository has a `nix.yml` workflow but no local `flake.nix`/`nix` files in
     this checkout; do not claim Nix packaging validation from this plan.
@@ -1246,7 +1246,7 @@ clamp-only shortcut.
 - [ ] Every visible input has an accessible name; working `widget_info` roles/values retained;
       roles/selected states asserted; missing-name mutation check fails as expected.
 - [ ] Curated glyph coverage passes with kittest panic policy; `UiFonts` per-face and aggregate
-      budgets tested; standalone `lamina-ui-egui` tests pass with and without `CRAFT_FONTS_DIR`.
+      budgets tested; standalone `lamina-ui-egui` tests pass with and without `NODALIA_FONTS_DIR`.
 - [ ] PasteImage, W15P PRIMARY, pre-existing DeleteSurrounding + E21b outgoing text, RTL/grapheme/
       non-Latin shortcuts and the #8763 selection-action regression tested.
 - [ ] GPU surface/texture limits, filtering, DX12 FXC and #8731 text tessellation measured; no panic
@@ -1308,9 +1308,9 @@ workspace's read-only copy.
   `https://github.com/aiongg/egui/blob/a4f9a17f64a6bae61350fb85804c9df0d9865916/PATCHES.md`
   and `https://github.com/aiongg/egui/tree/a4f9a17f64a6bae61350fb85804c9df0d9865916`.
 - Winit fork (review input): `https://github.com/aiongg/winit/tree/8b35388bd719e8cc86a95971ba0bc026c9a8f058`,
-  with the W1–W27/W15P ledger recorded in the craft-libs migration planning note and the local
+  with the W1–W27/W15P ledger recorded in the nodalia-libs migration planning note and the local
   `PATCHES.md` provenance.
-- craft-libs PR 199 and language work #198 are external work under
+- nodalia-libs PR 199 and language work #198 are external work under
   `https://github.com/storytold/craft-libs/pull/199` and
   `https://github.com/storytold/craft-libs/pull/198`; their merge state must be rechecked before
   any consumer relies on them. This implementation uses merged PR 199 at
@@ -1331,7 +1331,7 @@ The complete static delta review and exact old/new object identities are retaine
 ## Local implementation amendment — 2026-10-24 (v17 review findings)
 
 The v16 review found four concrete defects still open. Implementation here stays app-owned:
-Lámina has no `craft-ui` dependency, and the reviewed `craft-ui` PR is not part of this
+Lámina has no `nodalia-ui` dependency, and the reviewed `nodalia-ui` PR is not part of this
 checkout, so no generic compatibility component is added or copied. The existing `capture.rs`
 bounded registry remains the owner of screenshot admission, memory reservation and completion.
 
@@ -1435,7 +1435,7 @@ earlier snapshot or an open plan-time gap, this section is the current local sta
 
 ### Current review follow-up — 2026-10-25
 
-The candidate workflows now use `37827adc41fd165f9a9234ac40f94dbad353aa69`, combining
+The candidate workflows now use `9e13bf6e232a13661469a46157aff67eda350e91`, combining
 all prior Latin presentation fonts with the migration's core and Chinese fallbacks.
 This commit must be published before these workflow pins can be fetched remotely.
 The reusable CI gate explicitly sets `require-craft-fonts: true`; its current default
@@ -1456,10 +1456,10 @@ publication packet; old dirty-union hashes below are historical evidence only.
 |---|---|---|
 | egui family (`egui`, `eframe`, `egui-winit`, `egui-wgpu`, `epaint`, `ecolor`, `emath`, `epaint_default_fonts`, `egui_kittest`, …) | `storytold/egui` `6d518fc799681571963842f95b55a6b68431b15a` | `Cargo.toml` patch entries and `Cargo.lock` agree |
 | winit | `storytold/winit` `a517b3846ee8457d84ee4975110bfda6797c44dc` | `Cargo.toml` patch entry |
-| craft-media | `getnodalia/foundation (vendor/craft-libs)` `f0ad6c1e1d297908915f4be315b0fcfc9be7b5d4` | intentionally separate craft-libs pin |
-| craft-pdf / krilla patch | `getnodalia/foundation (vendor/craft-libs)` `9f75d3dc19b4b514c4f3d4847ed1ec1b0e86b4ef` | intentionally separate craft-libs pin |
+| nodalia-media | `getnodalia/foundation (vendor/nodalia-libs)` `f0ad6c1e1d297908915f4be315b0fcfc9be7b5d4` | intentionally separate nodalia-libs pin |
+| nodalia-pdf / krilla patch | `getnodalia/foundation (vendor/nodalia-libs)` `9f75d3dc19b4b514c4f3d4847ed1ec1b0e86b4ef` | intentionally separate nodalia-libs pin |
 
-The craft-media `f0ad6c1e…` and craft-pdf `9f75d3dc…` pins are intentionally separate from the
+The nodalia-media `f0ad6c1e…` and nodalia-pdf `9f75d3dc…` pins are intentionally separate from the
 egui/winit pins; they are **not** required to move to `25da1314…`. The font inputs bundled by
 `epaint_default_fonts` at `6d518fc7…` are byte-identical to those at the superseded `173cc737…`
 reviewed source (all files in `crates/epaint_default_fonts/fonts/` hash the same), so

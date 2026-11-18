@@ -2008,7 +2008,7 @@ fn metafile_dashed_pen_leaves_gaps() {
 
 #[test]
 fn metafile_skewed_bitmap_is_drawn_with_its_transform() {
-    use craft_metafile::write::{Image as MetafileImage, Op, emf};
+    use nodalia_metafile::write::{Image as MetafileImage, Op, emf};
     use kurbo::{Affine, Rect};
 
     let image = std::sync::Arc::new(MetafileImage { width: 2, height: 2, rgba: [255, 0, 0, 255].repeat(4) });
@@ -2024,8 +2024,8 @@ fn metafile_skewed_bitmap_is_drawn_with_its_transform() {
 
 #[test]
 fn metafile_clip_path_and_nondefault_pen_geometry_are_applied() {
-    use craft_metafile::write::{Op, Pen, emf};
-    use craft_metafile::{Cap, Join};
+    use nodalia_metafile::write::{Op, Pen, emf};
+    use nodalia_metafile::{Cap, Join};
     use kurbo::{BezPath, Rect, Shape as _};
 
     let mut triangle = BezPath::new();

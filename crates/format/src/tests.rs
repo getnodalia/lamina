@@ -1,5 +1,5 @@
 use super::*;
-use craft_deckcraft_format::{Manifest, parse_manifest};
+use nodalia_lamina_format::{Manifest, parse_manifest};
 use std::io::{Cursor, Read, Write};
 
 #[test]
@@ -366,7 +366,7 @@ fn reflection_transform_survives_two_native_saves_and_absent_fields_stay_absent(
     assert_eq!(reopened.slides[0].shapes.last().and_then(|s| s.effects.as_ref()).and_then(|e| e.reflection.as_ref()), Some(&absent));
 }
 
-/// Files written before [`craft_deckcraft_format::Finite`] (plain serde_json: NaN as `null`) open too,
+/// Files written before [`nodalia_lamina_format::Finite`] (plain serde_json: NaN as `null`) open too,
 /// including a `null` inside a tagged enum, where serde reports only the enclosing object.
 #[test]
 fn older_files_with_null_numbers_open() {

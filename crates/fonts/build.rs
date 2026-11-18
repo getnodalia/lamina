@@ -1,9 +1,9 @@
-//! Optional craft-fonts build input (https://github.com/getnodalia/foundation/tree/vendor/craft-fonts/main, recipe from its
-//! `docs/integration.md`). With `CRAFT_FONTS_DIR=<checkout>` the fonts in its
+//! Optional nodalia-fonts build input (https://github.com/getnodalia/foundation/tree/nodalia/fonts, recipe from its
+//! `docs/integration.md`). With `NODALIA_FONTS_DIR=<checkout>` the fonts in its
 //! `fonts/latin-manifest.txt` (presentation fonts) and `fonts/manifest.txt` are embedded as
-//! `CRAFT_FONTS`, Latin first. Native builds additionally read
+//! `NODALIA_FONTS`, Latin first. Native builds additionally read
 //! `fonts/simplified-chinese-manifest.txt`; it is optional for ordinary local builds but a required
-//! native input (`CRAFT_FONTS_REQUIRED`) fails without it. Unset, `CRAFT_FONTS` is empty. Web
+//! native input (`NODALIA_FONTS_REQUIRED`) fails without it. Unset, `NODALIA_FONTS` is empty. Web
 //! (wasm32) builds embed only Inter Regular/Bold (or a supported Variable face) and BIZ UDPGothic
 //! Regular, to stay within the web size budget; native builds also carry BIZ UDPGothic Bold.
 //! Required builds verify the faces they promise survive exclusion (and, on wasm, the web filter),
@@ -43,22 +43,22 @@ impl FontInput {
     }
 }
 
-/// Read font-input environment and target architecture, write `craft_fonts.rs`, report font-input
+/// Read font-input environment and target architecture, write `nodalia_fonts.rs`, report font-input
 /// failures as warnings unless required, and always fail when the generated file cannot be written.
 fn main() {
-    println!("cargo::rerun-if-env-changed=CRAFT_FONTS_DIR");
-    println!("cargo::rerun-if-env-changed=CRAFT_FONTS_REQUIRED");
-    let mut src = String::from("pub static CRAFT_FONTS: &[CraftFont] = &[\n");
-    let dir = std::env::var_os("CRAFT_FONTS_DIR").map(PathBuf::from);
-    let required = std::env::var_os("CRAFT_FONTS_REQUIRED").is_some();
+    println!("cargo::rerun-if-env-changed=NODALIA_FONTS_DIR");
+    println!("cargo::rerun-if-env-changed=NODALIA_FONTS_REQUIRED");
+    let mut src = String::from("pub static NODALIA_FONTS: &[CraftFont] = &[\n");
+    let dir = std::env::var_os("NODALIA_FONTS_DIR").map(PathBuf::from);
+    let required = std::env::var_os("NODALIA_FONTS_REQUIRED").is_some();
     let wasm = std::env::var("CARGO_CFG_TARGET_ARCH").is_ok_and(|a| a == "wasm32");
     match input_fonts(dir.as_deref(), wasm, required) {
         Ok(entries) => src.push_str(&entries),
         Err(e) if required => println!("cargo::error={e}"),
-        Err(e) => println!("cargo::warning=building without craft-fonts: {e}"),
+        Err(e) => println!("cargo::warning=building without nodalia-fonts: {e}"),
     }
     src.push_str("];\n");
-    let out = PathBuf::from(std::env::var_os("OUT_DIR").unwrap_or_default()).join("craft_fonts.rs");
+    let out = PathBuf::from(std::env::var_os("OUT_DIR").unwrap_or_default()).join("nodalia_fonts.rs");
     if let Err(e) = std::fs::write(&out, src) {
         println!("cargo::error=writing {}: {e}", out.display());
     }
@@ -72,17 +72,17 @@ fn input_fonts(dir: Option<&std::path::Path>, wasm: bool, required: bool) -> Res
 /// Use no fonts when the directory is absent unless required; otherwise load the manifests.
 fn load_fonts(dir: Option<&std::path::Path>, wasm: bool, required: bool) -> Result<FontInput, String> {
     match dir {
-        Some(dir) => craft_fonts(dir, wasm, required),
-        None if required => Err("CRAFT_FONTS_REQUIRED is set but CRAFT_FONTS_DIR is missing".into()),
+        Some(dir) => nodalia_fonts(dir, wasm, required),
+        None if required => Err("NODALIA_FONTS_REQUIRED is set but NODALIA_FONTS_DIR is missing".into()),
         None => Ok(FontInput::default()),
     }
 }
 
 /// Load optional Latin input, required main input, and native-only Chinese input, then validate
 /// the promised required faces after filtering.
-fn craft_fonts(dir: &std::path::Path, wasm: bool, required: bool) -> Result<FontInput, String> {
+fn nodalia_fonts(dir: &std::path::Path, wasm: bool, required: bool) -> Result<FontInput, String> {
     let mut input = FontInput::default();
-    // The Latin presentation fonts are optional within craft-fonts (older checkouts lack them).
+    // The Latin presentation fonts are optional within nodalia-fonts (older checkouts lack them).
     // A malformed or incomplete optional manifest is skipped as a unit: the main Japanese/symbol/RTL
     // faces and the native Chinese addition stay usable, and required builds still fail validation.
     let latin = dir.join("fonts/latin-manifest.txt");
@@ -103,7 +103,7 @@ fn craft_fonts(dir: &std::path::Path, wasm: bool, required: bool) -> Result<Font
         }
     }
     input.append(manifest(dir, &dir.join("fonts/manifest.txt"), wasm)?);
-    // Native consumers opt in; older craft-fonts checkouts need not carry this manifest.
+    // Native consumers opt in; older nodalia-fonts checkouts need not carry this manifest.
     // An invalid optional addition must never discard the main Japanese/symbol/RTL faces.
     if !wasm {
         let chinese = dir.join("fonts/simplified-chinese-manifest.txt");
@@ -125,7 +125,7 @@ fn craft_fonts(dir: &std::path::Path, wasm: bool, required: bool) -> Result<Font
         } else if required {
             // A required native font input that silently lacks the reviewed Chinese manifest
             // would make the Chinese UI/canvas test pass only by skipping.
-            return Err(format!("{}: CRAFT_FONTS_REQUIRED is set but the simplified-Chinese font manifest is missing", chinese.display()));
+            return Err(format!("{}: NODALIA_FONTS_REQUIRED is set but the simplified-Chinese font manifest is missing", chinese.display()));
         }
     }
     if required {
@@ -194,7 +194,7 @@ fn validate_required_faces(faces: &[(String, String)], wasm: bool) -> Result<(),
     if missing.is_empty() {
         Ok(())
     } else {
-        Err(format!("CRAFT_FONTS_REQUIRED is set but the embedded font set after filtering lacks {}", missing.join(" and ")))
+        Err(format!("NODALIA_FONTS_REQUIRED is set but the embedded font set after filtering lacks {}", missing.join(" and ")))
     }
 }
 
@@ -263,7 +263,7 @@ mod tests {
     /// A required build without a font directory fails; an optional build embeds no fonts.
     #[test]
     fn required_input_cannot_silently_disappear() {
-        assert!(input_fonts(None, false, true).unwrap_err().contains("CRAFT_FONTS_DIR"));
+        assert!(input_fonts(None, false, true).unwrap_err().contains("NODALIA_FONTS_DIR"));
         assert_eq!(input_fonts(None, false, false).unwrap(), "");
     }
 

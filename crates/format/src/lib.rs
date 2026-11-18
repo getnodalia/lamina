@@ -20,8 +20,8 @@ use lamina_model::{LayoutType, Presentation, ShapeKind, defaults};
 // The package itself (identity, manifest, member names, bounded reads) is shared.
 /// Lámina's own file extension. The shared format crate names the original one.
 pub const EXTENSION: &str = "lamina";
-pub use craft_deckcraft_format::{Budget, FormatError, LEGACY_MIMETYPE, MIMETYPE, Result, VERSION, sniff};
-use craft_deckcraft_format::{Member, Package, media_entry};
+pub use nodalia_lamina_format::{Budget, FormatError, LEGACY_MIMETYPE, MIMETYPE, Result, VERSION, sniff};
+use nodalia_lamina_format::{Member, Package, media_entry};
 
 /// Serialize a presentation.
 pub fn save(p: &Presentation) -> Result<Vec<u8>> {
@@ -40,7 +40,7 @@ fn save_as(p: &Presentation, generator: &str) -> Result<Vec<u8>> {
         .map(|(name, item)| Member { name, content_type: &item.content_type, bytes: &item.data })
         .chain(parts.iter().map(|(name, content_type, bytes)| Member { name, content_type, bytes }))
         .collect();
-    craft_deckcraft_format::write(&presentation, generator, &members)
+    nodalia_lamina_format::write(&presentation, generator, &members)
 }
 
 /// A member of a package a test built or rewrote with `zip`, within `max` bytes.
@@ -61,7 +61,7 @@ fn read_entry_max(z: &mut zip::ZipArchive<std::io::Cursor<&[u8]>>, name: &str, m
 
 #[cfg(test)]
 fn read_entry(z: &mut zip::ZipArchive<std::io::Cursor<&[u8]>>, name: &str) -> Result<Vec<u8>> {
-    read_entry_max(z, name, craft_deckcraft_format::MAX_ENTRY)
+    read_entry_max(z, name, nodalia_lamina_format::MAX_ENTRY)
 }
 
 /// Read a presentation. Missing media/chart parts are left empty; use [`load_checked`] to

@@ -154,7 +154,7 @@ pub(super) fn save_as(app: &mut SlideApp, ui: &mut Ui, bs: &mut Backstage, out: 
     ui.add_space(14.0);
     let current = SAVE_TYPES.iter().find(|s| s.0 == bs.file_type).map_or(SAVE_TYPES[0].1, |s| s.1);
     ui.horizontal(|ui| {
-        craft_ui::ComboBox::from_id_salt("backstage_save_type")
+        nodalia_ui::ComboBox::from_id_salt("backstage_save_type")
             .width(340.0)
             .selected_text(current)
             .show_ui(ui, |ui| {

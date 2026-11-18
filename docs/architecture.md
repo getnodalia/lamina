@@ -1,6 +1,6 @@
 # Lámina architecture
 
-> **Last reviewed:** 2026-10-14 · **Last updated:** 2026-11-11 · **Change:** trivial (containers and the Opus decoder come from craft-libs; previous: minor, native chart payloads stored in bounded ZIP members; previous: minor, community PR wave 2026-10-14: 320 engine commands, 41 dialogs, the `metafile` crate, 1,641 tests; duplicated L2/L5/L6 rows and headers folded; previous: minor, transition frames) · **Target:** Microsoft PowerPoint for Mac 16.113 (Microsoft 365)
+> **Last reviewed:** 2026-10-14 · **Last updated:** 2026-11-11 · **Change:** trivial (containers and the Opus decoder come from nodalia-libs; previous: minor, native chart payloads stored in bounded ZIP members; previous: minor, community PR wave 2026-10-14: 320 engine commands, 41 dialogs, the `metafile` crate, 1,641 tests; duplicated L2/L5/L6 rows and headers folded; previous: minor, transition frames) · **Target:** Microsoft PowerPoint for Mac 16.113 (Microsoft 365)
 
 How Lámina is built today. The binding rules (layering, everything is a command, thin UI, never
 break wasm, never crash) are in [AGENTS.md](../AGENTS.md) §3–§5; this document describes what
@@ -16,10 +16,10 @@ nothing below L6 uses egui, eframe, winit or rfd.
 | Layer | Crates | What they do |
 |---|---|---|
 | L0 | `geom`, `color` | EMU/pt units, transforms, ~180 preset shape generators re-derived from ECMA-376, adjust handles, hit testing; RGB/HSL and DrawingML colour transforms |
-| L1 | `model`, `fonts` | Presentation, masters, layouts, slides, shapes, text, themes, tables, charts, transitions, animations, placeholder inheritance (`resolve`); font database (craft-fonts + system) with metric-compatible substitutes for Office fonts (Carlito for Calibri, Caladea for Cambria, Liberation for Arial/Times) |
-| L2 | `text`, `anim`, `format`, `media` | Shaping (HarfRust), UAX #9 bidi, UAX #14 line breaking, autofit, caret hit testing; per-shape animation state over time, the show state machine, transition frame layouts, Morph matching; `.lamina` (zip + JSON + media) and outline text; media probing, decoding, mixer and clock (MP4/MOV, MKV/WebM and Ogg demuxers from craft-media and the Opus decoder from craft-audio, the H.264, HEVC, VP9 and AV1 decoders from craft-video, all in craft-libs) |
+| L1 | `model`, `fonts` | Presentation, masters, layouts, slides, shapes, text, themes, tables, charts, transitions, animations, placeholder inheritance (`resolve`); font database (nodalia-fonts + system) with metric-compatible substitutes for Office fonts (Carlito for Calibri, Caladea for Cambria, Liberation for Arial/Times) |
+| L2 | `text`, `anim`, `format`, `media` | Shaping (HarfRust), UAX #9 bidi, UAX #14 line breaking, autofit, caret hit testing; per-shape animation state over time, the show state machine, transition frame layouts, Morph matching; `.lamina` (zip + JSON + media) and outline text; media probing, decoding, mixer and clock (MP4/MOV, MKV/WebM and Ogg demuxers from nodalia-media and the Opus decoder from nodalia-audio, the H.264, HEVC, VP9 and AV1 decoders from nodalia-video, all in nodalia-libs) |
 | L3 | `render`, `pptx` | `vello_cpu` raster of slides, masters and layouts (fills, outlines, effects, pictures, tables, charts, Morph frames); PPTX import/export from ECMA-376 |
-| L4 | `pdf` | App-owned export layout and rendering through the shared `craft-pdf` writer |
+| L4 | `pdf` | App-owned export layout and rendering through the shared `nodalia-pdf` writer |
 | L5 | `engine` | Sessions, documents, selection, undo history on shared slide snapshots, the command registry (320 commands in `cmd/*`), pointer tools, keys, AutoRecover, the panic guard (`guard.rs`) |
 | L6 | `ui-egui`, `mcp` | The PowerPoint-style interface (ribbon with 10 tabs + contextual tabs, canvas, thumbnails, panes, 41 dialogs, show and presenter windows, the JSON control channel); the MCP server (JSON-RPC 2.0 over stdio), headless or connected to a running app |
 | apps | `lamina` (desktop: eframe/wgpu, cpal audio, logging), `lamina-cli` (run, render, convert, mcp, app), `lamina-web` (trunk; WebGPU with WebGL2 fallback), `xtask` | Exempt from layering |
@@ -81,9 +81,9 @@ macOS, Windows, Linux, FreeBSD and web artifacts.
 
 | Date | Change | Summary |
 |---|---|---|
-| 2026-11-12 | trivial | The `metafile` crate is gone: `render` reads EMF/WMF with craft-metafile from craft-libs |
-| 2026-11-12 | trivial | The `bitstream`, `h264`, `hevc`, `vp9` and `av1` crates are gone: `media` decodes video with craft-video from craft-libs |
-| 2026-11-11 | trivial | The `opus`, `ogg`, `isobmff` and `matroska` crates are gone: `media` uses craft-audio and craft-media from craft-libs |
+| 2026-11-12 | trivial | The `metafile` crate is gone: `render` reads EMF/WMF with nodalia-metafile from nodalia-libs |
+| 2026-11-12 | trivial | The `bitstream`, `h264`, `hevc`, `vp9` and `av1` crates are gone: `media` decodes video with nodalia-video from nodalia-libs |
+| 2026-11-11 | trivial | The `opus`, `ogg`, `isobmff` and `matroska` crates are gone: `media` uses nodalia-audio and nodalia-media from nodalia-libs |
 | 2026-10-18 | minor | Native chart payloads use referenced ZIP members and share media byte/item limits; old inline sidecars remain readable. Synthetic tests cover multi-megabyte layout, all shape owners, shared budgets, missing/corrupt members and invalid references. Scores and milestone scope unchanged |
 | 2026-10-14 | minor | Community PR wave folded: one L2/L5/L6 row each; command registry 320 (`cmd!` registrations in `cmd/*`), 41 dialogs (titled in `dialogs.rs`), 202k lines, 24 crates (`metafile` added at L0), 1,641 tests. The per-PR rows below give the counts each PR saw on its own branch |
 | 2026-10-14 | minor | Size and Position dialog (`shape.sizePosition`): position, size, rotation, scale and lock aspect in one undo step. 227 commands, 28 dialogs |

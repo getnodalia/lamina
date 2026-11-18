@@ -24,7 +24,7 @@ one choice away in Save As; `.deckcraft` and `.slidecraft` files still open.
 |---|---|---|---|
 | upstream's repository (`docs/upstream.md`) | `.github/workflows/upstream-sync.yml` | none: the weekly sync reads upstream and renames it | — |
 
-Resolved: craft-common-actions (release, contributors refresh, Windows ARM64) is gone; fonts and
+Resolved: the shared workflows (release, contributors refresh, Windows ARM64) is gone; fonts and
 the shared libraries come from getnodalia/foundation's vendor branches; the `[patch]` entries for
 `storytold/*` in `Cargo.toml` only name the old home of crates fetched from getnodalia/foundation.
 

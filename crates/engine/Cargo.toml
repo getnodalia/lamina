@@ -9,7 +9,7 @@ description = "Lámina engine: sessions, undo history, selection, the command re
 workspace = true
 
 [dependencies]
-craft-mime = { workspace = true }
+nodalia-mime = { workspace = true }
 lamina-geom = { workspace = true }
 lamina-color = { workspace = true }
 lamina-model = { workspace = true }

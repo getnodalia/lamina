@@ -2,7 +2,7 @@
 //! Noto Sans Arabic and egui's own) leave Hangul, Simplified Chinese, Thai, Devanagari… without
 //! glyphs, so a Korean file name, title, speaker note or comment would be drawn as boxes. For each
 //! character on screen that they lack, a face that has it is borrowed from the font database (the
-//! craft-fonts faces, then installed fonts such as Malgun Gothic, Apple SD Gothic Neo or Noto
+//! nodalia-fonts faces, then installed fonts such as Malgun Gothic, Apple SD Gothic Neo or Noto
 //! Sans CJK) and added after the interface faces. Nothing is bundled for it: on the web, where
 //! there are no installed fonts, only the embedded faces are used.
 //!

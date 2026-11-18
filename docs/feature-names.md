@@ -8,7 +8,7 @@ The existing `smartArt.*`, `insert.smartArt`, `insert.wordArt`, dialog and icon 
 
 Existing document-owned object names are not rewritten. PPTX diagram parts, DrawingML names, public data types, import/export code and attribution remain unchanged.
 
-Lámina currently authors these interface strings directly in English. Shared Lámina catalogs exist in craft-i18n, but this change does not add a catalog loader. Before enabling that integration, catalog keys must include the new Diagram and Decorative Text labels rather than only their retired English names. Diagram/format round-trip tests, UI tests and visual checks remain part of application verification.
+Lámina currently authors these interface strings directly in English. Shared Lámina catalogs exist in nodalia-i18n, but this change does not add a catalog loader. Before enabling that integration, catalog keys must include the new Diagram and Decorative Text labels rather than only their retired English names. Diagram/format round-trip tests, UI tests and visual checks remain part of application verification.
 
 ## Regression coverage
 

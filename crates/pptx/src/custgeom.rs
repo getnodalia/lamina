@@ -348,7 +348,7 @@ fn arc_to(d: &mut String, cur: (f64, f64), wr: f64, hr: f64, st: f64, sw: f64) -
 }
 
 /// Parse our path syntax into commands.
-pub use craft_drawingml::custgeom::parse_path;
+pub use nodalia_drawingml::custgeom::parse_path;
 
 /// Write custom paths as `a:custGeom`. Coordinates are integers in the file, so small path spaces
 /// are scaled up.

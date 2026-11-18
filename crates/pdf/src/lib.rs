@@ -13,7 +13,7 @@
 
 use std::collections::HashMap;
 
-use craft_pdf::write::{self, Metadata, Writer, backend as krilla};
+use nodalia_pdf::write::{self, Metadata, Writer, backend as krilla};
 
 use krilla::action::{Action, LinkAction};
 use krilla::annotation::{Annotation, LinkAnnotation, Target};

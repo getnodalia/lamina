@@ -173,7 +173,7 @@ fn ogg_opus() {
 fn ogg_opus_with_a_huge_granule_does_not_overflow() {
     fn seal(mut page: Vec<u8>) -> Vec<u8> {
         page[22..26].fill(0);
-        let crc = craft_media::ogg::crc32(&page);
+        let crc = nodalia_media::ogg::crc32(&page);
         page[22..26].copy_from_slice(&crc.to_le_bytes());
         page
     }
@@ -206,7 +206,7 @@ fn ogg_opus_with_a_huge_granule_does_not_overflow() {
     extra[18..22].copy_from_slice(&seq.to_le_bytes());
     pages.push(seal(extra));
     let b: Bytes = Arc::new(pages.concat());
-    // craft-media treats a granule past 2^62 as missing: the page continues from the previous one.
+    // nodalia-media treats a granule past 2^62 as missing: the page continues from the previous one.
     assert!(probe(&b).is_ok_and(|i| i.duration_ms < 1 << 40), "the out-of-range granule is ignored");
     let p = audio::decode(&b).expect("decode");
     assert_eq!(p.channels, 3);

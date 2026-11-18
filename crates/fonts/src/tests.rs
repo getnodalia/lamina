@@ -157,7 +157,7 @@ fn variable_font_instances_answer_to_their_windows_names() {
     let db = FontDb::with_font_dirs(Vec::new());
     db.set_system_fallback(false);
     if !db.is_loaded("Montserrat") {
-        return; // built without craft-fonts
+        return; // built without nodalia-fonts
     }
     for (name, style, weight, italic) in [
         ("Montserrat ExtraBold", "Regular", 800.0, false),
@@ -341,19 +341,19 @@ fn outlines_and_metrics() {
 /// When the Latin build input exists, the runtime catalogue carries the expected Latin faces;
 /// required builds also assert their presence.
 #[test]
-fn craft_fonts_latin_when_present() {
-    let required = option_env!("CRAFT_FONTS_REQUIRED").is_some();
-    if !CRAFT_FONTS.iter().any(|f| f.family == "Inter") {
-        assert!(!required, "CRAFT_FONTS_REQUIRED must embed Inter rather than skip the optional Latin manifest");
-        eprintln!("skipped: built without craft-fonts' Latin manifest (set CRAFT_FONTS_DIR)");
+fn nodalia_fonts_latin_when_present() {
+    let required = option_env!("NODALIA_FONTS_REQUIRED").is_some();
+    if !NODALIA_FONTS.iter().any(|f| f.family == "Inter") {
+        assert!(!required, "NODALIA_FONTS_REQUIRED must embed Inter rather than skip the optional Latin manifest");
+        eprintln!("skipped: built without nodalia-fonts' Latin manifest (set NODALIA_FONTS_DIR)");
         return;
     }
-    let inter = |style: &str| CRAFT_FONTS.iter().find(|f| f.family == "Inter" && f.style == style);
+    let inter = |style: &str| NODALIA_FONTS.iter().find(|f| f.family == "Inter" && f.style == style);
     let (regular, bold, variable) = (inter("Regular"), inter("Bold"), inter("Variable"));
     if required {
         assert!(
             variable.is_some() || (regular.is_some() && bold.is_some()),
-            "CRAFT_FONTS_REQUIRED must embed Inter Regular and Bold (or a Variable face)"
+            "NODALIA_FONTS_REQUIRED must embed Inter Regular and Bold (or a Variable face)"
         );
     }
     let db = FontDb::with_font_dirs(Vec::new());
@@ -370,7 +370,7 @@ fn craft_fonts_latin_when_present() {
         assert_ne!(r.id(), b.id(), "Inter Bold must load as its own face");
         assert!(b.weight > r.weight, "Inter Bold weight {} is not above Regular {}", b.weight, r.weight);
     }
-    if CRAFT_FONTS.iter().any(|f| f.family == "Carlito") {
+    if NODALIA_FONTS.iter().any(|f| f.family == "Carlito") {
         assert_eq!(db.face("Calibri", "Bold").family, "Carlito");
     }
 }

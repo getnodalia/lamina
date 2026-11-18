@@ -18,33 +18,33 @@ concurrency:
 
 jobs:
   # Keep the early manifest preflight separate from the reusable workflow. The shared gate
-  # sets CRAFT_FONTS_REQUIRED=1 once the fonts are checked out, so the build script enforces actual required faces.
+  # sets NODALIA_FONTS_REQUIRED=1 once the fonts are checked out, so the build script enforces actual required faces.
   # Keep this pin identical to gate, freebsd.yml and the release-*.yml workflows.
   font-pin:
     runs-on: ubuntu-latest
     env:
-      # Same craft-fonts commit as the release-*.yml workflows.
-      CRAFT_FONTS_REF: 37827adc41fd165f9a9234ac40f94dbad353aa69
+      # Same nodalia-fonts commit as the release-*.yml workflows.
+      NODALIA_FONTS_REF: 9e13bf6e232a13661469a46157aff67eda350e91
     steps:
-      - name: Check out craft-fonts
+      - name: Check out nodalia-fonts
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          repository: getnodalia/foundation # kept at vendor/craft-fonts/main
-          ref: ${{ env.CRAFT_FONTS_REF }}
-          path: craft-fonts
+          repository: getnodalia/foundation # kept at nodalia/fonts
+          ref: ${{ env.NODALIA_FONTS_REF }}
+          path: nodalia-fonts
       - name: Font pin gate
         env:
           # The only pin allowed to predate the reviewed Chinese manifest. It is a sentinel, not
           # a proposed future SHA; update it together with all three workflow pins.
-          PENDING_CRAFT_FONTS_PIN: 43913056ce82a3fdad0ef69f6b88d1dc922a8104
+          PENDING_NODALIA_FONTS_PIN: 43913056ce82a3fdad0ef69f6b88d1dc922a8104
         run: |
-          manifest="$GITHUB_WORKSPACE/craft-fonts/fonts/simplified-chinese-manifest.txt"
+          manifest="$GITHUB_WORKSPACE/nodalia-fonts/fonts/simplified-chinese-manifest.txt"
           if [ -f "$manifest" ]; then
-            echo "craft-fonts pin carries the reviewed simplified-Chinese manifest."
-          elif [ "$CRAFT_FONTS_REF" = "$PENDING_CRAFT_FONTS_PIN" ]; then
-            echo "::warning title=craft-fonts pin pending::The pinned craft-fonts commit has no fonts/simplified-chinese-manifest.txt, so CJK checks may skip. Advance ci.yml, freebsd.yml and the release-*.yml workflows together to the reviewed immutable SHA before claiming shipped Chinese fonts."
+            echo "nodalia-fonts pin carries the reviewed simplified-Chinese manifest."
+          elif [ "$NODALIA_FONTS_REF" = "$PENDING_NODALIA_FONTS_PIN" ]; then
+            echo "::warning title=nodalia-fonts pin pending::The pinned nodalia-fonts commit has no fonts/simplified-chinese-manifest.txt, so CJK checks may skip. Advance ci.yml, freebsd.yml and the release-*.yml workflows together to the reviewed immutable SHA before claiming shipped Chinese fonts."
           else
-            echo "::error title=craft-fonts pin missing Chinese manifest::CRAFT_FONTS_REF advanced past the known pending pin ($PENDING_CRAFT_FONTS_PIN) but still has no fonts/simplified-chinese-manifest.txt. Update the pin to the reviewed commit that carries it."
+            echo "::error title=nodalia-fonts pin missing Chinese manifest::NODALIA_FONTS_REF advanced past the known pending pin ($PENDING_NODALIA_FONTS_PIN) but still has no fonts/simplified-chinese-manifest.txt. Update the pin to the reviewed commit that carries it."
             exit 1
           fi
 
@@ -52,9 +52,9 @@ jobs:
     needs: font-pin
     uses: getnodalia/foundation/.github/workflows/rust-gate.yml@976581262c95c0d95c0184149c0e1ba55485ccb3 # foundation main
     with:
-      # Same craft-fonts commit as the release-*.yml workflows.
+      # Same nodalia-fonts commit as the release-*.yml workflows.
       fonts-repository: getnodalia/foundation
-      fonts-ref: 37827adc41fd165f9a9234ac40f94dbad353aa69
+      fonts-ref: 9e13bf6e232a13661469a46157aff67eda350e91
       packages: >-
         libasound2-dev libxkbcommon-dev libwayland-dev libx11-dev libxrandr-dev libxi-dev
         libgl1-mesa-dev

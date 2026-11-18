@@ -118,8 +118,8 @@ mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 # Executable and icon are ASCII; Info.plist names them (CFBundleExecutable / CFBundleIconFile).
 cp "$WORK/bin/lamina" "$APP/Contents/MacOS/Lamina"
 cp "$ROOT/assets/app-icon/lamina.icns" "$APP/Contents/Resources/Lamina.icns"
-# The licences and README, as in the CLI zip, plus the licences of the embedded craft-fonts
-# fonts when built with CRAFT_FONTS_DIR. Before signing, so the seal covers them.
+# The licences and README, as in the CLI zip, plus the licences of the embedded nodalia-fonts
+# fonts when built with NODALIA_FONTS_DIR. Before signing, so the seal covers them.
 copy_docs "$APP/Contents/Resources"
 sed -e "s/@VERSION@/$VERSION/g" -e "s/@SHORT_VERSION@/$SHORT_VERSION/g" \
   -e "s/@BUILD_SHA@/${LAMINA_BUILD_SHA:-unknown}/g" \

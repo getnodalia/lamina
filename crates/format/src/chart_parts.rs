@@ -2,7 +2,7 @@
 use std::collections::HashSet;
 use std::sync::Arc;
 
-use craft_deckcraft_format::{MAX_ENTRY, Package, chart_part_entry, is_chart_part_entry};
+use nodalia_lamina_format::{MAX_ENTRY, Package, chart_part_entry, is_chart_part_entry};
 
 use lamina_model::chart::ChartPart;
 use lamina_model::{Master, Presentation, Shape, ShapeKind};

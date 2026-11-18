@@ -3,7 +3,7 @@ name = "lamina-fonts"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
-description = "Lámina fonts: font database (craft-fonts + system), substitutes for Office fonts, metrics, outlines, shaping"
+description = "Lámina fonts: font database (nodalia-fonts + system), substitutes for Office fonts, metrics, outlines, shaping"
 
 [lints]
 workspace = true

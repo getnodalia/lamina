@@ -12,15 +12,15 @@ list (author, source, license) is in ATTRIBUTION.md.
 - Ubuntu Light (via the epaint_default_fonts crate) — Ubuntu Font Licence 1.0.
 - Hack, Noto Emoji and the egui emoji icon font (via epaint_default_fonts) — MIT, Bitstream Vera,
   OFL-1.1.
-- Builds made with craft-fonts (CRAFT_FONTS_DIR; all official releases) embed the fonts listed in
+- Builds made with nodalia-fonts (NODALIA_FONTS_DIR; all official releases) embed the fonts listed in
   ATTRIBUTION.md (Inter, Carlito, Caladea, Liberation, Montserrat, Lato, Open Sans, Roboto,
   Merriweather, Playfair Display, Poppins, Nunito Sans, BIZ UD, Shippori Mincho, Noto Sans
   Arabic, Noto Sans Thai, Noto Sans Georgian, NanumGothic, Noto Sans Symbols, Noto Sans Symbols 2,
   Noto Sans Hebrew) under the SIL Open Font License 1.1; their licence texts ship with release
-  packages (the exact font files and OFL texts are retained in craft-fonts releases). Native
-  builds may additionally read craft-fonts' separate Simplified Chinese manifest and embed LXGW
+  packages (the exact font files and OFL texts are retained in nodalia-fonts releases). Native
+  builds may additionally read nodalia-fonts' separate Simplified Chinese manifest and embed LXGW
   WenKai Lite 1.530 under OFL-1.1; its OFL text ships with release packages, and the exact font
-  and licence files are retained in craft-fonts with the LXGW Reserved Font Names. That face is
+  and licence files are retained in nodalia-fonts with the LXGW Reserved Font Names. That face is
   not in the web payload.
 - Lucide icon paths embedded in crates/engine/src/icon_data.rs (Insert › Icons), release 1.56.0,
   commit 440a1e1dfb1e712505308da46bead3c28b1f1398, https://github.com/lucide-icons/lucide.
@@ -74,13 +74,13 @@ Code dependencies
   under the Mozilla Public License 2.0; its source is available at
   https://github.com/pdeljanov/Symphonia.
 - The H.264, HEVC, VP9 and AV1 crates under crates/ are ported from FilmCraft (same owner,
-  MIT OR Apache-2.0). The Opus decoder (craft-audio) and the MP4, Matroska and Ogg demuxers
-  (craft-media) come from craft-libs (same owner, MIT OR Apache-2.0).
+  MIT OR Apache-2.0). The Opus decoder (nodalia-audio) and the MP4, Matroska and Ogg demuxers
+  (nodalia-media) come from nodalia-libs (same owner, MIT OR Apache-2.0).
 
-- Krilla 0.8.2 (https://github.com/LaurenzV/krilla) is used through craft-pdf under
-  MIT OR Apache-2.0. craft-libs vendors that version with page/surface unwind recovery
+- Krilla 0.8.2 (https://github.com/LaurenzV/krilla) is used through nodalia-pdf under
+  MIT OR Apache-2.0. nodalia-libs vendors that version with page/surface unwind recovery
   and rejection of serialization after failed cleanup. Its upstream licence files are
-  retained in craft-libs/licenses/pdf-writer. Its bundled Compact ICC Profiles by Clinton Ingram
+  retained in nodalia-libs/licenses/pdf-writer. Its bundled Compact ICC Profiles by Clinton Ingram
   (https://github.com/saucecontrol/Compact-ICC-Profiles) are CC0-1.0; the profile
   licence is retained in licenses/pdf-writer/LICENSE-ICC.txt and exact files, sources
   and hashes are in ATTRIBUTION.md.

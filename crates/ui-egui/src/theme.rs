@@ -175,7 +175,7 @@ pub fn apply(ctx: &egui::Context, t: &Tokens) {
     });
 }
 
-/// UI fonts: Inter (from craft-fonts) when embedded, a Japanese UI face for CJK, then egui's.
+/// UI fonts: Inter (from nodalia-fonts) when embedded, a Japanese UI face for CJK, then egui's.
 pub fn install_fonts(ctx: &egui::Context) {
     install_fonts_with(ctx, &[]);
 }
@@ -191,10 +191,10 @@ pub fn install_fonts_with(ctx: &egui::Context, extra: &[std::sync::Arc<lamina_fo
 pub fn font_definitions(extra: &[std::sync::Arc<lamina_fonts::FontFace>]) -> FontDefinitions {
     let mut defs = FontDefinitions::default();
     let mut names = vec![];
-    for (i, f) in lamina_fonts::CRAFT_FONTS.iter().enumerate() {
+    for (i, f) in lamina_fonts::NODALIA_FONTS.iter().enumerate() {
         let wanted = (f.family == "Inter" && (f.style == "Regular" || f.style == "SemiBold" || f.style == "Bold"))
             || (f.family == "BIZ UDPGothic" && f.style == "Regular")
-            // Exact craft-fonts family names: the Korean face is "NanumGothic" (no space), and
+            // Exact nodalia-fonts family names: the Korean face is "NanumGothic" (no space), and
             // the symbol faces are "Noto Sans Symbols" / "Noto Sans Symbols 2". A near-miss here
             // would leave Hangul and the ◉ laser toggle without a glyph. Hebrew backs the
             // Language dialog's native "עברית" label where no system font supplies it.
@@ -328,9 +328,9 @@ mod tests {
     #[test]
     #[cfg(not(target_arch = "wasm32"))]
     fn native_chinese_fallback_draws_initial_document_labels() {
-        let faces: Vec<_> = lamina_fonts::CRAFT_FONTS.iter().filter(|f| f.family == "LXGW WenKai Lite").collect();
+        let faces: Vec<_> = lamina_fonts::NODALIA_FONTS.iter().filter(|f| f.family == "LXGW WenKai Lite").collect();
         if faces.is_empty() {
-            assert!(option_env!("CRAFT_FONTS_REQUIRED").is_none(), "required native font input must include the reviewed Chinese fallback");
+            assert!(option_env!("NODALIA_FONTS_REQUIRED").is_none(), "required native font input must include the reviewed Chinese fallback");
             eprintln!("optional Chinese input absent: bundled Chinese coverage was not qualified");
             return;
         }
@@ -374,9 +374,9 @@ mod tests {
     #[test]
     #[cfg(not(target_arch = "wasm32"))]
     fn native_hebrew_fallback_is_one_regular_face_and_draws_language_labels() {
-        let faces: Vec<_> = lamina_fonts::CRAFT_FONTS.iter().filter(|f| f.family == "Noto Sans Hebrew").collect();
+        let faces: Vec<_> = lamina_fonts::NODALIA_FONTS.iter().filter(|f| f.family == "Noto Sans Hebrew").collect();
         if faces.is_empty() {
-            assert!(option_env!("CRAFT_FONTS_REQUIRED").is_none(), "required native font input must include Noto Sans Hebrew Regular");
+            assert!(option_env!("NODALIA_FONTS_REQUIRED").is_none(), "required native font input must include Noto Sans Hebrew Regular");
             eprintln!("optional font input absent: native Hebrew coverage was not qualified");
             return;
         }
@@ -415,8 +415,8 @@ mod tests {
     #[test]
     #[cfg(not(target_arch = "wasm32"))]
     fn native_hebrew_fallback_keeps_mixed_text_editing_in_logical_order() {
-        if !lamina_fonts::CRAFT_FONTS.iter().any(|f| f.family == "Noto Sans Hebrew") {
-            assert!(option_env!("CRAFT_FONTS_REQUIRED").is_none(), "required native Hebrew face is absent");
+        if !lamina_fonts::NODALIA_FONTS.iter().any(|f| f.family == "Noto Sans Hebrew") {
+            assert!(option_env!("NODALIA_FONTS_REQUIRED").is_none(), "required native Hebrew face is absent");
             return;
         }
         let ctx = egui::Context::default();

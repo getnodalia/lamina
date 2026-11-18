@@ -19,10 +19,10 @@ pub const FALLBACK_FAMILY: &str = "Inter";
 /// `epaint_default_fonts`; licence in ATTRIBUTION.md).
 pub const LAST_RESORT_FAMILY: &str = "Ubuntu";
 
-/// Compiled-in font files: the craft-fonts faces (Latin presentation fonts, then Japanese;
-/// empty without `CRAFT_FONTS_DIR`), then the last-resort face.
+/// Compiled-in font files: the nodalia-fonts faces (Latin presentation fonts, then Japanese;
+/// empty without `NODALIA_FONTS_DIR`), then the last-resort face.
 pub fn bundled() -> Vec<&'static [u8]> {
-    let mut v: Vec<&'static [u8]> = crate::CRAFT_FONTS.iter().map(|f| f.bytes).collect();
+    let mut v: Vec<&'static [u8]> = crate::NODALIA_FONTS.iter().map(|f| f.bytes).collect();
     v.push(epaint_default_fonts::UBUNTU_LIGHT);
     v
 }
@@ -936,9 +936,9 @@ fn style_italic(style: &str) -> bool {
 }
 
 impl FontDb {
-    /// A database holding the bundled fonts, then the craft-fonts Japanese faces (Mincho first,
+    /// A database holding the bundled fonts, then the nodalia-fonts Japanese faces (Mincho first,
     /// so they are the fallback for Japanese text after the requested and bundled fonts; empty
-    /// without `CRAFT_FONTS_DIR`), whose system font scan reads `font_dirs`.
+    /// without `NODALIA_FONTS_DIR`), whose system font scan reads `font_dirs`.
     pub fn with_font_dirs(font_dirs: Vec<std::path::PathBuf>) -> Self {
         let mut faces = Vec::new();
         for data in bundled() {

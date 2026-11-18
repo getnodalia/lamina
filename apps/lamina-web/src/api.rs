@@ -1,4 +1,4 @@
-//! `window.lamina`: the page command API (`craft-web-api`, storytold/craft-libs#413) over the
+//! `window.lamina`: the page command API (`nodalia-web-api`, storytold/craft-libs#413) over the
 //! app's own control channel, the one the desktop control server drives (`docs/control-protocol.md`).
 //!
 //! The crate owns the JavaScript side (`request`, `execute`, `commands`, `docInspect`, `uiInspect`,
@@ -59,8 +59,8 @@ mod web {
     use std::rc::Rc;
     use std::sync::mpsc::channel;
 
-    use craft_web_api::methods::Methods;
-    use craft_web_api::page::{PageApi, Request};
+    use nodalia_web_api::methods::Methods;
+    use nodalia_web_api::page::{PageApi, Request};
     use lamina_ui_egui::{ControlRequest, SlideApp};
     use serde_json::json;
     use wasm_bindgen_futures::JsFuture;

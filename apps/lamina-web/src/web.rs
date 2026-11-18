@@ -24,7 +24,7 @@ pub fn start() {
             log::error!("missing <canvas id=\"{CANVAS_ID}\">");
             return;
         };
-        // Host modes (`craft-web-host`): `?host=parent`, a same-origin page framing Lámina,
+        // Host modes (`nodalia-web-host`): `?host=parent`, a same-origin page framing Lámina,
         // opens presentations in it and stores what it saves (`host`); `data-host="page"` on the
         // canvas opts a page in that runs Lámina in its own document. The presenter popup is
         // never the framed page.
