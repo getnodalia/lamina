@@ -5,7 +5,7 @@
 | Upstream | `storytold/deckcraft` |
 | Last observed | `0623b430324cf4c3d1962e6ae7885cf30c011c5e` |
 | Last evaluated | `0623b430324cf4c3d1962e6ae7885cf30c011c5e` |
-| Last integrated | `0623b430324cf4c3d1962e6ae7885cf30c011c5e` imported with full history on 2026-11-10 |
+| Last integrated | `4aec38a2bceac18ee9c67b80b834441a69cc81ae` (209 commits since the last sync) on 2026-11-18 |
 | Skipped | the community button and the brand files (Lámina has neither) |
 | Adapted | every name (`scripts/rebrand.py`), the app icon, the Nodalia interface, PowerPoint as the format a new presentation is saved in |
 | Conflicting | `README.md` (kept ours), `AGENTS.md` (kept ours) |
@@ -15,16 +15,16 @@
 Upstream's code arrives renamed: `scripts/rebrand.py` applies `.github/rebrand.toml` (DeckCraft
 becomes Lámina, internal names included; links to the shared libraries point at
 getnodalia/foundation) to upstream's tree, and the weekly sync
-(`.github/workflows/upstream-sync.yml`) records the result on the `upstream-lamina` branch. Each
-commit there has the previous mirror commit and the upstream commit it renames as parents, and
-names that commit in an `Upstream-Commit:` trailer. The sync merges the newest mirror commit
-into a branch and opens a pull request; files listed in `.github/upstream-keep` keep this
-repository's version.
+(`.github/workflows/upstream-sync.yml`) records the result as one mirror commit: its only parent is
+the previous mirror commit, its subject is `Upstream <sha> with this app's names`, and an
+`Upstream-Commit:` trailer names the upstream commit it renames. The sync merges that commit into a
+branch and opens a pull request; files listed in `.github/upstream-keep` keep this repository's
+version. No mirror branch is pushed, so merge sync pull requests with a merge commit: a squash would
+drop the mirror commit the next sync starts from.
 
-The mirror starts at the renamed `0623b430`, merged into `main` (with this repository's tree)
-by the pull request that renamed the app. Before the first sync creates the `upstream-lamina`
-branch, the workflow finds that commit through its trailer. `python3 scripts/rebrand.py check`
-fails when an old name comes back; a line that must keep one says `rebrand: keep`.
+The mirror starts at the renamed `0623b430`, merged into `main` (with this repository's tree) by the
+pull request that renamed the app. `python3 scripts/rebrand.py check` fails when an old name comes
+back; a line that must keep one says `rebrand: keep`.
 
 ## Names kept on purpose
 
