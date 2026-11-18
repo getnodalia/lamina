@@ -36,8 +36,8 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use nodalia_web_host::web::{FileData, Host, Message};
 use lamina_ui_egui::{Services, SlideApp};
+use nodalia_web_host::web::{FileData, Host, Message};
 
 /// The app id in the host messages (`lamina:ready`).
 const APP: &str = "lamina";

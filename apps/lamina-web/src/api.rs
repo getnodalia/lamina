@@ -59,9 +59,9 @@ mod web {
     use std::rc::Rc;
     use std::sync::mpsc::channel;
 
+    use lamina_ui_egui::{ControlRequest, SlideApp};
     use nodalia_web_api::methods::Methods;
     use nodalia_web_api::page::{PageApi, Request};
-    use lamina_ui_egui::{ControlRequest, SlideApp};
     use serde_json::json;
     use wasm_bindgen_futures::JsFuture;
 

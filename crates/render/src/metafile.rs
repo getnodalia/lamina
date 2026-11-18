@@ -10,9 +10,9 @@
 use std::collections::HashMap;
 use std::sync::Arc;
 
-use nodalia_metafile::{Cap, HAlign, Item, Join, LineStyle, PlacedClip, PlacedItem, Text, Tile, VAlign};
 use kurbo::{Affine, BezPath, Rect, Shape as _};
 use lamina_fonts::{FontDb, FontFace};
+use nodalia_metafile::{Cap, HAlign, Item, Join, LineStyle, PlacedClip, PlacedItem, Text, Tile, VAlign};
 use skrifa::MetadataProvider as _;
 use vello_cpu::{Pixmap, RenderContext, Resources, peniko};
 
