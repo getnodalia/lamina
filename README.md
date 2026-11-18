@@ -32,13 +32,13 @@ with no account and no cloud. It runs on Linux, macOS and Windows, opens and sav
 and shares its start screen, Preferences and look with Letra and Celdas, the other Nodalia office apps.
 
 <p align="center">
-  <img src="docs/images/editor.png" width="900" alt="Lámina editing a slide: the ribbon, slide thumbnails in sections, a process diagram on the canvas and the notes island">
+  <img src="https://raw.githubusercontent.com/getnodalia/nodalia-web/main/assets/screens/lamina/lamina-editor-light.jpg" width="900" alt="Lámina editing a slide in the light theme: the ribbon, slide thumbnails, a diagram of shapes on the canvas and the notes island">
 </p>
 
 <table>
   <tr>
     <td width="50%"><img src="docs/images/home.png" alt="File › Home: new presentations from themes and templates, and recent files"><br><sub>File › Home, the start screen shared by the office apps</sub></td>
-    <td width="50%"><img src="docs/images/dark-mode.png" alt="Lámina in dark mode showing a chart slide"><br><sub>Dark mode, with a native chart</sub></td>
+    <td width="50%"><img src="https://raw.githubusercontent.com/getnodalia/nodalia-web/main/assets/screens/lamina/lamina-editor-dark.jpg" alt="Lámina in the dark theme with a diagram of shapes"><br><sub>Dark mode, chosen in Preferences</sub></td>
   </tr>
 </table>
 
