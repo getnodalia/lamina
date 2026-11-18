@@ -50,7 +50,7 @@ jobs:
 
   gate:
     needs: font-pin
-    uses: getnodalia/foundation/.github/workflows/rust-gate.yml@976581262c95c0d95c0184149c0e1ba55485ccb3 # foundation main
+    uses: getnodalia/foundation/.github/workflows/rust-gate.yml@c0d77c11d649cd5293834a544ef18031270d4d54 # foundation main
     with:
       # Same nodalia-fonts commit as the release-*.yml workflows.
       fonts-repository: getnodalia/foundation
@@ -62,7 +62,7 @@ jobs:
   # Every git dependency in Cargo.lock comes from getnodalia or nodalia-design.
   git-sources:
     name: git-sources
-    uses: getnodalia/foundation/.github/workflows/git-sources.yml@976581262c95c0d95c0184149c0e1ba55485ccb3 # foundation main
+    uses: getnodalia/foundation/.github/workflows/git-sources.yml@c0d77c11d649cd5293834a544ef18031270d4d54 # foundation main
 
 
   # Lámina's own names everywhere; upstream's arrive renamed by the weekly sync.
