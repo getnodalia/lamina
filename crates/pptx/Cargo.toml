@@ -9,7 +9,13 @@ description = "Lámina PPTX: Office Open XML (PresentationML/DrawingML) import a
 workspace = true
 
 [dependencies]
+craft-opc.workspace = true
+craft-xml.workspace = true
+craft-cfb.workspace = true
+craft-drawingml.workspace = true
+craft-drawingml-table.workspace = true
 lamina-model = { workspace = true }
+lamina-text = { workspace = true }
 lamina-geom = { workspace = true }
 lamina-color = { workspace = true }
 quick-xml = { workspace = true }
