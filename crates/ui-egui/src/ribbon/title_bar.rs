@@ -77,7 +77,7 @@ pub fn title_bar(app: &mut SlideApp, ui: &mut Ui) {
         );
         right.spacing_mut().item_spacing.x = 6.0;
         let present = right.add(
-            egui::Button::new(egui::RichText::new("Present").color(t.accent_text).font(theme::bold(13.0)))
+            egui::Button::new(egui::RichText::new(crate::i18n::t("Present")).color(t.accent_text).font(theme::bold(13.0)))
                 .fill(t.accent)
                 .corner_radius(control_h / 2.0)
                 .min_size(vec2(92.0, control_h)),
@@ -161,9 +161,9 @@ fn search_field(ui: &mut Ui, height: f32) -> egui::Response {
         let glyph = Rect::from_center_size(pos2(rect.min.x + height / 2.0 + 2.0, rect.center().y), vec2(16.0, 16.0));
         nodalia_theme::icons::paint(ui.painter(), glyph, icon, nodalia_theme::icons::Style::bold(t.text_dim));
     }
-    let hint = if cfg!(target_os = "macos") { "Search commands  ⇧⌘P" } else { "Search commands  Ctrl+Shift+P" };
+    let hint = crate::i18n::t(if cfg!(target_os = "macos") { "Search commands  ⇧⌘P" } else { "Search commands  Ctrl+Shift+P" });
     ui.painter().text(pos2(rect.min.x + height + 6.0, rect.center().y), Align2::LEFT_CENTER, hint, theme::font(12.5), t.text_faint);
-    resp.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, "Search commands"));
+    resp.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, crate::i18n::t("Search commands")));
     resp.on_hover_cursor(egui::CursorIcon::PointingHand)
 }
 

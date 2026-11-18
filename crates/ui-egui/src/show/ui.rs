@@ -760,7 +760,7 @@ fn draw_bars(ui: &mut Ui, show: &mut Show, f: &Fr, painter: &egui::Painter, out:
         painter.text(
             pos2(bar.min.x + 14.0, bar.center().y),
             Align2::LEFT_CENTER,
-            format!("Slide {} of {}", show.state.slide + 1, doc.slides.len()),
+            crate::i18n::slide_of(show.state.slide + 1, doc.slides.len()),
             theme::font(12.0),
             Color32::from_gray(200),
         );
@@ -769,7 +769,7 @@ fn draw_bars(ui: &mut Ui, show: &mut Show, f: &Fr, painter: &egui::Painter, out:
                 .max_rect(Rect::from_min_max(pos2(bar.max.x - 260.0, bar.min.y), bar.max))
                 .layout(egui::Layout::right_to_left(egui::Align::Center)),
         );
-        if child.button("Close").clicked() {
+        if child.button(crate::i18n::t("Close")).clicked() {
             out.keep = false;
         }
         if child.button("▶").clicked() {

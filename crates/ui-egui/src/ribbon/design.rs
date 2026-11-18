@@ -78,7 +78,7 @@ pub(super) fn design(app: &mut SlideApp, ui: &mut Ui) {
                 });
             }
             ui.separator();
-            if ui.button("Customize Colors…").clicked() {
+            if ui.button(crate::i18n::t("Customize Colors…")).clicked() {
                 run(app, "design.colors", json!({}));
                 ui.close();
             }
@@ -92,7 +92,7 @@ pub(super) fn design(app: &mut SlideApp, ui: &mut Ui) {
                 }
             }
             ui.separator();
-            if ui.button("Customize Fonts…").clicked() {
+            if ui.button(crate::i18n::t("Customize Fonts…")).clicked() {
                 run(app, "design.fonts", json!({}));
                 ui.close();
             }
@@ -131,7 +131,7 @@ pub(super) fn design(app: &mut SlideApp, ui: &mut Ui) {
                     }
                 }
             });
-            if ui.button("Reset Slide Background").clicked() {
+            if ui.button(crate::i18n::t("Reset Slide Background")).clicked() {
                 run(app, "design.background", json!({"reset": true}));
             }
         });
@@ -139,13 +139,13 @@ pub(super) fn design(app: &mut SlideApp, ui: &mut Ui) {
     group(ui, |ui| {
         let r = big_button(ui, Icon::SlideSize, "Slide\nSize", true);
         egui::Popup::menu(&r).show(|ui| {
-            if ui.button("Standard (4:3)").clicked() {
+            if ui.button(crate::i18n::t("Standard (4:3)")).clicked() {
                 run(app, "design.slideSize", json!({"preset": "standard"}));
             }
-            if ui.button("Widescreen (16:9)").clicked() {
+            if ui.button(crate::i18n::t("Widescreen (16:9)")).clicked() {
                 run(app, "design.slideSize", json!({"preset": "widescreen"}));
             }
-            if ui.button("Page Setup…").clicked() {
+            if ui.button(crate::i18n::t("Page Setup…")).clicked() {
                 app.dialog = Some(crate::dialogs::Dialog::new("slideSize"));
             }
         });

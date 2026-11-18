@@ -155,7 +155,7 @@ fn buttons(ui: &mut Ui, ok_label: &str) -> (bool, bool) {
         {
             ok = true;
         }
-        if ui.add(egui::Button::new("Cancel").min_size(vec2(72.0, 24.0))).clicked() {
+        if ui.add(egui::Button::new(crate::i18n::t("Cancel")).min_size(vec2(72.0, 24.0))).clicked() {
             cancel = true;
         }
     });
