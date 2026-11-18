@@ -684,17 +684,17 @@ Lámina. The shape is:
 
 ```toml
 [patch.crates-io]
-winit = { git = "https://github.com/getnodalia/foundation/tree/vendor/winit/master", rev = "<reviewed published storytold winit full SHA with W15P>" }
-eframe = { git = "https://github.com/getnodalia/foundation/tree/vendor/egui/main", rev = "<reviewed published storytold egui full SHA with E1-E21 + E21b>" }
-egui = { git = "https://github.com/getnodalia/foundation/tree/vendor/egui/main", rev = "<same reviewed storytold egui full SHA>" }
-egui-winit = { git = "https://github.com/getnodalia/foundation/tree/vendor/egui/main", rev = "<same reviewed storytold egui full SHA>" }
-egui-wgpu = { git = "https://github.com/getnodalia/foundation/tree/vendor/egui/main", rev = "<same reviewed storytold egui full SHA>" }
-egui_kittest = { git = "https://github.com/getnodalia/foundation/tree/vendor/egui/main", rev = "<same reviewed storytold egui full SHA>" }
-epaint = { git = "https://github.com/getnodalia/foundation/tree/vendor/egui/main", rev = "<same reviewed storytold egui full SHA>" }
-epaint_default_fonts = { git = "https://github.com/getnodalia/foundation/tree/vendor/egui/main", rev = "<same reviewed storytold egui full SHA>" }
-ecolor = { git = "https://github.com/getnodalia/foundation/tree/vendor/egui/main", rev = "<same reviewed storytold egui full SHA>" }
-emath = { git = "https://github.com/getnodalia/foundation/tree/vendor/egui/main", rev = "<same reviewed storytold egui full SHA>" }
-krilla = { git = "https://github.com/getnodalia/foundation/tree/vendor/craft-libs/main", rev = "c3487320b2d1de657b860b3c8abb44e1f2b32bd8", version = "=0.8.2" }
+winit = { git = "https://github.com/getnodalia/foundation", rev = "<reviewed published storytold winit full SHA with W15P>" }
+eframe = { git = "https://github.com/getnodalia/foundation", rev = "<reviewed published storytold egui full SHA with E1-E21 + E21b>" }
+egui = { git = "https://github.com/getnodalia/foundation", rev = "<same reviewed storytold egui full SHA>" }
+egui-winit = { git = "https://github.com/getnodalia/foundation", rev = "<same reviewed storytold egui full SHA>" }
+egui-wgpu = { git = "https://github.com/getnodalia/foundation", rev = "<same reviewed storytold egui full SHA>" }
+egui_kittest = { git = "https://github.com/getnodalia/foundation", rev = "<same reviewed storytold egui full SHA>" }
+epaint = { git = "https://github.com/getnodalia/foundation", rev = "<same reviewed storytold egui full SHA>" }
+epaint_default_fonts = { git = "https://github.com/getnodalia/foundation", rev = "<same reviewed storytold egui full SHA>" }
+ecolor = { git = "https://github.com/getnodalia/foundation", rev = "<same reviewed storytold egui full SHA>" }
+emath = { git = "https://github.com/getnodalia/foundation", rev = "<same reviewed storytold egui full SHA>" }
+krilla = { git = "https://github.com/getnodalia/foundation", rev = "c3487320b2d1de657b860b3c8abb44e1f2b32bd8", version = "=0.8.2" }
 ```
 
 The `aiongg/egui` `a4f9a17f` and `aiongg/winit` `8b35388b` revisions are source-review inputs, not

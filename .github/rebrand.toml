@@ -9,6 +9,8 @@
 
 # Left as they are wherever they appear (in file contents and in paths).
 keep = [
+    # The shared native-format crate in getnodalia/foundation keeps its published name.
+    "craft[-_]deckcraft[-_]format",
     # Family names baked into the binary test fonts under crates/*/tests/fixtures; the tests must
     # ask for the names the fonts carry.
     "DeckCraft(?= Colr Squares| Legacy)",
@@ -61,6 +63,10 @@ pattern = '^version = "[^"]*"'
 # Identity: app id, publisher, installer identities (a product of its own, never DeckCraft's).
 # Cargo sources: the shared libraries come from getnodalia/foundation, which vendors them at the
 # same commits (standards/shared-libraries.md there). Before the broader link rules below.
+[[replace]]
+from = '"https://github.com/storytold/craft-libs"'
+to = '"https://github.com/getnodalia/foundation"'
+
 [[replace]]
 from = 'git = "https://github.com/storytold/craft-libs.git"'
 to = 'git = "https://github.com/getnodalia/foundation"'

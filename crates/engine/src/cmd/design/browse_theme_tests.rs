@@ -140,7 +140,7 @@ fn effect_scheme_replaces_format_and_keeps_colours_and_fonts() {
     assert_eq!(names, ["Lámina", "Soft", "Crisp", "Lift", "Glow", "Plain"]);
 
     let n = undo_len(&s);
-    s.execute("design.effects", &json!({"name": "Lámina"})).unwrap();
+    s.execute("design.effects", &json!({"name": "Lamina"})).unwrap();
     assert_eq!(undo_len(&s), n, "the scheme already on the theme is not an undo step");
     let err = s.execute("design.effects", &json!({"name": "Office"})).unwrap_err().to_string();
     assert!(err.contains("no effect scheme"), "{err}");
