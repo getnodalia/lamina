@@ -233,11 +233,18 @@ fn next_font_scheme(
     Ok(next)
 }
 
+/// Scheme names match ignoring case and the accent on "Lámina", so an agent or script that writes
+/// the plain ASCII "Lamina" finds the built-in scheme.
+fn same_scheme_name(scheme: &str, asked: &str) -> bool {
+    let fold = |s: &str| s.chars().map(|c| if matches!(c, 'á' | 'Á') { 'a' } else { c.to_ascii_lowercase() }).collect::<String>();
+    fold(scheme) == fold(asked)
+}
+
 pub(super) fn effects(s: &mut Session, p: &Value) -> Result<Value> {
     let name = str_param(p, "name").ok_or_else(|| bad("design.effects", "missing `name`"))?;
     let scheme = builtin_format_schemes()
         .into_iter()
-        .find(|f| f.name.eq_ignore_ascii_case(name))
+        .find(|f| same_scheme_name(&f.name, name))
         .ok_or_else(|| bad("design.effects", format!("no effect scheme `{name}`")))?;
     let stored = scheme.name.clone();
     let same = {

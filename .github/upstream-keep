@@ -20,3 +20,5 @@ packaging/macos/dmg/**
 .github/ISSUE_TEMPLATE/**
 .github/CODEOWNERS
 CONTRIBUTING.md
+crates/format/tests/golden/deck.lamina
+crates/pptx/src/tables.rs
