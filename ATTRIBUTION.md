@@ -41,12 +41,12 @@ artwork. The ribbon and menu icons stay original drawings.
 | Hack Regular, Noto Emoji (via `epaint_default_fonts` / egui) | Source Foundry; Google | https://crates.io/crates/epaint_default_fonts | MIT / Bitstream-Vera, OFL-1.1 | egui UI fallback glyphs |
 | `epaint_default_fonts::EGUI_ICONS`, `epaint_default_fonts::EMOJI_ICON` (dependency font inputs) | John Slegers | [egui 6d518fc7](https://github.com/getnodalia/foundation/tree/vendor/egui/main/tree/6d518fc799681571963842f95b55a6b68431b15a/crates/epaint_default_fonts/fonts), [emoji-icon-font](https://github.com/jslegers/emoji-icon-font) | MIT (Copyright (c) 2014 John Slegers; full upstream text in `NOTICE`) | egui-icons.ttf is the five-glyph subset, included by default_fonts independently of monochrome_emoji_fonts; emoji-icon-font.ttf is the full monochrome fallback. Dependency assets unmodified here; no font file copied into this repository. |
 
-## Embedded at build time from craft-fonts (`CRAFT_FONTS_DIR`)
+## Embedded at build time from nodalia-fonts (`NODALIA_FONTS_DIR`)
 
-Release builds (and local builds with a craft-fonts checkout) embed the fonts listed in
-[craft-fonts](https://github.com/getnodalia/foundation/tree/vendor/craft-fonts/main) `fonts/latin-manifest.txt` and
+Release builds (and local builds with a nodalia-fonts checkout) embed the fonts listed in
+[nodalia-fonts](https://github.com/getnodalia/foundation/tree/nodalia/fonts) `fonts/latin-manifest.txt` and
 `fonts/manifest.txt` (per-file authors, sources, SHA-256 and licences in its
-[ATTRIBUTION.md](https://github.com/getnodalia/foundation/blob/vendor/craft-fonts/main/ATTRIBUTION.md)), except the
+[ATTRIBUTION.md](https://github.com/getnodalia/foundation/blob/nodalia/fonts/ATTRIBUTION.md)), except the
 families excluded by `crates/fonts/build.rs`:
 
 | Families | Licence | Notes |
@@ -66,7 +66,7 @@ provides one) and BIZ UDPGothic Regular.
 
 ## PDF writer colour profiles
 
-`craft-pdf` is used with only its `write` feature and default features disabled. Krilla
+`nodalia-pdf` is used with only its `write` feature and default features disabled. Krilla
 0.8.2 embeds the following profiles; these were already reachable through the direct Krilla
 exporter. No interpreter fallback fonts or CMaps are enabled, and no profile or font binary
 is copied into this repository. The licence text is in `licenses/pdf-writer/LICENSE-ICC.txt`.
@@ -80,9 +80,9 @@ is copied into this repository. The licence text is in `licenses/pdf-writer/LICE
 
 ### Optional native Chinese fallback
 
-Native builds also read craft-fonts' `fonts/simplified-chinese-manifest.txt` when present.
+Native builds also read nodalia-fonts' `fonts/simplified-chinese-manifest.txt` when present.
 This opt-in does not enter the wasm font allowlist. Font bytes and the full licence remain
-in craft-fonts, including the LXGW Reserved Font Names and original Klee notice.
+in nodalia-fonts, including the LXGW Reserved Font Names and original Klee notice.
 
 | Family | Author | Source | Licence | Use |
 |---|---|---|---|---|

@@ -5102,7 +5102,7 @@ fn tables_with_a_file_defined_style_edit_and_resize() {
     // Required native builds validate and embed both BIZ faces (crates/fonts/build.rs);
     // optional local builds may only have Regular, so the weight assertion is skipped there.
     assert!(
-        metric_pair || option_env!("CRAFT_FONTS_REQUIRED").is_none(),
+        metric_pair || option_env!("NODALIA_FONTS_REQUIRED").is_none(),
         "required native build is missing the BIZ UDPGothic Regular/Bold metric pair"
     );
     if metric_pair {

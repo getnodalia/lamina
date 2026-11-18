@@ -400,7 +400,7 @@ fn cjk_text_in_the_interface_is_drawn_with_real_glyphs() {
     let japanese = "日本語のスライド";
     let chinese = "简体中文演示文稿";
     let notes = "발표자 노트입니다";
-    let require_all = option_env!("CRAFT_FONTS_REQUIRED").is_some() || lamina_fonts::CRAFT_FONTS.iter().any(|f| f.family == "LXGW WenKai Lite");
+    let require_all = option_env!("NODALIA_FONTS_REQUIRED").is_some() || lamina_fonts::NODALIA_FONTS.iter().any(|f| f.family == "LXGW WenKai Lite");
     // The title slide's title and subtitle are painted by the initial Normal view, under
     // kittest's strict missing-glyph policy. Pre-paint CJK only when this build is required to
     // carry it or this machine can draw every initial sample; an optional build without those

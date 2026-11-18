@@ -66,14 +66,14 @@ allowed: our UI, our/Lucide icons, OFL fonts, and decks built only from allowed 
 ### 1.3 Every asset is attributed
 
 - **`ATTRIBUTION.md`** (repo root) lists every asset file — committed, fetched at build time
-  (craft-fonts) or bundled through a Cargo dependency — with author, source (URL + version or
+  (nodalia-fonts) or bundled through a Cargo dependency — with author, source (URL + version or
   commit), licence and use. `cargo xtask assets` fails if a file under `assets/` or `docs/images/`
   has no row.
 - **`NOTICE`** keeps the notices the licences require.
-- Fonts live in [getnodalia/foundation's `vendor/craft-fonts/main` branch](https://github.com/getnodalia/foundation/tree/vendor/craft-fonts/main), never in this
+- Fonts live in [getnodalia/foundation's `nodalia/fonts` branch](https://github.com/getnodalia/foundation/tree/nodalia/fonts), never in this
   repo. Lámina embeds its `fonts/latin-manifest.txt` and
-  `fonts/manifest.txt` when built with `CRAFT_FONTS_DIR` (local dev: `.cargo/config.toml` points at
-  `../craft-fonts`).
+  `fonts/manifest.txt` when built with `NODALIA_FONTS_DIR` (local dev: `.cargo/config.toml` points at
+  `../nodalia-fonts`).
 
 ### 1.4 Adding or changing an asset
 

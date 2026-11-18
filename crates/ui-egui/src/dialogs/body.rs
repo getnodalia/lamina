@@ -102,7 +102,7 @@ fn dlg_slide_size(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) -> bool {
     }
     let label = ui.label(crate::i18n::t("Slides sized for:"));
     let preset = d.get("preset", "");
-    let combo = craft_ui::ComboBox::from_id_salt("sizes").selected_text(if preset.is_empty() { "Custom" } else { &preset }).show_ui(ui, |ui| {
+    let combo = nodalia_ui::ComboBox::from_id_salt("sizes").selected_text(if preset.is_empty() { "Custom" } else { &preset }).show_ui(ui, |ui| {
         for (label, w, h) in lamina_model::defaults::SLIDE_SIZES {
             if ui.selectable_label(preset == *label, *label).clicked() {
                 d.fields.insert("preset".into(), label.to_string());
@@ -150,7 +150,7 @@ fn dlg_header_footer(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) -> bool {
     ui.add_enabled_ui(date && automatic, |ui| {
         ui.horizontal(|ui| {
             ui.label(crate::i18n::t("  Format:"));
-            craft_ui::ComboBox::from_id_salt("hf-date-format").selected_text(label).width(200.0).show_ui(ui, |ui| {
+            nodalia_ui::ComboBox::from_id_salt("hf-date-format").selected_text(label).width(200.0).show_ui(ui, |ui| {
                 for (kind, sample) in &rows {
                     if ui.selectable_label(fmt == *kind, sample).clicked() {
                         d.fields.insert("dateFormat".into(), (*kind).to_string());
@@ -265,7 +265,7 @@ fn dlg_setup_show(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) -> bool {
     let chosen = d.fields.entry("custom".into()).or_insert_with(|| sh.custom_show.clone().unwrap_or_default()).clone();
     let field = ui.label(crate::i18n::t("Slides"));
     let label = if chosen.is_empty() { "All slides".to_string() } else { chosen.clone() };
-    let combo = craft_ui::ComboBox::from_id_salt("setup_custom").selected_text(label).show_ui(ui, |ui| {
+    let combo = nodalia_ui::ComboBox::from_id_salt("setup_custom").selected_text(label).show_ui(ui, |ui| {
         if ui.selectable_label(chosen.is_empty(), "All slides").clicked() {
             d.fields.insert("custom".into(), String::new());
         }
@@ -431,7 +431,7 @@ fn dlg_bullets(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) -> bool {
     let color = d.get("color", "");
     ui.horizontal(|ui| {
         let field = ui.add_sized(vec2(120.0, 20.0), egui::Label::new(crate::i18n::t("Color:")));
-        let combo = craft_ui::ComboBox::from_id_salt("bullet-color")
+        let combo = nodalia_ui::ComboBox::from_id_salt("bullet-color")
             .selected_text(colors.iter().find(|c| c.0 == color).map_or("Automatic", |c| c.1))
             .show_ui(ui, |ui| {
                 for (k, l) in colors {
@@ -538,7 +538,7 @@ fn dlg_action(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) -> bool {
         ];
         let shown = targets.iter().find(|t| t.0 == kind).map_or("Next Slide", |t| t.1);
         ui.add_enabled_ui(hyperlink, |ui| {
-            let combo = craft_ui::ComboBox::from_id_salt("action-target").selected_text(shown).show_ui(ui, |ui| {
+            let combo = nodalia_ui::ComboBox::from_id_salt("action-target").selected_text(shown).show_ui(ui, |ui| {
                 for (k, l) in targets {
                     if ui.selectable_label(kind == k, l).clicked() {
                         d.fields.insert("kind".into(), k.into());
@@ -732,7 +732,7 @@ fn dlg_export(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) -> bool {
         ui.add_space(4.0);
         ui.horizontal(|ui| {
             let field = ui.label(crate::i18n::t("Print layout:"));
-            let combo = craft_ui::ComboBox::from_id_salt("pdf_layout")
+            let combo = nodalia_ui::ComboBox::from_id_salt("pdf_layout")
                 .selected_text(match pdf_layout.as_str() {
                     "notes" => "Notes Pages",
                     "h1" => "Handouts (1 slide per page)",
@@ -817,7 +817,7 @@ fn dlg_replace_fonts(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) -> bool {
     let mut to = d.get("to", "");
     egui::Grid::new("replace_fonts").num_columns(2).spacing(vec2(10.0, 8.0)).show(ui, |ui| {
         let field = ui.label(crate::i18n::t("Replace:"));
-        let combo = craft_ui::ComboBox::from_id_salt("rf_from").width(240.0).selected_text(from.clone()).show_ui(ui, |ui| {
+        let combo = nodalia_ui::ComboBox::from_id_salt("rf_from").width(240.0).selected_text(from.clone()).show_ui(ui, |ui| {
             for f in &used {
                 ui.selectable_value(&mut from, f.clone(), f);
             }
@@ -1347,7 +1347,7 @@ pub(crate) fn preference_controls(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialo
             Some(crate::i18n::Language::En) => "English",
             Some(crate::i18n::Language::Es) => "Español",
         };
-        let response = craft_ui::ComboBox::from_id_salt("interface-language").selected_text(label).show_ui(ui, |ui| {
+        let response = nodalia_ui::ComboBox::from_id_salt("interface-language").selected_text(label).show_ui(ui, |ui| {
             ui.selectable_value(&mut app.ui.language, None, lang.tr("Automatic"));
             ui.selectable_value(&mut app.ui.language, Some(crate::i18n::Language::En), "English");
             ui.selectable_value(&mut app.ui.language, Some(crate::i18n::Language::Es), "Español");

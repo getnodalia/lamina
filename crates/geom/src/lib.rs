@@ -10,9 +10,9 @@ pub mod morph;
 pub mod squircle;
 
 pub use kurbo::{Affine, BezPath, PathEl, Point, Rect, Shape as KurboShape, Size, Vec2};
-// Placement, units and preset and warp geometry are DrawingML's, shared in craft-libs
-// (`craft_drawingml`, craft-libs#778 and #792).
-pub use craft_drawingml::{EMU_PER_CM, EMU_PER_IN, EMU_PER_PT, Xfrm, emu_to_pt, group_child_affine, preset, pt_to_emu, warp};
+// Placement, units and preset and warp geometry are DrawingML's, shared in nodalia-libs
+// (`nodalia_drawingml`, nodalia-libs#778 and #792).
+pub use nodalia_drawingml::{EMU_PER_CM, EMU_PER_IN, EMU_PER_PT, Xfrm, emu_to_pt, group_child_affine, preset, pt_to_emu, warp};
 use serde::{Deserialize, Serialize};
 
 /// Display units for measurements (inches on US English systems, centimetres elsewhere).

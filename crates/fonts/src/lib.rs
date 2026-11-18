@@ -1,4 +1,4 @@
-//! Lámina fonts: the font database (craft-fonts families, user and system fonts, and open
+//! Lámina fonts: the font database (nodalia-fonts families, user and system fonts, and open
 //! substitutes for the Office fonts presentations ask for), vertical metrics, glyph outlines and
 //! OpenType shaping, script/slot classification and per-cluster fallback.
 //!
@@ -24,8 +24,8 @@ pub use kurbo::BezPath;
 pub use script::{FontSlot, ScriptTag};
 pub use shape::{ShapeParams, ShapedGlyph, shape_range};
 
-/// A font from the optional craft-fonts build input (https://github.com/getnodalia/foundation/tree/vendor/craft-fonts/main;
-/// empty unless built with `CRAFT_FONTS_DIR`, see `build.rs`).
+/// A font from the optional nodalia-fonts build input (https://github.com/getnodalia/foundation/tree/nodalia/fonts;
+/// empty unless built with `NODALIA_FONTS_DIR`, see `build.rs`).
 pub struct CraftFont {
     pub family: &'static str,
     pub style: &'static str,
@@ -34,11 +34,11 @@ pub struct CraftFont {
     pub bytes: &'static [u8],
 }
 
-include!(concat!(env!("OUT_DIR"), "/craft_fonts.rs"));
+include!(concat!(env!("OUT_DIR"), "/nodalia_fonts.rs"));
 
-/// The craft-fonts faces for Japanese (`"Jpan"`), in manifest order. Empty without craft-fonts.
+/// The nodalia-fonts faces for Japanese (`"Jpan"`), in manifest order. Empty without nodalia-fonts.
 pub fn japanese_fonts() -> impl Iterator<Item = &'static CraftFont> {
-    CRAFT_FONTS.iter().filter(|f| f.scripts.contains(&"Jpan"))
+    NODALIA_FONTS.iter().filter(|f| f.scripts.contains(&"Jpan"))
 }
 
 /// The TrueType or OpenType font inside a PresentationML embedded-font part

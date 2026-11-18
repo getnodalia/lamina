@@ -9,8 +9,8 @@ description = "Lámina native file format (.lamina: zip of a JSON manifest plus 
 workspace = true
 
 [dependencies]
-craft-deckcraft-format = { workspace = true }
-craft-rtf = { workspace = true }
+nodalia-lamina-format = { workspace = true }
+nodalia-rtf = { workspace = true }
 lamina-model = { workspace = true }
 
 [dev-dependencies]

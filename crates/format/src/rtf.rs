@@ -23,11 +23,11 @@ fn escape(out: &mut String, s: &str) {
             '\u{2028}' => "\\u8232?",
             _ => continue,
         };
-        craft_rtf::push_esc(out, &s[start..i]);
+        nodalia_rtf::push_esc(out, &s[start..i]);
         out.push_str(replacement);
         start = i + c.len_utf8();
     }
-    craft_rtf::push_esc(out, &s[start..]);
+    nodalia_rtf::push_esc(out, &s[start..]);
 }
 
 fn runs(out: &mut String, p: &Paragraph) {
@@ -297,7 +297,7 @@ impl Outline<'_> {
             && let Some(h) = hex
             && h != 0
         {
-            self.line.push(craft_rtf::codepage::cp1252(h));
+            self.line.push(nodalia_rtf::codepage::cp1252(h));
         }
     }
 
@@ -449,7 +449,7 @@ mod tests {
     #[test]
     fn shared_cp1252_preserves_all_bytes() {
         for b in 0..=u8::MAX {
-            assert_eq!(craft_rtf::codepage::cp1252(b), legacy_cp1252(b));
+            assert_eq!(nodalia_rtf::codepage::cp1252(b), legacy_cp1252(b));
         }
     }
 

@@ -10,9 +10,9 @@ workspace = true
 
 [dependencies]
 # Containers (MP4/MOV, Matroska/WebM, Ogg), the Opus decoder and the video decoders, shared with the other Craft apps.
-craft-media = { workspace = true, features = ["isobmff", "matroska", "ogg"] }
-craft-audio = { workspace = true }
-craft-video = { workspace = true }
+nodalia-media = { workspace = true, features = ["isobmff", "matroska", "ogg"] }
+nodalia-audio = { workspace = true }
+nodalia-video = { workspace = true }
 thiserror = { workspace = true }
 log = { workspace = true }
 image = { workspace = true }

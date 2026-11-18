@@ -7,7 +7,7 @@ use std::process::Command;
 use serde_json::Value;
 
 const SHARED_REPO: &str = "https://github.com/getnodalia/foundation";
-const SHARED_REV: &str = "63196e66f3033a6623eb629af95a104d26986725";
+const SHARED_REV: &str = "46d6d9970a609c064cb7f632477d4cf68c7e4eb0";
 const REGISTRY: &str = "registry+https://github.com/rust-lang/crates.io-index";
 
 pub fn run(root: &Path) -> Result<(), String> {
@@ -57,7 +57,7 @@ pub fn run(root: &Path) -> Result<(), String> {
         }
         validate_target_features(&String::from_utf8_lossy(&output.stdout), parallel).map_err(|e| format!("{target}: {e}"))?;
     }
-    println!("PDF writer: pinned craft-pdf/Krilla; native-only parallel compression; parser assertions are development-only");
+    println!("PDF writer: pinned nodalia-pdf/Krilla; native-only parallel compression; parser assertions are development-only");
     Ok(())
 }
 
@@ -73,7 +73,7 @@ fn validate(metadata: &Value) -> Result<(), String> {
     };
     let source = format!("git+{SHARED_REPO}?rev={SHARED_REV}#{SHARED_REV}");
     for (name, version, expected_source, expected_features) in [
-        ("craft-pdf", "0.1.0", source.as_str(), vec!["write", "write-simple-text"]),
+        ("nodalia-pdf", "0.1.0", source.as_str(), vec!["write", "write-simple-text"]),
         ("krilla", "0.8.2", source.as_str(), vec!["raster-images", "rayon", "simple-text"]),
         ("hayro-syntax", "0.7.2", REGISTRY, vec!["std"]),
     ] {
@@ -148,7 +148,7 @@ mod tests {
         json!({
             "packages": [
                 {"id":"app", "name":"lamina-pdf"},
-                {"id":"writer", "name":"craft-pdf", "version":"0.1.0", "source":source},
+                {"id":"writer", "name":"nodalia-pdf", "version":"0.1.0", "source":source},
                 {"id":"backend", "name":"krilla", "version":"0.8.2", "source":source},
                 {"id":"parser", "name":"hayro-syntax", "version":"0.7.2", "source":REGISTRY}
             ],

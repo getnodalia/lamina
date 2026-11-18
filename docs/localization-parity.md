@@ -25,14 +25,14 @@ support partly there), **55–90 h** to parity plus native-speaker review.
 | Language | Code | UI strings translated | Dialogs / tooltips / help | Script support (slide text) | Native review | Status | PowerPoint for Mac UI | Hours to full |
 |---|---|---|---|---|---|---|---|---|
 | English | en | ~1,050 / ~1,050 (100%) | yes / yes / no help | full | yes | **full** | yes | 0 |
-| Simplified Chinese (Mandarin) | zh-Hans | 0 (0%) | no | native candidate optionally embeds LXGW WenKai Lite via craft-fonts, with existing per-character fallback; other builds use system CJK fonts (Noto CJK remains excluded); UAX #14 breaking; IME composition (#101); no true vertical layout | no | none | yes | 6–10 (incl. IME) |
+| Simplified Chinese (Mandarin) | zh-Hans | 0 (0%) | no | native candidate optionally embeds LXGW WenKai Lite via nodalia-fonts, with existing per-character fallback; other builds use system CJK fonts (Noto CJK remains excluded); UAX #14 breaking; IME composition (#101); no true vertical layout | no | none | yes | 6–10 (incl. IME) |
 | Spanish | es | 0 (0%) | no | full (Latin) | no | none | yes (es, es-MX) | 3–5 |
 | Hindi | hi | 0 (0%) | no | Devanagari shaping through HarfRust, untested; no bundled Devanagari font | no | none | **no** (Windows only) | 4–7 |
 | Arabic | ar | 0 (0%) | no | bidi, contextual shaping, kashida justification, RTL bullets and caret (#4); **UI not mirrored**; browser export shows boxes (#81) | no | none | yes | 10–16 (incl. UI mirroring) |
 | French | fr | 0 (0%) | no | full (Latin) | no | none | yes (fr, fr-CA) | 3–5 |
 | Portuguese | pt | 0 (0%) | no | full (Latin) | no | none | yes (pt-BR, pt-PT) | 3–5 |
 | Indonesian | id | 0 (0%) | no | full (Latin) | no | none | yes | 3–5 |
-| Japanese | ja | 0 (0%) | no | renders with system or craft-fonts Japanese faces; IME composition (#101); vertical text is rotated, not laid out vertically | no | none | yes | 4–7 |
+| Japanese | ja | 0 (0%) | no | renders with system or nodalia-fonts Japanese faces; IME composition (#101); vertical text is rotated, not laid out vertically | no | none | yes | 4–7 |
 | German | de | 0 (0%) | no | full (Latin) | no | none | yes | 3–5 |
 | Korean | ko | 0 (0%) | no | system Hangul fonts, in the interface too; IME composition (#101) | no | none | yes | 4–7 |
 | Vietnamese | vi | 0 (0%) | no | stacked diacritics through HarfRust | no | none | **no** (Windows only) | 3–5 |

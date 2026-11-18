@@ -355,7 +355,7 @@ fn decode_utf16(bytes: &[u8]) -> String {
 }
 
 // Preserve the public writer helpers while sharing the XML 1.0 escaping rules.
-pub use craft_xml::{esc, esc_attr};
+pub use nodalia_xml::{esc, esc_attr};
 
 /// A string builder for XML parts.
 #[derive(Default)]

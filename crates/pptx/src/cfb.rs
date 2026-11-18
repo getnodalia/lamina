@@ -1,24 +1,24 @@
 //! Password-protected presentations. PowerPoint wraps an encrypted `.pptx` in a Compound File
 //! Binary (CFB/OLE2) container holding `EncryptionInfo` and `EncryptedPackage` streams
 //! (ECMA-376 / [MS-OFFCRYPTO]) instead of a zip. The container's directory is read by the shared
-//! `craft-cfb` crate, which bounds every chain and falls back to a UTF-16 name search when a
+//! `nodalia-cfb` crate, which bounds every chain and falls back to a UTF-16 name search when a
 //! damaged file's directory cannot be followed.
 
 /// Stream names that mark an encrypted (password-protected) OOXML package.
 const ENCRYPTED_STREAMS: [&str; 2] = ["EncryptedPackage", "EncryptionInfo"];
 
 /// Directory entries read at most: 1024 directory sectors of 512 bytes, as before the move to
-/// `craft-cfb`, so a hostile directory chain stays cheap.
+/// `nodalia-cfb`, so a hostile directory chain stays cheap.
 const MAX_DIR_ENTRIES: usize = 4096;
 
-fn limits() -> craft_cfb::Limits {
-    craft_cfb::Limits { max_dir_entries: MAX_DIR_ENTRIES, ..craft_cfb::Limits::default() }
+fn limits() -> nodalia_cfb::Limits {
+    nodalia_cfb::Limits { max_dir_entries: MAX_DIR_ENTRIES, ..nodalia_cfb::Limits::default() }
 }
 
 /// Whether `bytes` is a compound file holding an encryption stream.
 pub(crate) fn is_encrypted(bytes: &[u8]) -> bool {
     let limits = limits();
-    ENCRYPTED_STREAMS.iter().any(|name| craft_cfb::has_entry_named(bytes, name, &limits))
+    ENCRYPTED_STREAMS.iter().any(|name| nodalia_cfb::has_entry_named(bytes, name, &limits))
 }
 
 #[cfg(test)]
@@ -26,7 +26,7 @@ mod tests {
     #![allow(clippy::unwrap_used)]
 
     use super::*;
-    use craft_cfb::{ENDOFCHAIN as END_OF_CHAIN, SIGNATURE};
+    use nodalia_cfb::{ENDOFCHAIN as END_OF_CHAIN, SIGNATURE};
 
     /// A minimal valid compound file (512-byte sectors: FAT at sector 0, directory at sector 1)
     /// whose directory holds a root entry plus the given stream names.
@@ -68,7 +68,7 @@ mod tests {
     #[test]
     fn reads_directory_names() {
         let b = build(&["EncryptionInfo", "EncryptedPackage"]);
-        assert_eq!(craft_cfb::directory_names(&b, &limits()), Some(vec!["Root Entry".into(), "EncryptionInfo".into(), "EncryptedPackage".into()]));
+        assert_eq!(nodalia_cfb::directory_names(&b, &limits()), Some(vec!["Root Entry".into(), "EncryptionInfo".into(), "EncryptedPackage".into()]));
         assert!(is_encrypted(&b));
         // A PowerPoint 97-2003 .ppt is a compound file too, without the encryption streams.
         assert!(!is_encrypted(&build(&["PowerPoint Document", "Current User"])));

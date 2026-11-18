@@ -616,7 +616,7 @@ fn param_optional(alt: &str) -> Option<bool> {
 
 /// Base64 (standard alphabet) for binary payloads in JSON params and results.
 pub fn base64_encode(data: &[u8]) -> String {
-    craft_mime::base64::STANDARD.encode(data)
+    nodalia_mime::base64::STANDARD.encode(data)
 }
 
 pub fn base64_decode(s: &str) -> Option<Vec<u8>> {
@@ -637,7 +637,7 @@ pub fn base64_decode(s: &str) -> Option<Vec<u8>> {
     if symbols_mod_four == 1 {
         return None;
     }
-    craft_mime::base64_compat::decode(s).ok()
+    nodalia_mime::base64_compat::decode(s).ok()
 }
 
 #[cfg(test)]

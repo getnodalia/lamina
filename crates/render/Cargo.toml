@@ -11,7 +11,7 @@ workspace = true
 [dependencies]
 lamina-geom = { workspace = true }
 lamina-color = { workspace = true }
-craft-metafile = { workspace = true }
+nodalia-metafile = { workspace = true }
 lamina-model = { workspace = true }
 lamina-anim = { workspace = true }
 lamina-fonts = { workspace = true }
@@ -27,4 +27,4 @@ skrifa = { workspace = true }
 vello_cpu = { workspace = true, features = ["multithreading"] }
 
 [dev-dependencies]
-craft-metafile = { workspace = true, features = ["write"] }
+nodalia-metafile = { workspace = true, features = ["write"] }

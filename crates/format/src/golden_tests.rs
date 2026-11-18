@@ -1,6 +1,6 @@
 //! Byte-for-byte checks on the `.lamina` package. The files in `tests/golden` were written by
-//! the format code as it was before the package layer moved to `craft-deckcraft-format`
-//! (getnodalia/foundation (vendor/craft-libs)). A save of the same deck must give the same bytes, and a load must give
+//! the format code as it was before the package layer moved to `nodalia-lamina-format`
+//! (getnodalia/foundation (vendor/nodalia-libs)). A save of the same deck must give the same bytes, and a load must give
 //! the same presentation and the same damage report.
 //! `LAMINA_BLESS_GOLDEN=1` rewrites them. Only do that for a deliberate format change.
 

@@ -335,10 +335,10 @@ Detail in [localization-parity.md](localization-parity.md).
 - **English only, no string catalog** (#15, #30; Ukrainian PR #34 open). PowerPoint for Mac ships
   26 languages. Infrastructure 8–14 h, then 3–16 h per language plus native review. Beta needs the
   infrastructure and at least Simplified Chinese, Spanish, French, German and Japanese (~30–45 h).
-- **Hangul in the interface needs an installed Korean font** (#101). craft-fonts has no Korean face
+- **Hangul in the interface needs an installed Korean font** (#101). nodalia-fonts has no Korean face
   (Noto CJK is excluded by the asset policy), so the web build draws Korean file names, notes and
   outline text as boxes; desktop borrows Malgun Gothic, Apple SD Gothic Neo or Noto Sans CJK.
-  Adding an openly licensed Korean face (e.g. Nanum Gothic, OFL) to craft-fonts: 1–2 h.
+  Adding an openly licensed Korean face (e.g. Nanum Gothic, OFL) to nodalia-fonts: 1–2 h.
 - **UI isn't mirrored for right-to-left languages.** 6–10 h.
 - **Browser build draws Arabic and Hebrew as missing-glyph boxes in exports** (#81). 1–2 h.
 

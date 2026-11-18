@@ -255,11 +255,11 @@ pub fn sidecar_part(name: &str) -> bool {
 }
 
 pub fn dir_of(part: &str) -> String {
-    craft_opc::dir_of(part).to_owned()
+    nodalia_opc::dir_of(part).to_owned()
 }
 
-use craft_opc::percent_decode;
-pub use craft_opc::{file_of, rels_path};
+use nodalia_opc::percent_decode;
+pub use nodalia_opc::{file_of, rels_path};
 
 /// Resolve a relative target against a base directory into a part name.
 pub fn resolve(base: &str, target: &str) -> String {

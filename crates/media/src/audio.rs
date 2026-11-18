@@ -91,15 +91,15 @@ pub fn decode(bytes: &Bytes) -> Result<Pcm> {
 /// Ogg Opus with our decoder; `None` when the file holds no Opus stream.
 fn decode_ogg_opus(bytes: &Bytes) -> Option<Result<Pcm>> {
     let src: &[u8] = bytes;
-    let file = craft_media::ogg::open(src).ok()?;
-    let s = file.stream_of(craft_media::ogg::Codec::Opus)?;
+    let file = nodalia_media::ogg::open(src).ok()?;
+    let s = file.stream_of(nodalia_media::ogg::Codec::Opus)?;
     let stream = file.streams.get(s)?;
     Some((|| {
         let head = stream.headers.first().ok_or(MediaError::Corrupt("Opus header missing".into()))?;
-        let mut dec = craft_audio::opus::Decoder::new(head).map_err(|e| MediaError::Corrupt(e.to_string()))?;
+        let mut dec = nodalia_audio::opus::Decoder::new(head).map_err(|e| MediaError::Corrupt(e.to_string()))?;
         dec.set_trim_pre_skip(true);
         let channels = dec.channels() as u16;
-        let timing = craft_media::ogg::OpusTiming::of(stream, dec.pre_skip() as u32);
+        let timing = nodalia_media::ogg::OpusTiming::of(stream, dec.pre_skip() as u32);
         let mut out = Vec::new();
         for i in 0..stream.packets.len() {
             if MAX_PCM_SAMPLES.saturating_sub(out.len()) < channels.max(1) as usize {
@@ -127,13 +127,13 @@ fn decode_ogg_opus(bytes: &Bytes) -> Option<Result<Pcm>> {
 /// WebM / Matroska Opus with our decoder; `None` when there is no Opus track.
 fn decode_mkv_opus(bytes: &Bytes) -> Option<Result<Pcm>> {
     let src: &[u8] = bytes;
-    let file = craft_media::matroska::open(src).ok()?;
+    let file = nodalia_media::matroska::open(src).ok()?;
     let (ti, head) = file.tracks.iter().enumerate().find_map(|(i, t)| match &t.codec {
-        craft_media::matroska::Codec::Opus { head } => Some((i, head.clone())),
+        nodalia_media::matroska::Codec::Opus { head } => Some((i, head.clone())),
         _ => None,
     })?;
     Some((|| {
-        let mut dec = craft_audio::opus::Decoder::new(&head).map_err(|e| MediaError::Corrupt(e.to_string()))?;
+        let mut dec = nodalia_audio::opus::Decoder::new(&head).map_err(|e| MediaError::Corrupt(e.to_string()))?;
         dec.set_trim_pre_skip(true);
         let channels = dec.channels() as u16;
         let mut out = Vec::new();

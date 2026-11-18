@@ -12,14 +12,14 @@ repository = "https://github.com/getnodalia/lamina"
 
 [workspace.dependencies]
 # OPC part-name primitives; relationship admission stays app-local.
-craft-opc = { git = "https://github.com/getnodalia/foundation", rev = "ea24422ae9859dc5da398d0462bc87f8e02e0d10", version = "0.1.0" }
+nodalia-opc = { git = "https://github.com/getnodalia/foundation", rev = "6538375ff4f9dc07267164c1135744edaa9a7bae", version = "0.1.0" }
 # Compound File Binary directory reads (password-protected deck detection).
-craft-cfb = { git = "https://github.com/getnodalia/foundation", rev = "ea24422ae9859dc5da398d0462bc87f8e02e0d10", version = "0.1.0" }
+nodalia-cfb = { git = "https://github.com/getnodalia/foundation", rev = "6538375ff4f9dc07267164c1135744edaa9a7bae", version = "0.1.0" }
 # XML writer primitives; parser admission and OOXML policy stay app-local.
-craft-xml = { git = "https://github.com/getnodalia/foundation", rev = "ea24422ae9859dc5da398d0462bc87f8e02e0d10", version = "0.1.0" }
-# DrawingML colours, themes and text (craft-libs#778, #792): the model Lámina reads and writes.
+nodalia-xml = { git = "https://github.com/getnodalia/foundation", rev = "6538375ff4f9dc07267164c1135744edaa9a7bae", version = "0.1.0" }
+# DrawingML colours, themes and text (nodalia-libs#778, #792): the model Lámina reads and writes.
 # Isolated table XML writer; existing DrawingML model/readers keep their revision.
-craft-drawingml = { git = "https://github.com/getnodalia/foundation", rev = "44d83fa8f635333dcb3c231f87381387a1f5631b", version = "0.1.0" }
+nodalia-drawingml = { git = "https://github.com/getnodalia/foundation", rev = "3bb28e2f1f15f61238a40b0fea3922ec56170f8f", version = "0.1.0" }
 # internal
 lamina-geom = { path = "crates/geom" }
 lamina-color = { path = "crates/color" }
@@ -57,23 +57,23 @@ harfrust = "0.13"
 vello_cpu = "0.2"
 vello_common = { version = "0.2", default-features = false }
 image = { version = "0.25", default-features = false, features = ["png", "jpeg", "webp", "gif", "tiff", "bmp"] }
-# Base64 for command payloads (engine); base64_compat keeps the legacy lenient decoder. Same rev as craft-deckcraft-format.
-craft-mime = { git = "https://github.com/getnodalia/foundation", rev = "254e9a409b410dc93c0e06ff66cd1e767893ac32", version = "=0.1.0" }
-# craft-media, craft-audio and craft-video share types and stay on one rev.
+# Base64 for command payloads (engine); base64_compat keeps the legacy lenient decoder. Same rev as nodalia-lamina-format.
+nodalia-mime = { git = "https://github.com/getnodalia/foundation", rev = "049560c6017d516cd64ddd0c46d85a40f68067ef", version = "=0.1.0" }
+# nodalia-media, nodalia-audio and nodalia-video share types and stay on one rev.
 # The .lamina package layer (identity, manifest, member names, bounded reads); crates/format maps the presentation onto it.
-craft-deckcraft-format = { git = "https://github.com/getnodalia/foundation", rev = "254e9a409b410dc93c0e06ff66cd1e767893ac32", version = "=0.1.0" }
-craft-rtf = { git = "https://github.com/getnodalia/foundation", rev = "63196e66f3033a6623eb629af95a104d26986725", version = "=0.1.0" }
-craft-media = { git = "https://github.com/getnodalia/foundation", rev = "63196e66f3033a6623eb629af95a104d26986725", version = "=0.1.0", default-features = false }
-craft-audio = { git = "https://github.com/getnodalia/foundation", rev = "63196e66f3033a6623eb629af95a104d26986725", version = "=0.1.0", default-features = false, features = ["opus-decode"] }
+nodalia-lamina-format = { git = "https://github.com/getnodalia/foundation", rev = "049560c6017d516cd64ddd0c46d85a40f68067ef", version = "=0.1.0" }
+nodalia-rtf = { git = "https://github.com/getnodalia/foundation", rev = "46d6d9970a609c064cb7f632477d4cf68c7e4eb0", version = "=0.1.0" }
+nodalia-media = { git = "https://github.com/getnodalia/foundation", rev = "46d6d9970a609c064cb7f632477d4cf68c7e4eb0", version = "=0.1.0", default-features = false }
+nodalia-audio = { git = "https://github.com/getnodalia/foundation", rev = "46d6d9970a609c064cb7f632477d4cf68c7e4eb0", version = "=0.1.0", default-features = false, features = ["opus-decode"] }
 # H.264, HEVC, VP9 and AV1 decoders.
-craft-video = { git = "https://github.com/getnodalia/foundation", rev = "63196e66f3033a6623eb629af95a104d26986725", version = "=0.1.0", default-features = false, features = ["h264-decode", "hevc-decode", "vp9-decode", "av1-decode", "threads"] }
+nodalia-video = { git = "https://github.com/getnodalia/foundation", rev = "46d6d9970a609c064cb7f632477d4cf68c7e4eb0", version = "=0.1.0", default-features = false, features = ["h264-decode", "hevc-decode", "vp9-decode", "av1-decode", "threads"] }
 # WMF, EMF and EMF+ reader.
-craft-metafile = { git = "https://github.com/getnodalia/foundation", rev = "63196e66f3033a6623eb629af95a104d26986725", version = "=0.1.0" }
-craft-pdf = { git = "https://github.com/getnodalia/foundation", rev = "63196e66f3033a6623eb629af95a104d26986725", version = "=0.1.0", default-features = false, features = ["write", "write-simple-text"] }
+nodalia-metafile = { git = "https://github.com/getnodalia/foundation", rev = "46d6d9970a609c064cb7f632477d4cf68c7e4eb0", version = "=0.1.0" }
+nodalia-pdf = { git = "https://github.com/getnodalia/foundation", rev = "46d6d9970a609c064cb7f632477d4cf68c7e4eb0", version = "=0.1.0", default-features = false, features = ["write", "write-simple-text"] }
 # In-app updates from this app's GitHub releases, with the update windows for egui.
 nodalia-update = { git = "https://github.com/danielmigueltejedor/nodalia-design", rev = "114848a2ff1a7c29c9a5432fb12e955fbe0aeef2", features = ["egui"] }
 nodalia-theme = { git = "https://github.com/danielmigueltejedor/nodalia-design", rev = "40f13d3a7df61f1fd58081acdcc6e904a8b5af1a", features = ["egui"] }
-craft-ui = { git = "https://github.com/getnodalia/foundation", rev = "63196e66f3033a6623eb629af95a104d26986725", version = "=0.1.0" }
+nodalia-ui = { git = "https://github.com/getnodalia/foundation", rev = "46d6d9970a609c064cb7f632477d4cf68c7e4eb0", version = "=0.1.0" }
 i_overlay = "9"
 quick-xml = "0.41"
 zip = { version = "3", default-features = false, features = ["deflate"] }
@@ -119,7 +119,7 @@ codegen-units = 16
 debug = 0
 
 [patch.crates-io]
-krilla = { git = "https://github.com/getnodalia/foundation", rev = "63196e66f3033a6623eb629af95a104d26986725", version = "=0.8.2" }
+krilla = { git = "https://github.com/getnodalia/foundation", rev = "46d6d9970a609c064cb7f632477d4cf68c7e4eb0", version = "=0.8.2" }
 ecolor = { git = "https://github.com/getnodalia/foundation", rev = "6d518fc799681571963842f95b55a6b68431b15a" }
 emath = { git = "https://github.com/getnodalia/foundation", rev = "6d518fc799681571963842f95b55a6b68431b15a" }
 epaint = { git = "https://github.com/getnodalia/foundation", rev = "6d518fc799681571963842f95b55a6b68431b15a" }
