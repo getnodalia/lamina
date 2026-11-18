@@ -2598,7 +2598,7 @@ dependencies = [
 
 [[package]]
 name = "lamina"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "arboard",
  "chrono",
@@ -2621,7 +2621,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-anim"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "lamina-geom",
  "lamina-model",
@@ -2630,7 +2630,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-cli"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "lamina-engine",
  "lamina-mcp",
@@ -2640,14 +2640,14 @@ dependencies = [
 
 [[package]]
 name = "lamina-color"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "craft-drawingml",
 ]
 
 [[package]]
 name = "lamina-engine"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "chrono",
  "craft-mime",
@@ -2674,7 +2674,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-fonts"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "epaint_default_fonts",
  "harfrust 0.13.3",
@@ -2686,7 +2686,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-format"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "craft-deckcraft-format",
  "craft-rtf",
@@ -2697,7 +2697,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-geom"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "craft-drawingml",
  "kurbo",
@@ -2706,7 +2706,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-mcp"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "lamina-engine",
  "lamina-render",
@@ -2716,7 +2716,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-media"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "craft-audio",
  "craft-media",
@@ -2729,7 +2729,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-model"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "lamina-color",
  "lamina-geom",
@@ -2741,7 +2741,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-pdf"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "craft-pdf",
  "hayro-syntax",
@@ -2759,7 +2759,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-pptx"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "craft-cfb",
  "craft-drawingml",
@@ -2780,7 +2780,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-render"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "craft-metafile",
  "image",
@@ -2799,7 +2799,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-text"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "chrono",
  "lamina-color",
@@ -2813,7 +2813,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-ui-egui"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "craft-ui",
  "egui",
@@ -2841,7 +2841,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-web"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "craft-web-api",
  "craft-web-host",
@@ -3116,7 +3116,7 @@ dependencies = [
 [[package]]
 name = "nodalia-update"
 version = "0.1.0-alpha.1"
-source = "git+https://github.com/danielmigueltejedor/nodalia-design?rev=d066d5d351f18f704bdfd8aad6f04b9e96a155e4#d066d5d351f18f704bdfd8aad6f04b9e96a155e4"
+source = "git+https://github.com/danielmigueltejedor/nodalia-design?rev=114848a2ff1a7c29c9a5432fb12e955fbe0aeef2#114848a2ff1a7c29c9a5432fb12e955fbe0aeef2"
 dependencies = [
  "egui",
  "serde_json",
@@ -6279,7 +6279,7 @@ checksum = "9440ea3e5aeabb0ac63af70daf835274065238cdd0cec83418f417eae38bacee"
 
 [[package]]
 name = "xtask"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "serde_json",
 ]
