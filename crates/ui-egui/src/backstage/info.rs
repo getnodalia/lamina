@@ -42,13 +42,13 @@ pub(super) fn info(app: &mut SlideApp, ui: &mut Ui, bs: &mut Backstage) {
     if let Some(p) = &path {
         ui.add_space(8.0);
         ui.horizontal(|ui| {
-            if ui.button("Copy path").clicked() {
+            if ui.button(crate::i18n::t("Copy path")).clicked() {
                 ui.ctx().copy_text(p.clone());
                 app.set_status("Copied the path");
             }
             #[cfg(not(target_arch = "wasm32"))]
             if let Some(dir) = std::path::Path::new(p).parent().and_then(std::path::Path::to_str)
-                && ui.button("Open file location").clicked()
+                && ui.button(crate::i18n::t("Open file location")).clicked()
             {
                 app.open_url(&format!("file:///{}", dir.replace('\\', "/").trim_start_matches('/')));
             }
@@ -214,7 +214,7 @@ pub(super) fn about(app: &mut SlideApp, ui: &mut Ui) {
             ui.horizontal(|ui| {
                 let (r, _) = ui.allocate_exact_size(vec2(40.0, 40.0), Sense::hover());
                 crate::dialogs::paint_logo(ui.painter(), r);
-                ui.label(RichText::new("Lámina").font(theme::bold(24.0)).color(t.text));
+                ui.label(RichText::new(crate::i18n::t("Lámina")).font(theme::bold(24.0)).color(t.text));
             });
             dim(ui, &crate::dialogs::version_line());
             dim(ui, "Part of Nodalia. Open source under MIT OR Apache-2.0.");
@@ -222,8 +222,8 @@ pub(super) fn about(app: &mut SlideApp, ui: &mut Ui) {
             if task(ui, Icon::Help, "About Lámina", "About Lámina", "Version, links and licence.", true) {
                 let _ = app.run("app.about", json!({}));
             }
-            ui.hyperlink_to("Report a problem or suggest an idea", lamina_engine::links::DISCORD);
-            ui.hyperlink_to("Source on GitHub", lamina_engine::links::GITHUB);
+            ui.hyperlink_to(crate::i18n::t("Report a problem or suggest an idea"), lamina_engine::links::DISCORD);
+            ui.hyperlink_to(crate::i18n::t("Source on GitHub"), lamina_engine::links::GITHUB);
         });
     });
 }

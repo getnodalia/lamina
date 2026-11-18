@@ -285,6 +285,7 @@ impl SlideApp {
     /// Run the admitted root UI pass, including setup gating, panels, canvas, dialogs, overlays, and
     /// show mode.
     fn ui_inner(&mut self, ui: &mut egui::Ui) {
+        crate::i18n::set_current(self.ui.language.unwrap_or_else(crate::i18n::Language::system));
         let ctx = ui.ctx().clone();
         self.ime_frame_viewport = Some(ctx.viewport_id());
         self.ime_pending = None;

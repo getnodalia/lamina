@@ -10,20 +10,20 @@ pub fn about(_app: &mut SlideApp, ui: &mut Ui) {
         let (r, _) = ui.allocate_exact_size(vec2(96.0, 96.0), Sense::hover());
         paint_logo(ui.painter(), r);
         ui.add_space(8.0);
-        ui.label(egui::RichText::new("Lámina").font(theme::bold(22.0)));
+        ui.label(egui::RichText::new(crate::i18n::t("Lámina")).font(theme::bold(22.0)));
         ui.label(egui::RichText::new(version_line()).color(t.text_dim));
-        ui.label(egui::RichText::new("Part of Nodalia").color(t.text_dim));
+        ui.label(egui::RichText::new(crate::i18n::t("Part of Nodalia")).color(t.text_dim));
         ui.add_space(10.0);
-        ui.label("Presentations and slide shows, in pure Rust.");
+        ui.label(crate::i18n::t("Presentations and slide shows, in pure Rust."));
         ui.add_space(10.0);
-        ui.hyperlink_to("getnodalia.com/lamina", lamina_engine::links::APP_PAGE);
+        ui.hyperlink_to(crate::i18n::t("getnodalia.com/lamina"), lamina_engine::links::APP_PAGE);
         ui.add_space(2.0);
-        ui.hyperlink_to("Source code", lamina_engine::links::GITHUB);
+        ui.hyperlink_to(crate::i18n::t("Source code"), lamina_engine::links::GITHUB);
         ui.add_space(2.0);
-        ui.hyperlink_to("Report a problem or suggest an idea", lamina_engine::links::ISSUES);
+        ui.hyperlink_to(crate::i18n::t("Report a problem or suggest an idea"), lamina_engine::links::ISSUES);
         ui.add_space(10.0);
-        ui.hyperlink_to("Licence: MIT OR Apache-2.0", LICENCE);
-        ui.label(egui::RichText::new("Includes work by other open-source authors (see NOTICE).").size(11.0).color(t.text_faint));
+        ui.hyperlink_to(crate::i18n::t("Licence: MIT OR Apache-2.0"), LICENCE);
+        ui.label(egui::RichText::new(crate::i18n::t("Includes work by other open-source authors (see NOTICE).")).size(11.0).color(t.text_faint));
     });
 }
 
