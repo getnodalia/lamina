@@ -901,17 +901,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "craft-drawingml"
-version = "0.1.0"
-source = "git+https://github.com/getnodalia/foundation?rev=cff5af869dbf6926801c9ac63a927d155202ba3b#cff5af869dbf6926801c9ac63a927d155202ba3b"
-dependencies = [
- "craft-xml 0.1.0 (git+https://github.com/getnodalia/foundation?rev=cff5af869dbf6926801c9ac63a927d155202ba3b)",
- "kurbo",
- "log",
- "serde",
-]
-
-[[package]]
 name = "craft-fonts-build"
 version = "0.1.0"
 source = "git+https://github.com/getnodalia/foundation?rev=63196e66f3033a6623eb629af95a104d26986725#63196e66f3033a6623eb629af95a104d26986725"
@@ -1051,16 +1040,6 @@ dependencies = [
 name = "craft-xml"
 version = "0.1.0"
 source = "git+https://github.com/getnodalia/foundation?rev=44d83fa8f635333dcb3c231f87381387a1f5631b#44d83fa8f635333dcb3c231f87381387a1f5631b"
-dependencies = [
- "quick-xml",
- "serde",
- "thiserror 2.0.21",
-]
-
-[[package]]
-name = "craft-xml"
-version = "0.1.0"
-source = "git+https://github.com/getnodalia/foundation?rev=cff5af869dbf6926801c9ac63a927d155202ba3b#cff5af869dbf6926801c9ac63a927d155202ba3b"
 dependencies = [
  "quick-xml",
  "serde",
@@ -2663,7 +2642,7 @@ dependencies = [
 name = "lamina-color"
 version = "0.1.3"
 dependencies = [
- "craft-drawingml 0.1.0 (git+https://github.com/getnodalia/foundation?rev=44d83fa8f635333dcb3c231f87381387a1f5631b)",
+ "craft-drawingml",
 ]
 
 [[package]]
@@ -2720,7 +2699,7 @@ dependencies = [
 name = "lamina-geom"
 version = "0.1.3"
 dependencies = [
- "craft-drawingml 0.1.0 (git+https://github.com/getnodalia/foundation?rev=44d83fa8f635333dcb3c231f87381387a1f5631b)",
+ "craft-drawingml",
  "kurbo",
  "serde",
 ]
@@ -2783,8 +2762,7 @@ name = "lamina-pptx"
 version = "0.1.3"
 dependencies = [
  "craft-cfb",
- "craft-drawingml 0.1.0 (git+https://github.com/getnodalia/foundation?rev=44d83fa8f635333dcb3c231f87381387a1f5631b)",
- "craft-drawingml 0.1.0 (git+https://github.com/getnodalia/foundation?rev=cff5af869dbf6926801c9ac63a927d155202ba3b)",
+ "craft-drawingml",
  "craft-opc",
  "craft-xml 0.1.0 (git+https://github.com/getnodalia/foundation?rev=ea24422ae9859dc5da398d0462bc87f8e02e0d10)",
  "image",

@@ -21,3 +21,4 @@ packaging/macos/dmg/**
 .github/CODEOWNERS
 CONTRIBUTING.md
 crates/format/tests/golden/deck.lamina
+crates/pptx/src/tables.rs
