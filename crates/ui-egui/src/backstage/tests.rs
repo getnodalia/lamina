@@ -804,6 +804,7 @@ fn about_has_product_links_without_account_controls() {
     click_on_page(&h, "About Lámina");
     h.run_steps(3);
     assert!(h.state().dialog.is_some());
-    assert!(h.query_by_label("Part of Nodalia").is_some());
+    // The shared page paints its text; its links are real widgets.
+    assert!(h.query_by_label("Source code").is_some());
     assert!(h.query_by_label("Models").is_none(), "no upstream credits tabs");
 }
