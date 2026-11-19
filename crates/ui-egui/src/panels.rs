@@ -59,6 +59,7 @@ pub fn show(app: &mut SlideApp, ui: &mut Ui) {
                 "revisions" => "Revisions",
                 _ => "Pane",
             };
+            let title = crate::i18n::t(title);
             ui.horizontal(|ui| {
                 ui.label(egui::RichText::new(title).font(theme::bold(16.0)));
                 ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {

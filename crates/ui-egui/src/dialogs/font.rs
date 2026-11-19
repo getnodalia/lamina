@@ -92,7 +92,7 @@ pub(super) fn font_dialog(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) -> bo
                     }
                 }
             });
-        combo.response.widget_info(|| egui::WidgetInfo::labeled(egui::Role::ComboBox, true, "Spacing"));
+        combo.response.widget_info(|| egui::WidgetInfo::labeled(egui::Role::ComboBox, true, crate::i18n::t("Spacing")));
         let _ = edited;
         if let Some(v) = picked {
             d.fields.insert("spacing".into(), v);

@@ -308,7 +308,7 @@ impl View {
         ui.heading(crate::i18n::t("All slides"));
         ui.label(crate::i18n::t("Choose a slide to show it, or press G to return."));
         if snapshot.total > crate::show::GRID_CAP {
-            ui.label(format!("First {} slides", crate::show::GRID_CAP));
+            ui.label(crate::i18n::tf("First {n} slides", &[("n", &crate::show::GRID_CAP)]));
         }
         egui::ScrollArea::vertical().show(ui, |ui| {
             ui.horizontal_wrapped(|ui| {

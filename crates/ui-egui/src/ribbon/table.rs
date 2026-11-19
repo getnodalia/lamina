@@ -220,7 +220,11 @@ pub(super) fn table_layout(app: &mut SlideApp, ui: &mut Ui) {
             });
             ui.horizontal(|ui| {
                 for (l, a) in [("Top", "top"), ("Center", "middle"), ("Bottom", "bottom")] {
-                    if ui.small_button(l).on_hover_text(format!("Align text to the {l} of the cell").to_lowercase()).clicked() {
+                    if ui
+                        .small_button(crate::i18n::t(l))
+                        .on_hover_text(crate::i18n::t(&format!("Align text to the {} of the cell", l.to_lowercase())))
+                        .clicked()
+                    {
                         run(app, "table.cellAlign", json!({"anchor": a}));
                     }
                 }

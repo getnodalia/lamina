@@ -106,7 +106,7 @@ pub fn tick(app: &mut SlideApp, ctx: &Context) {
 fn begin(app: &mut SlideApp, pick: Pick) {
     let Some(d) = app.session.active() else { return };
     if d.selection.target != lamina_engine::Target::Slides {
-        app.set_status("The Eyedropper takes colours from a slide");
+        app.set_status(crate::i18n::t("The Eyedropper takes colours from a slide"));
         return;
     }
     let slide = d.selection.slide;

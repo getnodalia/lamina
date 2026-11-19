@@ -154,6 +154,7 @@ app's JSON control channel (`lamina --control PORT`).
 
 | Date | What landed |
 |---|---|
+| 2026-11-19 | Spanish: an audit of the running interface found and fixed untranslated text in the dialogs, the ribbon galleries, the panes, the status bar, the Backstage pages (Info, Save As, Print) and fixed strings in the code; the table grows to ~1,800 entries and a test keeps the Backstage pages in Spanish |
 | 2026-11-14 | Slide show: a slide the show advances to again (click, →, Space, automatic advance or a loop) starts over, so its animations play again, as in PowerPoint. Back and links still show it as it was left (#2090) |
 | 2026-11-11 | Media: the Opus decoder and the Ogg, MP4/MOV and Matroska demuxers are nodalia-audio and nodalia-media from nodalia-libs; Lámina's own copies and re-export crates are removed |
 | 2026-11-07 | PPTX slide-list entries with missing relationships are reported in lostSlides instead of silently omitted. The engine opens the partial deck as a repaired copy with no original save path. Slide lists over 10,000 entries are explicitly refused before a partial load; exactly 10,000 remain supported. Synthetic 13-slide regression; does not establish the cause of #1910's field report. |
@@ -343,6 +344,7 @@ app's JSON control channel (`lamina --control PORT`).
 
 | Date | Change | Summary |
 |---|---|---|
+| 2026-11-19 | trivial | Progress log: Spanish interface audit and fixes; parity scores unchanged |
 | 2026-11-14 | trivial | Progress log: a slide the show advances to again plays its animations again (#2090); parity scores unchanged |
 | 2026-11-11 | trivial | Opus and container code moved to nodalia-libs crates; parity scores unchanged |
 | 2026-11-04 | trivial | Ogg Opus recovery duration includes its recovered tail; parity scores unchanged |

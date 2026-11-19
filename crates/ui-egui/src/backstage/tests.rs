@@ -786,6 +786,27 @@ fn preferences_page_can_be_shown_in_spanish() {
     assert!(h.query_all_by_label("Preferencias").any(|n| in_nav(n.rect())));
 }
 
+/// Info, Save As and Print draw their labels, choices and hints in Spanish, not only the
+/// navigation (the fixed texts of those pages used to stay in English).
+#[test]
+fn info_save_as_and_print_pages_are_in_spanish() {
+    let mut app = new_app();
+    app.ui.language = Some(crate::i18n::Language::Es);
+    let mut h = harness(app);
+    let checks: [(Page, &[&str]); 3] = [
+        (Page::Info, &["Diapositivas ocultas", "Aún sin guardar", "Categorías"]),
+        (Page::SaveAs, &["Aún sin guardar"]),
+        (Page::Print, &["Imprimir diapositivas ocultas", "Editar encabezado y pie de página"]),
+    ];
+    for (p, markers) in checks {
+        h.state_mut().run("app.backstage", json!({"page": p.id()})).unwrap();
+        h.run_steps(3);
+        for m in markers {
+            assert!(h.query_all_by_label_contains(m).next().is_some(), "{} shows “{m}” in Spanish", p.id());
+        }
+    }
+}
+
 /// About replaces the account entry and opens the About dialog.
 #[test]
 fn about_has_product_links_without_account_controls() {

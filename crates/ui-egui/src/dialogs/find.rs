@@ -48,8 +48,8 @@ pub(super) fn find_dialog(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) -> bo
                 let mut p = q.clone();
                 p["with"] = json!(d.get("with", ""));
                 let msg = match app.session.execute("text.replace", &p) {
-                    Ok(v) => format!("Replaced {} occurrence(s).", v.get("replaced").and_then(Value::as_u64).unwrap_or(0)),
-                    Err(_) => format!("Lámina can't find “{text}”."),
+                    Ok(v) => crate::i18n::tf("Replaced {n} occurrence(s).", &[("n", &v.get("replaced").and_then(Value::as_u64).unwrap_or(0))]),
+                    Err(_) => crate::i18n::tf("Lámina can't find “{text}”.", &[("text", &text)]),
                 };
                 d.fields.insert("status".into(), msg);
                 d.fields.remove("cur");
@@ -64,7 +64,7 @@ pub(super) fn find_dialog(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) -> bo
     if find_next {
         let list = app.session.execute("text.find", &q).ok().and_then(|v| v.as_array().cloned()).unwrap_or_default();
         if list.is_empty() {
-            d.fields.insert("status".into(), format!("Lámina can't find “{text}”."));
+            d.fields.insert("status".into(), crate::i18n::tf("Lámina can't find “{text}”.", &[("text", &text)]));
             d.fields.remove("cur");
         } else {
             let n = d.get("next", "0").parse::<usize>().unwrap_or(0) % list.len();
@@ -75,10 +75,18 @@ pub(super) fn find_dialog(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) -> bo
             }
             d.fields.insert("cur".into(), m.to_string());
             d.fields.insert("next".into(), (n + 1).to_string());
-            let where_ = if m.get("shape").is_some_and(Value::is_null) { " (notes)" } else { "" };
+            let where_ = if m.get("shape").is_some_and(Value::is_null) { crate::i18n::t(" (notes)") } else { "" };
             d.fields.insert(
                 "status".into(),
-                format!("Match {} of {} on slide {}{where_}.", n + 1, list.len(), m.get("slide").and_then(Value::as_u64).unwrap_or(0) + 1),
+                crate::i18n::tf(
+                    "Match {n} of {total} on slide {slide}{where_}.",
+                    &[
+                        ("n", &(n + 1)),
+                        ("total", &list.len()),
+                        ("slide", &(m.get("slide").and_then(Value::as_u64).unwrap_or(0) + 1)),
+                        ("where_", &where_),
+                    ],
+                ),
             );
         }
     }

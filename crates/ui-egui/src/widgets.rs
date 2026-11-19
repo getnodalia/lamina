@@ -134,7 +134,7 @@ pub fn small_button(ui: &mut Ui, icon: Icon, label: &str, enabled: bool, selecte
 /// Draw a small named button, optionally with a separately named options chevron, and return
 /// both click targets.
 pub fn small_button_ex(ui: &mut Ui, icon: Icon, label: &str, enabled: bool, selected: bool, split: bool) -> (Response, Option<Response>) {
-    small_button_named(ui, icon, label, if label.is_empty() { "Options" } else { label }, enabled, selected, split)
+    small_button_named(ui, icon, label, if label.is_empty() { crate::i18n::t("Options") } else { label }, enabled, selected, split)
 }
 
 /// A small button whose accessible name is independent of its visible label. Split arrows are
@@ -605,7 +605,7 @@ pub fn drop_button(ui: &mut Ui, label: &str, size: egui::Vec2, enabled: bool) ->
     let t = Tokens::get(ui.ctx());
     let r = ui
         .add_enabled(enabled, egui::Button::new(if label.is_empty() { String::new() } else { format!("{label}   ") }).min_size(size))
-        .on_hover_text(if label.is_empty() { "Options" } else { label });
+        .on_hover_text(if label.is_empty() { crate::i18n::t("Options") } else { label });
     let col = if enabled { t.text_dim } else { t.text_faint };
     chevron(ui.painter(), egui::pos2(r.rect.max.x - 8.0, r.rect.center().y), 3.0, col);
     r

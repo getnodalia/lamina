@@ -360,7 +360,7 @@ pub(super) fn paint_grid(painter: &egui::Painter, ctx: &egui::Context, show: &mu
         painter.text(
             pos2(full.center().x, full.min.y + 50.0),
             Align2::CENTER_CENTER,
-            format!("First {GRID_CAP} slides"),
+            crate::i18n::tf("First {n} slides", &[("n", &GRID_CAP)]),
             theme::font(13.0),
             Color32::from_gray(180),
         );

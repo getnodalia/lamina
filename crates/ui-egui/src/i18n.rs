@@ -75,10 +75,29 @@ pub fn t(english: &str) -> &str {
     current().tr(english)
 }
 
+/// Translate a sentence with named placeholders and fill them in: `tf("Saved {name}", &[("name", &n)])`.
+/// The English template is the table key, so a placeholder keeps its name in every language.
+pub fn tf(english: &str, args: &[(&str, &dyn std::fmt::Display)]) -> String {
+    let mut out = t(english).to_string();
+    for (name, value) in args {
+        out = out.replace(&format!("{{{name}}}"), &value.to_string());
+    }
+    out
+}
+
 #[cfg(test)]
 mod tests {
     #![allow(clippy::unwrap_used, clippy::expect_used)]
     use super::Language;
+
+    #[test]
+    fn tf_translates_the_template_then_fills_the_names() {
+        super::set_current(Language::En);
+        assert_eq!(super::tf("{n} slides per page", &[("n", &3)]), "3 slides per page");
+        super::set_current(Language::Es);
+        assert_eq!(super::tf("{n} slides per page", &[("n", &3)]), "3 diapositivas por página");
+        super::set_current(Language::En);
+    }
 
     #[test]
     fn saved_language_round_trips_and_old_settings_default_to_automatic() {

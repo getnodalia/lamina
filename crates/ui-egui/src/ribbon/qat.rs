@@ -124,11 +124,12 @@ fn tip(q: &QatItem, index: usize, mac: bool) -> String {
     let sc =
         lamina_engine::find_command(&q.id).and_then(|c| c.shortcut).or_else(|| crate::UI_COMMANDS.iter().find(|c| c.0 == q.id).and_then(|c| c.2));
     let qat_sc = if !mac && index < 9 { Some(format!("Alt+{}", index + 1)) } else { None };
+    let label = crate::i18n::t(&q.label);
     match (sc, qat_sc) {
-        (Some(s), Some(qsc)) => format!("{} ({}, {})", q.label, crate::ribbon::pretty_shortcut(s), qsc),
-        (Some(s), None) => format!("{} ({})", q.label, crate::ribbon::pretty_shortcut(s)),
-        (None, Some(qsc)) => format!("{} ({})", q.label, qsc),
-        (None, None) => q.label.clone(),
+        (Some(s), Some(qsc)) => format!("{} ({}, {})", label, crate::ribbon::pretty_shortcut(s), qsc),
+        (Some(s), None) => format!("{} ({})", label, crate::ribbon::pretty_shortcut(s)),
+        (None, Some(qsc)) => format!("{} ({})", label, qsc),
+        (None, None) => label.to_string(),
     }
 }
 
@@ -165,7 +166,7 @@ pub fn show(app: &mut SlideApp, ui: &mut Ui) {
             ui.separator();
             for q in extra {
                 let mut on = true;
-                if ui.checkbox(&mut on, &q.label).changed() {
+                if ui.checkbox(&mut on, crate::i18n::t(&q.label)).changed() {
                     let _ = command(app, &json!({"remove": q.id, "params": q.params}));
                 }
             }

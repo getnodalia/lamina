@@ -195,7 +195,7 @@ pub(super) fn presenter_window(ctx: &egui::Context, show: &mut Show, doc: &std::
                     if button(ui, if show.presenter_grid { "All slides on" } else { "All slides" }).clicked() {
                         show.presenter_grid = !show.presenter_grid;
                     }
-                    if button(ui, show.zoom_label()).clicked() {
+                    if button(ui, crate::i18n::t(show.zoom_label())).clicked() {
                         show.zoom_key();
                     }
                 });

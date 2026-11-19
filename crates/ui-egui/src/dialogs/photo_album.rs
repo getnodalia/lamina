@@ -13,7 +13,7 @@ fn store_album_items(d: &mut Dialog, items: &[Value]) {
 fn album_item_label(v: &Value) -> String {
     if let Some(text) = v.get("text").and_then(Value::as_str) {
         let text = text.trim();
-        if text.is_empty() { "Text Box".to_string() } else { format!("Text: {text}") }
+        if text.is_empty() { "Text Box".to_string() } else { crate::i18n::tf("Text: {text}", &[("text", &text)]) }
     } else {
         v.get("name").and_then(Value::as_str).filter(|s| !s.is_empty()).unwrap_or("Picture").to_string()
     }
@@ -68,15 +68,15 @@ fn pick_album_picture(app: &mut SlideApp) -> Option<Value> {
 /// newly chosen key; the caller supplies the visible label.
 fn album_choice(ui: &mut Ui, d: &mut Dialog, id: &str, name: &str, key: &str, default: &str, choices: &[(&str, &str)]) {
     let cur = d.get(key, default);
-    let label = choices.iter().find(|(k, _)| *k == cur).map(|(_, l)| *l).unwrap_or(default);
+    let label = crate::i18n::t(choices.iter().find(|(k, _)| *k == cur).map(|(_, l)| *l).unwrap_or(default));
     let opened = nodalia_ui::ComboBox::from_id_salt(id).selected_text(label).width(220.0).show_ui(ui, |ui| {
         for (k, l) in choices {
-            if ui.selectable_label(cur == *k, *l).clicked() {
+            if ui.selectable_label(cur == *k, crate::i18n::t(l)).clicked() {
                 d.fields.insert(key.into(), (*k).to_string());
             }
         }
     });
-    let access = name.to_string();
+    let access = crate::i18n::t(name).to_string();
     let shown = label.to_string();
     opened.response.widget_info(move || {
         let mut info = egui::WidgetInfo::labeled(egui::Role::ComboBox, true, access.clone());
@@ -319,15 +319,18 @@ pub(super) fn photo_album_dialog(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog
 
 fn album_picture_status(items: &[Value], sel: usize) -> String {
     let Some(item) = items.get(sel) else {
-        return "Select a picture to rotate it or change brightness and contrast".into();
+        return crate::i18n::t("Select a picture to rotate it or change brightness and contrast").into();
     };
     if item.get("data").is_none() && item.get("path").is_none() {
-        return "Text boxes have no picture options".into();
+        return crate::i18n::t("Text boxes have no picture options").into();
     }
     let rot = item.get("rot").and_then(Value::as_f64).unwrap_or(0.0);
     let brightness = item.get("brightness").and_then(Value::as_f64).unwrap_or(0.0);
     let contrast = item.get("contrast").and_then(Value::as_f64).unwrap_or(0.0);
-    format!("Rotation {rot:.0}°, brightness {brightness:.1}, contrast {contrast:.1}")
+    crate::i18n::tf(
+        "Rotation {rot}°, brightness {brightness}, contrast {contrast}",
+        &[("rot", &format!("{rot:.0}")), ("brightness", &format!("{brightness:.1}")), ("contrast", &format!("{contrast:.1}"))],
+    )
 }
 
 fn nudge_picture(d: &mut Dialog, key: &str, delta: f64) {

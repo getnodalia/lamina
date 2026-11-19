@@ -4,7 +4,7 @@ fn seed_theme_fonts(d: &mut Dialog) {
     if d.fields.contains_key("seeded") {
         return;
     }
-    let name = d.params.get("name").and_then(Value::as_str).unwrap_or("Custom");
+    let name = d.params.get("name").and_then(Value::as_str).unwrap_or(crate::i18n::t("Custom"));
     let major = d.params.get("major").and_then(Value::as_str).unwrap_or("Inter");
     let minor = d.params.get("minor").and_then(Value::as_str).unwrap_or(major);
     d.fields.insert("schemeName".into(), name.to_string());
@@ -38,7 +38,7 @@ fn font_combo(ui: &mut Ui, label: &str, choices: &[String], selected: &mut Strin
         }
     });
     let shown = selected.clone();
-    let access = label.to_string();
+    let access = crate::i18n::t(label).to_string();
     resp.response.widget_info(move || {
         let mut info = egui::WidgetInfo::labeled(egui::Role::ComboBox, true, access.clone());
         info.current_text_value = Some(shown.clone());
@@ -84,8 +84,8 @@ pub(super) fn theme_fonts_dialog(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog
     ui.add_space(4.0);
     // Theme faces are not egui families; naming an unbound family panics. The lines show the
     // chosen names at heading and body sizes.
-    ui.label(egui::RichText::new(format!("Heading sample  {major}")).size(20.0));
-    ui.label(egui::RichText::new(format!("Body sample  {minor}")).size(14.0));
+    ui.label(egui::RichText::new(crate::i18n::tf("Heading sample  {font}", &[("font", &major)])).size(20.0));
+    ui.label(egui::RichText::new(crate::i18n::tf("Body sample  {font}", &[("font", &minor)])).size(14.0));
     ui.add_space(4.0);
     let mut name = d.get("schemeName", "");
     ui.horizontal(|ui| {
@@ -93,7 +93,7 @@ pub(super) fn theme_fonts_dialog(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog
         let resp = ui.add(egui::TextEdit::singleline(&mut name).desired_width(240.0).id_salt("schemeName"));
         let shown = name.clone();
         resp.widget_info(move || {
-            let mut info = egui::WidgetInfo::labeled(egui::Role::TextInput, true, "Scheme name");
+            let mut info = egui::WidgetInfo::labeled(egui::Role::TextInput, true, crate::i18n::t("Scheme name"));
             info.current_text_value = Some(shown.clone());
             info
         });

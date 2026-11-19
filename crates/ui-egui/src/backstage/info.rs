@@ -37,7 +37,7 @@ pub(super) fn info(app: &mut SlideApp, ui: &mut Ui, bs: &mut Backstage) {
     ui.label(RichText::new(&title).font(theme::font(24.0)).color(t.accent));
     match &path {
         Some(p) => dim(ui, p),
-        None => dim(ui, "Not saved yet"),
+        None => dim(ui, crate::i18n::t("Not saved yet")),
     }
     if let Some(p) = &path {
         ui.add_space(8.0);
@@ -84,7 +84,7 @@ pub(super) fn info(app: &mut SlideApp, ui: &mut Ui, bs: &mut Backstage) {
             let size = v.get("bytes").and_then(Value::as_u64).map(format_bytes);
             egui::Grid::new("backstage_props").num_columns(2).spacing(vec2(18.0, 7.0)).show(ui, |ui| {
                 let row = |ui: &mut Ui, k: &str, val: String| {
-                    ui.label(RichText::new(k).color(t.text_dim));
+                    ui.label(RichText::new(crate::i18n::t(k)).color(t.text_dim));
                     ui.label(val);
                     ui.end_row();
                 };
@@ -96,9 +96,10 @@ pub(super) fn info(app: &mut SlideApp, ui: &mut Ui, bs: &mut Backstage) {
                 for (i, (key, label, hint)) in PROPERTIES.iter().enumerate() {
                     let saved = props.get(*key).and_then(Value::as_str).unwrap_or("").to_string();
                     let Some(draft) = bs.props.get_mut(i) else { continue };
-                    let l = ui.label(RichText::new(*label).color(t.text_dim));
+                    let l = ui.label(RichText::new(crate::i18n::t(label)).color(t.text_dim));
                     let id = ui.make_persistent_id(("backstage_prop", *key));
-                    let resp = ui.add(egui::TextEdit::singleline(draft).id(id).hint_text(*hint).desired_width(300.0)).labelled_by(l.id);
+                    let resp =
+                        ui.add(egui::TextEdit::singleline(draft).id(id).hint_text(crate::i18n::t(hint)).desired_width(300.0)).labelled_by(l.id);
                     if resp.lost_focus() && *draft != saved {
                         // Commit first: a click on another field takes the focus before this one is drawn.
                         let mut p = serde_json::Map::new();
@@ -111,7 +112,7 @@ pub(super) fn info(app: &mut SlideApp, ui: &mut Ui, bs: &mut Backstage) {
                     }
                     ui.end_row();
                 }
-                row(ui, "Location", path.clone().unwrap_or_else(|| "Not saved yet".into()));
+                row(ui, "Location", path.clone().unwrap_or_else(|| crate::i18n::t("Not saved yet").to_string()));
             });
         });
     });
@@ -150,34 +151,34 @@ pub(super) fn save_as(app: &mut SlideApp, ui: &mut Ui, bs: &mut Backstage, out: 
     let t = Tokens::get(ui.ctx());
     let (title, path) = app.session.active().map(|d| (d.title(), d.path.clone())).unwrap_or_default();
     ui.label(RichText::new(&title).font(theme::font(15.0)).color(t.text));
-    dim(ui, path.as_deref().unwrap_or("Not saved yet"));
+    dim(ui, &path.clone().unwrap_or_else(|| crate::i18n::t("Not saved yet").to_string()));
     ui.add_space(14.0);
     let current = SAVE_TYPES.iter().find(|s| s.0 == bs.file_type).map_or(SAVE_TYPES[0].1, |s| s.1);
     ui.horizontal(|ui| {
         nodalia_ui::ComboBox::from_id_salt("backstage_save_type")
             .width(340.0)
-            .selected_text(current)
+            .selected_text(crate::i18n::t(current))
             .show_ui(ui, |ui| {
                 for (id, label, _) in SAVE_TYPES {
-                    if ui.selectable_label(bs.file_type == id, label).clicked() {
+                    if ui.selectable_label(bs.file_type == id, crate::i18n::t(label)).clicked() {
                         bs.file_type = id;
                     }
                 }
             })
             .response
-            .widget_info(|| egui::WidgetInfo::labeled(egui::Role::ComboBox, true, "Save as type"));
+            .widget_info(|| egui::WidgetInfo::labeled(egui::Role::ComboBox, true, crate::i18n::t("Save as type")));
         // A page that keeps the files (`host_save`) saves; plain web downloads.
         let web = app.services.pick_save.is_none() && app.services.host_save.is_none();
         let label = if web { "Download" } else { "Save" };
-        let save = ui.add(egui::Button::new(RichText::new(label).color(t.accent_text)).fill(t.accent).min_size(vec2(84.0, 26.0)));
+        let save = ui.add(egui::Button::new(RichText::new(crate::i18n::t(label)).color(t.accent_text)).fill(t.accent).min_size(vec2(84.0, 26.0)));
         if save
-            .on_hover_text(if web {
+            .on_hover_text(crate::i18n::t(if web {
                 "Download the file"
             } else if app.services.host_save.is_some() {
                 "Save to the page"
             } else {
                 "Choose where to save"
-            })
+            }))
             .clicked()
         {
             let fmt = bs.file_type;
@@ -198,7 +199,7 @@ pub(super) fn save_as(app: &mut SlideApp, ui: &mut Ui, bs: &mut Backstage, out: 
     });
     ui.add_space(8.0);
     if let Some((_, _, detail)) = SAVE_TYPES.iter().find(|s| s.0 == bs.file_type) {
-        dim(ui, detail);
+        dim(ui, crate::i18n::t(detail));
     }
 }
 
@@ -217,7 +218,7 @@ pub(super) fn about(app: &mut SlideApp, ui: &mut Ui) {
                 ui.label(RichText::new(crate::i18n::t("Lámina")).font(theme::bold(24.0)).color(t.text));
             });
             dim(ui, &crate::dialogs::version_line());
-            dim(ui, "Part of Nodalia. Open source under MIT OR Apache-2.0.");
+            dim(ui, crate::i18n::t("Part of Nodalia. Open source under MIT OR Apache-2.0."));
             ui.add_space(14.0);
             if task(ui, Icon::Help, "About Lámina", "About Lámina", "Version, links and licence.", true) {
                 let _ = app.run("app.about", json!({}));

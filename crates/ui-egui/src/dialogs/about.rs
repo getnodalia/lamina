@@ -34,7 +34,7 @@ const LICENCE: &str = "https://github.com/getnodalia/lamina/blob/main/NOTICE";
 /// from `[workspace.package] version` (the single source of truth, `cargo xtask version`); the
 /// release workflow sets `LAMINA_BUILD_SHA` / `LAMINA_BUILD_DATE` at build time.
 pub fn version_line() -> String {
-    let mut s = format!("Version {}", env!("CARGO_PKG_VERSION"));
+    let mut s = crate::i18n::tf("Version {version}", &[("version", &env!("CARGO_PKG_VERSION"))]);
     let sha = option_env!("LAMINA_BUILD_SHA").map(|s| s.get(..9).unwrap_or(s)).filter(|s| !s.is_empty());
     let date = option_env!("LAMINA_BUILD_DATE").filter(|s| !s.is_empty());
     match (sha, date) {
