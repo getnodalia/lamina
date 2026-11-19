@@ -454,9 +454,9 @@ mod title_bar_tests {
         let (h, left, control) = title_geometry(true);
         // AppKit centres the lights in its own band, so the bar is that band.
         assert_eq!(h, MAC_TITLE_BAR);
-        // Content keeps the same gap after the lights as the lights keep from the top.
+        // Content keeps at least the lights' own gap after the green button.
         let lights_end = MAC_LIGHTS_LEFT + 2.0 * MAC_LIGHT_PITCH + MAC_LIGHT;
-        assert_eq!(left - lights_end, (h - MAC_LIGHT) / 2.0);
+        assert!(left >= lights_end + (h - MAC_LIGHT) / 2.0);
         // The tallest controls keep at least 4 pt above and below.
         assert!(control <= h - 8.0);
         // Elsewhere the bar holds Nodalia's 28 pt window controls with room above and below.

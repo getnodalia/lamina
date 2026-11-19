@@ -22,7 +22,7 @@ pub(super) const MAC_LIGHTS_LEFT: f32 = 9.0;
 
 /// Where title-bar content starts on macOS: the end of the three lights plus the gap the lights
 /// keep from the top of the window.
-pub const MAC_CONTENT_LEFT: f32 = MAC_LIGHTS_LEFT + 2.0 * MAC_LIGHT_PITCH + MAC_LIGHT + (MAC_TITLE_BAR - MAC_LIGHT) / 2.0;
+pub const MAC_CONTENT_LEFT: f32 = nodalia_theme::titlebar::MAC_LIGHTS;
 
 /// The title bar's height, the left edge of its content and the height of its tallest control.
 /// With the integrated title bar (macOS) the bar is shorter, so the controls shrink to keep a
