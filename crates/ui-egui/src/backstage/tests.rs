@@ -220,6 +220,25 @@ fn new_template_opens_a_starter_deck() {
     assert!(h.state().backstage.is_none(), "the starter deck shows");
 }
 
+/// A Spanish interface shows the starters by their Spanish names and opens them written in Spanish.
+#[test]
+fn new_template_opens_a_spanish_deck_in_a_spanish_interface() {
+    let mut app = new_app();
+    app.ui.language = Some(crate::i18n::Language::Es);
+    let mut h = harness(app);
+    h.state_mut().run("app.backstage", json!({"page": "new"})).unwrap();
+    h.run_steps(3);
+    assert!(h.query_by_label("Briefing").is_none(), "the English name is not shown");
+    h.get_by_label("Resumen semanal").scroll_to_me();
+    h.run_steps(3);
+    h.get_by_label("Resumen semanal").click();
+    h.run_steps(3);
+    let doc = &h.state().session.active().unwrap().doc;
+    assert_eq!(doc.slides[0].title(), "Resumen semanal");
+    assert_eq!(doc.slides.len(), 5);
+    crate::i18n::set_current(crate::i18n::Language::En);
+}
+
 /// New and Home create presentations, which leaves the File tab.
 #[test]
 fn new_creates_a_presentation() {
