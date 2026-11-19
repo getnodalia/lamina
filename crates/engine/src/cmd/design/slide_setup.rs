@@ -73,6 +73,18 @@ pub(super) fn slide_size(s: &mut Session, p: &Value) -> Result<Value> {
 }
 
 pub(super) fn header_footer(s: &mut Session, p: &Value) -> Result<Value> {
+    // The language a date the call creates or re-formats is written in (a BCP 47 tag, as
+    // `insert.dateTime` takes); absent, the date keeps the placeholder's own language.
+    let lang = match p.get("language") {
+        None => None,
+        Some(v) => {
+            let known = v.as_str().and_then(lamina_text::datetime::canonical_language);
+            Some(
+                known
+                    .ok_or_else(|| bad("design.headerFooter", "language: en-US, en-GB, es-ES, es-MX, fr-FR, de-DE, it-IT, pt-BR, ja-JP or sv-SE"))?,
+            )
+        }
+    };
     s.edit(|doc, sel| {
         let hf = &mut doc.header_footer;
         if let Some(v) = bool_param(p, "date") {
@@ -150,8 +162,8 @@ pub(super) fn header_footer(s: &mut Session, p: &Value) -> Result<Value> {
                             PhType::Date if hf.date_text.is_empty() => TextBody {
                                 paragraphs: vec![lamina_model::Paragraph {
                                     runs: vec![Run {
-                                        text: date_now(&hf.date_format),
-                                        props: Default::default(),
+                                        text: date_now(&hf.date_format, lang),
+                                        props: lamina_model::RunProps { lang: lang.map(str::to_string), ..Default::default() },
                                         kind: RunKind::Field { field: date_kind(&hf.date_format).into() },
                                     }],
                                     ..Default::default()
@@ -179,7 +191,7 @@ pub(super) fn header_footer(s: &mut Session, p: &Value) -> Result<Value> {
                             // The deck's format always travels; whether the caller asked for it
                             // is what decides if it may rewrite a field the slide already has
                             // (see `set_date`).
-                            set_date(sh, &hf.date_text, &hf.date_format, format_given);
+                            set_date(sh, &hf.date_text, &hf.date_format, format_given, lang);
                         }
                     }
                     _ => {}
@@ -197,9 +209,9 @@ fn date_kind(format: &str) -> &str {
 }
 
 /// The saved text of a date field of `format`, as it shows now.
-fn date_now(format: &str) -> String {
+fn date_now(format: &str, lang: Option<&str>) -> String {
     let kind = date_kind(format);
-    lamina_text::datetime::DateTime::now_local().and_then(|now| lamina_text::datetime::field_text(kind, None, now)).unwrap_or_else(today)
+    lamina_text::datetime::DateTime::now_local().and_then(|now| lamina_text::datetime::field_text(kind, lang, now)).unwrap_or_else(today)
 }
 
 /// Point a slide's date placeholder at a fixed date (its own plain text) or, for an empty
@@ -215,21 +227,25 @@ fn date_now(format: &str) -> String {
 /// build a `datetime1`: a slide that went from `datetime11` to fixed text and back came away on
 /// the short date. With nothing to preserve, the deck's remembered format is the right one to
 /// take (noted in review).
-fn set_date(sh: &mut Shape, fixed: &str, format: &str, format_given: bool) {
+fn set_date(sh: &mut Shape, fixed: &str, format: &str, format_given: bool, lang: Option<&str>) {
     let runs = || sh.text.iter().flat_map(|t| &t.paragraphs).flat_map(|p| &p.runs);
     let field_now = runs().find_map(|r| match &r.kind {
         RunKind::Field { field } if lamina_text::datetime::is_date_field(field) => Some(field.clone()),
         _ => None,
     });
     let has_field = field_now.is_some();
-    let props = runs().next().map(|r| r.props.clone()).unwrap_or_default();
+    let mut props = runs().next().map(|r| r.props.clone()).unwrap_or_default();
+    if let Some(lang) = lang {
+        props.lang = Some(lang.to_string());
+    }
+    let lang = lang.or(props.lang.as_deref()).map(str::to_string);
     let format = if format_given || !has_field { format } else { "" };
     let want = date_kind(format);
     let (text, kind) = match fixed {
         // Automatic: keep the field, but follow a format that has changed.
         "" if field_now.as_deref() == Some(want) => return,
         "" if has_field && format.is_empty() => return,
-        "" => (date_now(format), RunKind::Field { field: want.into() }),
+        "" => (date_now(format, lang.as_deref()), RunKind::Field { field: want.into() }),
         _ if !has_field && sh.text.as_ref().is_some_and(|t| t.text() == fixed) => return,
         _ => (fixed.to_string(), RunKind::Text),
     };
@@ -399,5 +415,24 @@ mod header_footer_date_tests {
         let got = dates(&s);
         assert_eq!(got.len(), 1, "{got:?}");
         assert_eq!(got[0].1.as_deref(), Some("datetime11"));
+    }
+
+    /// The date the dialog writes reads in the language it names, and an unknown language is
+    /// refused without touching the deck.
+    #[test]
+    fn header_footer_writes_the_date_in_the_chosen_language() {
+        let mut s = Session::with_new();
+        s.execute("design.headerFooter", &json!({"date": true, "dateFormat": "datetime3", "language": "es-ES", "all": true})).unwrap();
+        let got = dates(&s);
+        assert_eq!(got.len(), 1, "{got:?}");
+        assert_eq!(got[0].1.as_deref(), Some("datetime3"));
+        let months = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+        assert!(months.iter().any(|m| got[0].0.contains(&format!(" de {m} de "))), "{got:?}");
+        let rev = s.doc().unwrap().revision;
+        for bad in [json!("xx-YY"), json!(""), json!(7), json!(null)] {
+            let err = s.execute("design.headerFooter", &json!({"date": true, "dateFormat": "datetime4", "language": bad})).unwrap_err();
+            assert!(err.to_string().contains("language"), "{err}");
+            assert_eq!(s.doc().unwrap().revision, rev);
+        }
     }
 }

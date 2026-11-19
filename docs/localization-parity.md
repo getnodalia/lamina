@@ -61,6 +61,7 @@ of every text in the file and the default for new text (`format.languageAll`).
 | Date | Change | Summary |
 |---|---|---|
 | 2026-11-19 | trivial | Spanish interface audit: dialogs, ribbon galleries, panes, status bar and the Backstage Info, Save As and Print pages draw Spanish through `i18n::t`/`tf`. Not yet translated: the date and time samples of the Date & Time dialog (English only in `lamina_text`), accessibility-checker messages from the engine, and the docking label "Resize panel" of the egui panels. Scores unchanged. |
+| 2026-11-19 | minor | 0.2.0: Date & Time names in Spanish, French, German, Italian and Portuguese (`lamina_text::datetime`), the dialog starts in the interface language, Header and Footer writes its date in it, and the accessibility checker's messages are translated. Still English: the screen-reader label "Resize panel" of the egui panel dividers (hard-coded in the shared egui). Scores unchanged. |
 | 2026-10-24 | minor | Local 0.37 candidate adds an opt-in native LXGW WenKai Lite glyph fallback and CJK interface-test coverage. This records local implementation only: managed tests, formatting, clippy, wasm-size and native GUI qualification remain pending. Browser font budget and uniform Chinese typography are unchanged. |
 | 2026-10-21 | minor | Review › Language can set the proofing language of the whole presentation |
 | 2026-10-14 | minor | IME composition in a table cell is underlined in place; the candidate window sits on that cell's caret |

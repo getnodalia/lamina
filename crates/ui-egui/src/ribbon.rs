@@ -311,7 +311,7 @@ fn big(app: &mut SlideApp, ui: &mut Ui, icon: Icon, label: &str, id: &str, p: Va
     let en = enabled(app, id);
     let r = big_button(ui, icon, label, en);
     if id == "insert.dateTime" {
-        let name = label.replace('\n', " ");
+        let name = crate::i18n::t(label).replace('\n', " ");
         r.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, en, &name));
     }
     let r = r.on_hover_text(tip(id, label));

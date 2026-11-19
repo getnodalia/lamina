@@ -286,3 +286,20 @@ fn the_open_dialog_reads_the_caret_word_and_the_shape_click() {
     let seed = hyperlink_seed_of(Some(&st));
     assert_eq!(seed, HyperlinkSeed::blank(), "a caret at the end of the word inserts a new link");
 }
+
+/// The accessibility checker's issues read in the interface language, the contrast one with its
+/// ratio filled in.
+#[test]
+fn accessibility_issues_read_in_the_interface_language() {
+    use crate::i18n::{Language, set_current};
+    let issue = super::body::accessibility_issue;
+    set_current(Language::En);
+    assert_eq!(issue("Missing slide title"), "Missing slide title");
+    assert_eq!(issue("Hard-to-read text contrast (2.1:1)"), "Hard-to-read text contrast (2.1:1)");
+    set_current(Language::Es);
+    assert_eq!(issue("Missing slide title"), "Falta el título de la diapositiva");
+    assert_eq!(issue("Missing alternative text"), "Falta el texto alternativo");
+    assert_eq!(issue("Hard-to-read text contrast (2.1:1)"), "Contraste del texto difícil de leer (2.1:1)");
+    assert_eq!(issue("An issue nobody has translated"), "An issue nobody has translated");
+    set_current(Language::En);
+}

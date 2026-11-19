@@ -77,3 +77,32 @@ fn cancel_closes_the_dialog_without_a_date() {
     assert!(date_run(&h).is_none());
     assert!(h.state().session.active().unwrap().history.undo.is_empty());
 }
+
+/// In a Spanish interface the dialog starts in Spanish and shows the date with Spanish names.
+#[test]
+fn the_dialog_starts_in_spanish_in_a_spanish_interface() {
+    let mut app = SlideApp::new(Session::with_new(), Services::default());
+    app.ui.tab = "Insert".into();
+    app.ui.language = Some(crate::i18n::Language::Es);
+    let mut h = Harness::builder().with_size(egui::vec2(1800.0, 1100.0)).build_ui_state(
+        |ui, app: &mut SlideApp| {
+            app.logic(ui.ctx());
+            app.ui(ui);
+        },
+        app,
+    );
+    h.run_steps(3);
+    h.get_by_label("Fecha y hora").click();
+    h.run_steps(2);
+    assert_eq!(h.get_by_role_and_label(egui::accesskit::Role::ComboBox, "Idioma").value().as_deref(), Some("Español (España)"));
+    let now = lamina_text::datetime::DateTime::now_local().unwrap();
+    let sample = lamina_text::datetime::field_text("datetime2", Some("es-ES"), now).unwrap();
+    h.get_by_label(&sample).click();
+    h.run_steps(1);
+    h.get_by_label("OK").click();
+    h.run_steps(2);
+    let run = date_run(&h).unwrap();
+    assert_eq!(run.props.lang.as_deref(), Some("es-ES"));
+    assert!(matches!(run.kind, RunKind::Field { ref field } if field == "datetime2"), "{run:?}");
+    crate::i18n::set_current(crate::i18n::Language::En);
+}
