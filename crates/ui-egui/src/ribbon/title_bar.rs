@@ -14,10 +14,13 @@ pub const MAC_TITLE_BAR: f32 = 32.0;
 
 /// The traffic lights as AppKit lays them out, measured on macOS 27: button diameter,
 /// centre-to-centre pitch and the first button's left edge.
+#[cfg(test)]
 pub(super) const MAC_LIGHT: f32 = 14.0;
 
+#[cfg(test)]
 pub(super) const MAC_LIGHT_PITCH: f32 = 23.0;
 
+#[cfg(test)]
 pub(super) const MAC_LIGHTS_LEFT: f32 = 9.0;
 
 /// Where title-bar content starts on macOS: the end of the three lights plus the gap the lights
