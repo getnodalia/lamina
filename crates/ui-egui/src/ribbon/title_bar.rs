@@ -1,5 +1,6 @@
 use super::{Align2, Icon, Rect, Sense, SlideApp, Tokens, Ui, icon_toggle, json, pos2, theme, vec2};
 use crate::widgets::ndl_icon_button;
+use nodalia_theme::titlebar::{self, Placement, Side};
 
 /// The title bar's height where Lámina draws the whole window frame (Linux, the BSDs, Windows):
 /// room for Nodalia's 28 pt window controls with a margin above and below.
@@ -14,15 +15,18 @@ pub const MAC_TITLE_BAR: f32 = 32.0;
 
 /// The traffic lights as AppKit lays them out, measured on macOS 27: button diameter,
 /// centre-to-centre pitch and the first button's left edge.
+#[cfg(test)]
 pub(super) const MAC_LIGHT: f32 = 14.0;
 
+#[cfg(test)]
 pub(super) const MAC_LIGHT_PITCH: f32 = 23.0;
 
+#[cfg(test)]
 pub(super) const MAC_LIGHTS_LEFT: f32 = 9.0;
 
 /// Where title-bar content starts on macOS: the end of the three lights plus the gap the lights
 /// keep from the top of the window.
-pub const MAC_CONTENT_LEFT: f32 = MAC_LIGHTS_LEFT + 2.0 * MAC_LIGHT_PITCH + MAC_LIGHT + (MAC_TITLE_BAR - MAC_LIGHT) / 2.0;
+pub const MAC_CONTENT_LEFT: f32 = nodalia_theme::titlebar::MAC_LIGHTS;
 
 /// The title bar's height, the left edge of its content and the height of its tallest control.
 /// With the integrated title bar (macOS) the bar is shorter, so the controls shrink to keep a
@@ -50,9 +54,14 @@ pub fn title_bar(app: &mut SlideApp, ui: &mut Ui) {
             let max = ui.input(|i| i.viewport().maximized.unwrap_or(false));
             ui.ctx().send_viewport_cmd(egui::ViewportCommand::Maximized(!max));
         }
+        // Where the window buttons are decides which end of the bar they take (Linux: the
+        // desktop's side) and how much room the content leaves them.
+        let placement = if app.draws_window_controls() { Placement::nodalia(titlebar::system_side()) } else { Placement::system() };
+        let insets = placement.insets(false);
+        let left = left + insets.left;
         let mut child = ui.new_child(
             egui::UiBuilder::new()
-                .max_rect(Rect::from_min_max(pos2(rect.min.x + left, rect.min.y), pos2(rect.min.x + 460.0, rect.max.y)))
+                .max_rect(Rect::from_min_max(pos2(rect.min.x + left, rect.min.y), pos2(rect.min.x + left + 460.0, rect.max.y)))
                 .layout(egui::Layout::left_to_right(egui::Align::Center)),
         );
         child.spacing_mut().item_spacing.x = 2.0;
@@ -66,9 +75,8 @@ pub fn title_bar(app: &mut SlideApp, ui: &mut Ui) {
         // Right side.
         let mut right_edge = rect.max.x - theme::ISLAND_GAP - 2.0;
         if app.draws_window_controls() {
-            let controls = Rect::from_min_max(pos2(right_edge - nodalia_theme::window_controls::WIDTH, rect.min.y), pos2(right_edge, rect.max.y));
-            window_controls(ui, controls);
-            right_edge = controls.min.x - 14.0;
+            window_controls(ui, placement.controls_rect(rect), placement.side);
+            right_edge = rect.max.x - theme::ISLAND_GAP - 2.0 - insets.right;
         }
         let mut right = ui.new_child(
             egui::UiBuilder::new()
@@ -168,12 +176,12 @@ fn search_field(ui: &mut Ui, height: f32) -> egui::Response {
 }
 
 /// Nodalia's minimize, maximize (or restore) and close buttons in `rect`.
-fn window_controls(ui: &Ui, rect: Rect) {
+fn window_controls(ui: &Ui, rect: Rect, side: Side) {
     let dark = Tokens::get(ui.ctx()).dark;
     let mode = if dark { nodalia_theme::Mode::Dark } else { nodalia_theme::Mode::Light };
     let (focused, maximized) = ui.input(|i| (i.viewport().focused.unwrap_or(true), i.viewport().maximized.unwrap_or(false)));
     let labels = nodalia_theme::window_controls::Labels { minimize: "Minimize", maximize: "Maximize", restore: "Restore", close: "Close" };
-    let action = nodalia_theme::window_controls::show(ui, rect, &theme::palette(dark), mode, focused, maximized, labels);
+    let action = nodalia_theme::window_controls::show_on(ui, rect, side, &theme::palette(dark), mode, focused, maximized, labels);
     use nodalia_theme::window_controls::Action;
     let cmd = match action {
         Some(Action::Minimize) => egui::ViewportCommand::Minimized(true),

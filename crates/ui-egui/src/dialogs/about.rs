@@ -1,30 +1,33 @@
-use super::{Color32, Rect, Sense, SlideApp, Tokens, Ui, pos2, theme, vec2};
+use super::{Color32, Rect, SlideApp, Tokens, Ui, pos2, theme};
 
-/// About Lámina, laid out as in every Nodalia office app: the icon, the name and version, "Part of
-/// Nodalia", the links and the licence. Upstream authors are credited in NOTICE, which the last
-/// line points to.
+/// About Lámina, as every Nodalia app draws it (`nodalia_theme::about`): the icon, the name and
+/// version, one line on what it is, "Part of Nodalia", the links and the licence. Upstream authors
+/// are credited in NOTICE, which the last line points to.
 pub fn about(_app: &mut SlideApp, ui: &mut Ui) {
     let t = Tokens::get(ui.ctx());
-    ui.set_width(360.0);
-    ui.vertical_centered(|ui| {
-        let (r, _) = ui.allocate_exact_size(vec2(96.0, 96.0), Sense::hover());
-        paint_logo(ui.painter(), r);
-        ui.add_space(8.0);
-        ui.label(egui::RichText::new(crate::i18n::t("Lámina")).font(theme::bold(22.0)));
-        ui.label(egui::RichText::new(version_line()).color(t.text_dim));
-        ui.label(egui::RichText::new(crate::i18n::t("Part of Nodalia")).color(t.text_dim));
-        ui.add_space(10.0);
-        ui.label(crate::i18n::t("Presentations and slide shows, in pure Rust."));
-        ui.add_space(10.0);
-        ui.hyperlink_to(crate::i18n::t("getnodalia.com/lamina"), lamina_engine::links::APP_PAGE);
-        ui.add_space(2.0);
-        ui.hyperlink_to(crate::i18n::t("Source code"), lamina_engine::links::GITHUB);
-        ui.add_space(2.0);
-        ui.hyperlink_to(crate::i18n::t("Report a problem or suggest an idea"), lamina_engine::links::ISSUES);
-        ui.add_space(10.0);
-        ui.hyperlink_to(crate::i18n::t("Licence: MIT OR Apache-2.0"), LICENCE);
-        ui.label(egui::RichText::new(crate::i18n::t("Includes work by other open-source authors (see NOTICE).")).size(11.0).color(t.text_faint));
-    });
+    ui.set_width(nodalia_theme::about::measures::WIDTH);
+    let look = nodalia_theme::creator::Look::new(theme::palette(t.dark)).strong_family(theme::bold(1.0).family);
+    let version = version_line();
+    let links = [
+        nodalia_theme::about::Link { label: crate::i18n::t("getnodalia.com/lamina"), url: lamina_engine::links::APP_PAGE },
+        nodalia_theme::about::Link { label: crate::i18n::t("Source code"), url: lamina_engine::links::GITHUB },
+        nodalia_theme::about::Link { label: crate::i18n::t("Report a problem or suggest an idea"), url: lamina_engine::links::ISSUES },
+        nodalia_theme::about::Link { label: crate::i18n::t("Licence: MIT OR Apache-2.0"), url: LICENCE },
+    ];
+    let info = nodalia_theme::about::Info {
+        name: crate::i18n::t("Lámina"),
+        version: &version,
+        tagline: crate::i18n::t("Presentations and slide shows, in pure Rust."),
+        suite: crate::i18n::t("Part of Nodalia"),
+        links: &links,
+        footer: crate::i18n::t("Includes work by other open-source authors (see NOTICE)."),
+    };
+    let page = nodalia_theme::about::page(ui, &look, &info, |ui, rect| paint_logo(ui.painter(), rect));
+    if let Some(i) = page.picked
+        && let Some(link) = links.get(i)
+    {
+        ui.ctx().open_url(egui::OpenUrl::new_tab(link.url));
+    }
 }
 
 /// The licence the About window links to.
@@ -88,8 +91,8 @@ mod about_tests {
             app,
         );
         h.run_steps(3);
-        assert!(h.query_by_label("Part of Nodalia").is_some());
-        assert!(h.query_by_label_contains("see NOTICE").is_some());
+        // The shared page paints its text; its links are real widgets.
+        assert!(h.query_by_label("Source code").is_some());
         for gone in ["Contributors", "Models", "Cancel"] {
             assert!(h.query_by_label(gone).is_none(), "{gone} is not in About");
         }
