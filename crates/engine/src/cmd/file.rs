@@ -17,11 +17,11 @@ pub fn specs() -> Vec<CommandSpec> {
             "New Presentation",
             ["File"],
             Some("Cmd+N"),
-            "{theme?: name, template?: starter name, size?: [w,h] pt, blank?: bool}",
+            "{theme?: name, template?: starter id or name, lang?: \"en\"|\"es\" (the language a template is written in), size?: [w,h] pt, blank?: bool}",
             always,
             new
         ),
-        cmd!(query "file.templates", "Starter Templates", [], None, "{} → [{name, summary, theme, slides}]", always, templates),
+        cmd!(query "file.templates", "Starter Templates", [], None, "{lang?: \"en\"|\"es\"} → {templates: [{id, name, summary, theme, slides}]}", always, templates),
         cmd!(noundo "file.open", "Open…", ["File"], Some("Cmd+O"), "{path}", always, open),
         cmd!(
             noundo "file.adopt",
@@ -88,14 +88,23 @@ fn slide_size(p: &Value) -> lamina_geom::Size {
         .unwrap_or(defaults::WIDE)
 }
 
-fn templates(_s: &mut Session, _p: &Value) -> Result<Value> {
+fn lang_param(p: &Value) -> crate::templates::Lang {
+    str_param(p, "lang").map(crate::templates::Lang::parse).unwrap_or_default()
+}
+
+fn templates(_s: &mut Session, p: &Value) -> Result<Value> {
+    let lang = lang_param(p);
     Ok(json!({
-        "templates": crate::templates::starters().iter().map(|t| json!({
-            "name": t.name,
-            "summary": t.summary,
-            "theme": t.theme,
-            "slides": t.slides.len(),
-        })).collect::<Vec<_>>(),
+        "templates": crate::templates::starters().iter().map(|t| {
+            let text = t.text(lang);
+            json!({
+                "id": t.id,
+                "name": text.name,
+                "summary": text.summary,
+                "theme": t.theme,
+                "slides": text.slides.len(),
+            })
+        }).collect::<Vec<_>>(),
     }))
 }
 
@@ -110,8 +119,9 @@ fn new(s: &mut Session, p: &Value) -> Result<Value> {
     }
     let size = slide_size(p);
     let (doc, template_name) = if let Some(name) = template {
-        let doc = crate::templates::build(name, size)?;
-        let chosen = crate::templates::find(name).map(|t| t.name);
+        let lang = lang_param(p);
+        let doc = crate::templates::build(name, size, lang)?;
+        let chosen = crate::templates::find(name).map(|t| t.text(lang).name);
         (doc, chosen)
     } else {
         let theme = theme_name.and_then(theme_named).unwrap_or_default();

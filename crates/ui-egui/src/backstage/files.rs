@@ -67,9 +67,25 @@ fn new_tiles(app: &mut SlideApp, ui: &mut Ui, query: &str, limit: usize, blank: 
     true
 }
 
+/// The language starter decks are shown and written in: the interface's.
+fn starter_lang() -> lamina_engine::templates::Lang {
+    match crate::i18n::current() {
+        crate::i18n::Language::Es => lamina_engine::templates::Lang::Es,
+        crate::i18n::Language::En => lamina_engine::templates::Lang::En,
+    }
+}
+
+fn lang_code(lang: lamina_engine::templates::Lang) -> &'static str {
+    match lang {
+        lamina_engine::templates::Lang::Es => "es",
+        lamina_engine::templates::Lang::En => "en",
+    }
+}
+
 /// Starter decks whose name, summary, theme or a slide title matches `query`, at most `limit` tiles.
 fn template_tiles(app: &mut SlideApp, ui: &mut Ui, query: &str, limit: usize) -> bool {
-    let list = lamina_engine::templates::matching(query);
+    let lang = starter_lang();
+    let list = lamina_engine::templates::matching(query, lang);
     if list.is_empty() {
         return false;
     }
@@ -77,8 +93,9 @@ fn template_tiles(app: &mut SlideApp, ui: &mut Ui, query: &str, limit: usize) ->
         ui.spacing_mut().item_spacing = vec2(10.0, 10.0);
         for starter in list.into_iter().take(limit) {
             let theme = lamina_model::theme::builtin_themes().into_iter().find(|th| th.name == starter.theme);
-            if tile(ui, starter.name, theme.as_ref(), false).on_hover_text(starter.summary).clicked() {
-                let _ = app.run("file.new", json!({"template": starter.name}));
+            let text = starter.text(lang);
+            if tile(ui, text.name, theme.as_ref(), false).on_hover_text(text.summary).clicked() {
+                let _ = app.run("file.new", json!({"template": starter.id, "lang": lang_code(lang)}));
             }
         }
     });
@@ -269,7 +286,7 @@ pub(super) fn new_page(app: &mut SlideApp, ui: &mut Ui, bs: &mut Backstage) {
     ui.add_space(14.0);
     let q = bs.query.clone();
     let themes = new_tiles(app, ui, &q, usize::MAX, false);
-    let templates = if q.trim().is_empty() || !lamina_engine::templates::matching(&q).is_empty() {
+    let templates = if q.trim().is_empty() || !lamina_engine::templates::matching(&q, starter_lang()).is_empty() {
         ui.add_space(18.0);
         heading(ui, "Templates");
         template_tiles(app, ui, &q, usize::MAX)
