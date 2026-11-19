@@ -296,6 +296,7 @@ pub(super) fn spare_room(ctx: &egui::Context, tab: &str) -> Option<f32> {
 
 /// A chevron over a ribbon edge that scrolls it; `true` on the frame it is clicked.
 fn edge_cue(ui: &mut Ui, rect: Rect, glyph: &str, hint: &str, t: &Tokens) -> bool {
+    let hint = crate::i18n::t(hint);
     let resp = ui.interact(rect, ui.scope_id().with(glyph), Sense::click()).on_hover_text(hint);
     resp.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, hint));
     let ink = if resp.hovered() { t.text } else { t.text_dim };
@@ -346,11 +347,31 @@ fn tip(id: &str, label: &str) -> String {
 }
 
 pub fn pretty_shortcut(s: &str) -> String {
-    if cfg!(target_os = "macos") {
+    let s = if cfg!(target_os = "macos") {
         s.replace("Cmd+", "⌘").replace("Shift+", "⇧").replace("Alt+", "⌥").replace("Ctrl+", "⌃")
     } else {
         s.replace("Cmd+", "Ctrl+")
-    }
+    };
+    if crate::i18n::current() == crate::i18n::Language::Es { s.split('+').map(spanish_key).collect::<Vec<_>>().join("+") } else { s }
+}
+
+/// The name of a key on a Spanish keyboard; the modifier glyphs a Mac shortcut starts with stay put.
+fn spanish_key(part: &str) -> String {
+    let at = part.find(|c: char| !"⌘⇧⌥⌃".contains(c)).unwrap_or(part.len());
+    let (glyphs, key) = part.split_at(at);
+    let key = match key {
+        "Backspace" => "Retroceso",
+        "Delete" => "Supr",
+        "Enter" => "Intro",
+        "Escape" => "Esc",
+        "PageUp" => "Re Pág",
+        "PageDown" => "Av Pág",
+        "Home" => "Inicio",
+        "End" => "Fin",
+        "Space" => "Espacio",
+        other => other,
+    };
+    format!("{glyphs}{key}")
 }
 
 fn scheme(app: &SlideApp) -> lamina_color::ColorScheme {

@@ -37,7 +37,7 @@ impl SlideApp {
             if self.session.documents().iter().any(|d| d.is_dirty())
                 && let Err(e) = self.session.execute("file.recovery.save", &json!({}))
             {
-                self.set_status(format!("Couldn't save AutoRecover information: {e}"));
+                self.set_status(crate::i18n::tf("Couldn't save AutoRecover information: {e}", &[("e", &e)]));
             }
         }
         if self.session.documents().iter().any(|d| d.is_dirty()) {

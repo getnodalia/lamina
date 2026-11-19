@@ -76,6 +76,7 @@ pub(super) fn soft_edge_row(ui: &mut Ui, current: f64) -> Option<f64> {
 }
 
 fn tile(ui: &mut Ui, label: &str, selected: bool, paint: impl FnOnce(&Painter, Rect)) -> egui::Response {
+    let label = crate::i18n::t(label);
     let t = Tokens::get(ui.ctx());
     let (rect, resp) = ui.allocate_exact_size(TILE, Sense::click());
     resp.widget_info(|| WidgetInfo::selected(Role::Button, true, selected, label));

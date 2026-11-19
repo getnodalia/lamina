@@ -227,7 +227,7 @@ pub fn gradient_editor(ui: &mut Ui, id: &str, g: &Gradient, sc: &ColorScheme) ->
     ui.add_space(4.0);
     ui.label(crate::i18n::t("Gradient stops"));
     let (bar, bar_resp) = ui.allocate_exact_size(vec2(ui.available_width().min(260.0), 18.0), Sense::click());
-    bar_resp.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Unknown, true, "Gradient bar"));
+    bar_resp.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Unknown, true, crate::i18n::t("Gradient bar")));
     paint_bar(ui, bar, g, sc);
     let (marks, _) = ui.allocate_exact_size(vec2(bar.width(), 14.0), Sense::hover());
     let drag_id = ui.scope_id().with((id, "drag"));
@@ -293,7 +293,7 @@ pub fn gradient_editor(ui: &mut Ui, id: &str, g: &Gradient, sc: &ColorScheme) ->
             let (sw, _) = ui.allocate_exact_size(vec2(18.0, 18.0), Sense::hover());
             ui.painter().rect(sw, CornerRadius::same(3), c32(&s.color, sc), Stroke::new(1.0, t.border), egui::StrokeKind::Inside);
             let r = widgets::drop_button(ui, "", vec2(24.0, 20.0), true);
-            r.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, "Stop color"));
+            r.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, crate::i18n::t("Stop color")));
             let mut popup = widgets::color_popup(&r);
             if open_color {
                 popup = popup.open_memory(egui::SetOpenCommand::Bool(true));

@@ -5,6 +5,7 @@ use super::{
 
 /// A new-presentation tile: a theme preview drawn in code (or a blank slide) over its name.
 fn tile(ui: &mut Ui, label: &str, theme: Option<&lamina_model::Theme>, big: bool) -> egui::Response {
+    let label = crate::i18n::t(label);
     let t = Tokens::get(ui.ctx());
     let thumb_w = if big { 200.0 } else { 160.0 };
     let (rect, resp) = ui.allocate_exact_size(vec2(thumb_w + 16.0, thumb_w * 9.0 / 16.0 + 44.0), Sense::click());
@@ -121,7 +122,7 @@ fn recent_list(app: &mut SlideApp, ui: &mut Ui, query: &str, limit: usize) {
     let list: Vec<String> =
         app.ui.recent.iter().filter(|p| q.is_empty() || split_path(p).0.to_lowercase().contains(&q)).take(limit).cloned().collect();
     if list.is_empty() {
-        dim(ui, &format!("No recent presentations match “{}”.", query.trim()));
+        dim(ui, &crate::i18n::tf("No recent presentations match “{query}”.", &[("query", &query.trim())]));
         return;
     }
     let width = ui.available_width().min(CONTENT_W);
@@ -155,7 +156,7 @@ fn recent_list(app: &mut SlideApp, ui: &mut Ui, query: &str, limit: usize) {
             Rect::from_min_max(pos2(visible_right - 32.0, rect.top() + 5.0), pos2(visible_right, rect.bottom() - 5.0)),
             Sense::click(),
         );
-        x.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, "Remove from Recent"));
+        x.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, crate::i18n::t("Remove from Recent")));
         if x.hovered() {
             ui.painter().rect_filled(x.rect, CornerRadius::same(3), t.hover);
         }
@@ -171,6 +172,7 @@ fn recent_list(app: &mut SlideApp, ui: &mut Ui, query: &str, limit: usize) {
 
 /// A large square command button (Print, Create PDF, Check for Issues…).
 pub(super) fn square_button(ui: &mut Ui, icon: Icon, label: &str, enabled: bool) -> egui::Response {
+    let label = crate::i18n::t(label);
     let t = Tokens::get(ui.ctx());
     let (rect, resp) = ui.allocate_exact_size(vec2(88.0, 80.0), if enabled { Sense::click() } else { Sense::hover() });
     resp.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, enabled, label));
@@ -186,6 +188,7 @@ pub(super) fn square_button(ui: &mut Ui, icon: Icon, label: &str, enabled: bool)
 
 /// A row of a page's own list on the left (Open's places, Export's tasks).
 pub(super) fn place_row(ui: &mut Ui, icon: Icon, label: &str, selected: bool, width: f32) -> egui::Response {
+    let label = crate::i18n::t(label);
     let t = Tokens::get(ui.ctx());
     let (rect, resp) = ui.allocate_exact_size(vec2(width, 44.0), Sense::click());
     resp.widget_info(|| egui::WidgetInfo::selected(egui::Role::Button, true, selected, label));
@@ -203,6 +206,8 @@ pub(super) fn place_row(ui: &mut Ui, icon: Icon, label: &str, selected: bool, wi
 
 /// A square button with its title and description beside it (Info, Export).
 pub(super) fn task(ui: &mut Ui, icon: Icon, button: &str, title: &str, detail: &str, enabled: bool) -> bool {
+    let button = crate::i18n::t(button);
+    let title = crate::i18n::t(title);
     let t = Tokens::get(ui.ctx());
     let mut clicked = false;
     ui.horizontal_top(|ui| {
@@ -289,7 +294,7 @@ pub(super) fn new_page(app: &mut SlideApp, ui: &mut Ui, bs: &mut Backstage) {
         false
     };
     if !themes && !templates {
-        dim(ui, &format!("No themes or templates match “{}”.", q.trim()));
+        dim(ui, &crate::i18n::tf("No themes or templates match “{query}”.", &[("query", &q.trim())]));
     }
 }
 

@@ -4,7 +4,7 @@ fn seed_theme_colors(d: &mut Dialog) {
     if d.fields.contains_key("seeded") {
         return;
     }
-    let name = d.params.get("name").and_then(Value::as_str).unwrap_or("Custom");
+    let name = d.params.get("name").and_then(Value::as_str).unwrap_or(crate::i18n::t("Custom"));
     d.fields.insert("schemeName".into(), name.to_string());
     let obj = d.params.get("colors").and_then(Value::as_object);
     for slot in SchemeSlot::THEME {
@@ -74,7 +74,7 @@ pub(super) fn theme_colors_dialog(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialo
         let resp = ui.add(egui::TextEdit::singleline(&mut name).desired_width(280.0).id_salt("schemeName"));
         let shown = name.clone();
         resp.widget_info(move || {
-            let mut info = egui::WidgetInfo::labeled(egui::Role::TextInput, true, "Scheme name");
+            let mut info = egui::WidgetInfo::labeled(egui::Role::TextInput, true, crate::i18n::t("Scheme name"));
             info.current_text_value = Some(shown.clone());
             info
         });

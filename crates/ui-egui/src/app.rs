@@ -154,7 +154,7 @@ impl SlideApp {
     pub fn fresh_status(&mut self) -> Option<String> {
         let (msg, at) = self.status.clone()?;
         if now_ms() - at < STATUS_LINGER_MS {
-            Some(msg)
+            Some(crate::i18n::t(&msg).to_string())
         } else {
             self.status = None;
             None

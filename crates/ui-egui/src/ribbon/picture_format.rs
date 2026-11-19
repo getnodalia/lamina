@@ -20,13 +20,13 @@ pub(super) fn picture_format(app: &mut SlideApp, ui: &mut Ui) {
         let r = big_button(ui, Icon::Corrections, "Corrections", true);
         egui::Popup::menu(&r).show(|ui| {
             for b in [-0.4, -0.2, 0.0, 0.2, 0.4] {
-                if ui.button(format!("Brightness {:+}%", (b * 100.0) as i32)).clicked() {
+                if ui.button(crate::i18n::tf("Brightness {n}%", &[("n", &format!("{:+}", (b * 100.0) as i32))])).clicked() {
                     run(app, "picture.adjust", json!({"brightness": b}));
                 }
             }
             ui.separator();
             for c in [-0.4, -0.2, 0.0, 0.2, 0.4] {
-                if ui.button(format!("Contrast {:+}%", (c * 100.0) as i32)).clicked() {
+                if ui.button(crate::i18n::tf("Contrast {n}%", &[("n", &format!("{:+}", (c * 100.0) as i32))])).clicked() {
                     run(app, "picture.adjust", json!({"contrast": c}));
                 }
             }
@@ -34,7 +34,7 @@ pub(super) fn picture_format(app: &mut SlideApp, ui: &mut Ui) {
         let r = big_button(ui, Icon::ColorAdjust, "Color", true);
         egui::Popup::menu(&r).show(|ui| {
             for s in [0.0, 0.33, 0.66, 1.0, 1.5, 2.0, 3.0] {
-                if ui.button(format!("Saturation {}%", (s * 100.0) as i32)).clicked() {
+                if ui.button(crate::i18n::tf("Saturation {n}%", &[("n", &((s * 100.0) as i32))])).clicked() {
                     run(app, "picture.adjust", json!({"saturation": s}));
                 }
             }
@@ -117,7 +117,7 @@ pub(super) fn picture_format(app: &mut SlideApp, ui: &mut Ui) {
         let mut picked = tiles(ui, inline_styles(ui));
         // Every style, in rows, behind the gallery's arrow (PowerPoint's More).
         let more = widgets::drop_button(ui, "", vec2(14.0, 52.0), true);
-        more.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, "More Picture Styles"));
+        more.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, crate::i18n::t("More Picture Styles")));
         // Six to a row: the 24 styles in four rows.
         egui::Popup::menu(&more).width(6.0 * (STYLE_TILE.x + 2.0) + 16.0).show(|ui| {
             ui.spacing_mut().item_spacing = vec2(2.0, 2.0);
@@ -305,7 +305,7 @@ fn compress_menu(app: &mut SlideApp, ui: &mut Ui) {
         (150, "Web (150 ppi): good for web pages and projectors"),
         (96, "E-mail (96 ppi): minimise document size for sharing"),
     ] {
-        ui.radio_value(&mut ppi, v, label);
+        ui.radio_value(&mut ppi, v, crate::i18n::t(label));
     }
     ui.data_mut(|d| d.insert_temp(id, (ppi, only_selected, delete_cropped)));
     ui.separator();
@@ -315,8 +315,11 @@ fn compress_menu(app: &mut SlideApp, ui: &mut Ui) {
             Ok(r) => {
                 let kb = |v: &Value| v.as_u64().unwrap_or(0) / 1024;
                 let msg = match r["pictures"].as_u64().unwrap_or(0) {
-                    0 => "Pictures are already at or below that resolution".to_string(),
-                    n => format!("Compressed {n} picture(s): {} KB → {} KB", kb(&r["before"]), kb(&r["after"])),
+                    0 => crate::i18n::t("Pictures are already at or below that resolution").to_string(),
+                    n => crate::i18n::tf(
+                        "Compressed {n} picture(s): {before} KB → {after} KB",
+                        &[("n", &n), ("before", &kb(&r["before"])), ("after", &kb(&r["after"]))],
+                    ),
                 };
                 app.set_status(msg);
             }

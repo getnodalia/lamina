@@ -222,7 +222,7 @@ fn size_tab(app: &mut SlideApp, ui: &mut Ui, sh: &lamina_model::Shape, x: lamina
                     ui.selectable_value(&mut center, false, crate::i18n::t("Top Left Corner"));
                     ui.selectable_value(&mut center, true, crate::i18n::t("Center"));
                 });
-            combo.response.widget_info(|| egui::WidgetInfo::labeled(egui::Role::ComboBox, true, "From"));
+            combo.response.widget_info(|| egui::WidgetInfo::labeled(egui::Role::ComboBox, true, crate::i18n::t("From")));
         })
     });
     if single {
@@ -457,10 +457,10 @@ pub(super) fn format_shape(app: &mut SlideApp, ui: &mut Ui) {
             if ui.radio(none, crate::i18n::t("No line")).clicked() {
                 run(app, "shape.line", json!({"none": true}));
             }
-            if ui.radio(!none && sh.line.is_some(), "Solid line").clicked() {
+            if ui.radio(!none && sh.line.is_some(), crate::i18n::t("Solid line")).clicked() {
                 run(app, "shape.line", json!({"color": "tx1", "width": 1}));
             }
-            if ui.radio(sh.line.is_none(), "Automatic").clicked() {
+            if ui.radio(sh.line.is_none(), crate::i18n::t("Automatic")).clicked() {
                 run(app, "shape.line", json!({"reset": true}));
             }
             color_button(app, ui, "Color", Some("No Outline"), |c| match c {
@@ -491,11 +491,11 @@ pub(super) fn format_shape(app: &mut SlideApp, ui: &mut Ui) {
 /// `shape.line` with `{key: value}`.
 fn line_choice(app: &mut SlideApp, ui: &mut Ui, label: &str, key: &str, current: &str, items: &[(&str, &str)]) {
     ui.horizontal(|ui| {
-        let field = ui.add_sized(vec2(90.0, 20.0), egui::Label::new(label));
+        let field = ui.add_sized(vec2(90.0, 20.0), egui::Label::new(crate::i18n::t(label)));
         let shown = items.iter().find(|(_, v)| *v == current).map_or(current, |(l, _)| *l);
-        let combo = nodalia_ui::ComboBox::from_id_salt(("fmt-line", key)).selected_text(shown).width(120.0).show_ui(ui, |ui| {
+        let combo = nodalia_ui::ComboBox::from_id_salt(("fmt-line", key)).selected_text(crate::i18n::t(shown)).width(120.0).show_ui(ui, |ui| {
             for (l, v) in items {
-                if ui.selectable_label(*v == current, *l).clicked() {
+                if ui.selectable_label(*v == current, crate::i18n::t(l)).clicked() {
                     run(app, "shape.line", json!({key: v}));
                 }
             }
@@ -608,6 +608,7 @@ fn pick_fill_picture(app: &mut SlideApp) {
 /// A number field for one picture-fill option; runs `shape.fill` with `{pictureProps: {key: v × scale}}`
 /// when it changes.
 fn pic_drag(app: &mut SlideApp, ui: &mut Ui, label: &str, value: f64, suffix: &str, key: &str, scale: f64) {
+    let label = crate::i18n::t(label);
     ui.horizontal(|ui| {
         let field = ui.add_sized(vec2(90.0, 20.0), egui::Label::new(label));
         let mut v = value;
@@ -703,6 +704,7 @@ fn preset_label(name: &str) -> String {
 
 /// A drop-down of `options`; picking one runs `shape.effects` with `{threeD: {key: option}}`.
 fn three_d_combo(app: &mut SlideApp, ui: &mut Ui, id: u32, label: &str, key: &str, cur: &str, options: &[&str]) {
+    let label = crate::i18n::t(label);
     ui.horizontal(|ui| {
         let field = ui.add_sized(vec2(90.0, 20.0), egui::Label::new(label));
         let combo = nodalia_ui::ComboBox::from_id_salt(("3d", id, key)).selected_text(preset_label(cur)).width(170.0).show_ui(ui, |ui| {
@@ -718,6 +720,7 @@ fn three_d_combo(app: &mut SlideApp, ui: &mut Ui, id: u32, label: &str, key: &st
 
 /// A number field running `shape.effects` with `{threeD: {key: value}}` when it changes.
 fn three_d_drag(app: &mut SlideApp, ui: &mut Ui, label: &str, value: f64, suffix: &str, key: &str) {
+    let label = crate::i18n::t(label);
     ui.horizontal(|ui| {
         let field = ui.add_sized(vec2(90.0, 20.0), egui::Label::new(label));
         let mut v = value;

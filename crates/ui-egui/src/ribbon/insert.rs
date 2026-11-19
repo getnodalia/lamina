@@ -11,10 +11,10 @@ fn photo_album_button(app: &mut SlideApp, ui: &mut Ui) {
     let en = enabled(app, "insert.photoAlbum");
     let (main, arrow) = big_button_ex(ui, Icon::Picture, "Photo\nAlbum", en, true, false);
     let _ = main.clone().on_hover_text(tip("insert.photoAlbum", "Photo Album…"));
-    main.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, en, "Photo Album…"));
+    main.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, en, crate::i18n::t("Photo Album…")));
     if let Some(a) = &arrow {
         let _ = a.clone().on_hover_text(crate::i18n::t("Photo Album options"));
-        a.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, en, "Photo Album options"));
+        a.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, en, crate::i18n::t("Photo Album options")));
     }
     if main.clicked() {
         run(app, "insert.photoAlbum", json!({}));
@@ -94,7 +94,7 @@ pub(super) fn insert(app: &mut SlideApp, ui: &mut Ui) {
         let r = big_button(ui, Icon::Action, "Action", enabled(app, "insert.actionButton"));
         egui::Popup::menu(&r).show(|ui| {
             for k in ["back", "forward", "beginning", "end", "home", "information", "return", "movie", "document", "sound", "help", "custom"] {
-                if ui.button(format!("Action Button: {k}")).clicked() {
+                if ui.button(crate::i18n::tf("Action Button: {kind}", &[("kind", &crate::i18n::t(k))])).clicked() {
                     run(app, "insert.actionButton", json!({"kind": k}));
                 }
             }
@@ -114,7 +114,7 @@ pub(super) fn insert(app: &mut SlideApp, ui: &mut Ui) {
         let r = big_button(ui, Icon::WordArt, "Decorative Text", enabled(app, "insert.wordArt"));
         egui::Popup::menu(&r).show(|ui| {
             for i in 0..6 {
-                if ui.button(format!("Decorative Text style {}", i + 1)).clicked() {
+                if ui.button(crate::i18n::tf("Decorative Text style {n}", &[("n", &(i + 1))])).clicked() {
                     run(app, "insert.wordArt", json!({"style": i}));
                 }
             }

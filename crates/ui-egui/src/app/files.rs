@@ -214,7 +214,7 @@ impl SlideApp {
             }
             return match self.run("file.export", params) {
                 Ok(_) => {
-                    self.set_status(format!("Exported {path}"));
+                    self.set_status(crate::i18n::tf("Exported {path}", &[("path", &path)]));
                     true
                 }
                 Err(_) => false,
@@ -252,7 +252,7 @@ impl SlideApp {
                 false
             }
             (Ok(_), None) => {
-                self.set_status("Saving a copy needs a file picker, which this window doesn't have.");
+                self.set_status(crate::i18n::t("Saving a copy needs a file picker, which this window doesn't have."));
                 false
             }
         }
@@ -272,7 +272,7 @@ impl SlideApp {
         let preview_path = match self.print_previews.create(&title) {
             Ok(path) => path,
             Err(e) => {
-                self.set_status(format!("Couldn't create a private print preview: {e}"));
+                self.set_status(crate::i18n::tf("Couldn't create a private print preview: {e}", &[("e", &e)]));
                 return false;
             }
         };
@@ -400,7 +400,7 @@ impl SlideApp {
         match result {
             Ok(()) => {
                 self.reuse_target = None;
-                self.set_status(format!("Inserted {} slides", picked.len()));
+                self.set_status(crate::i18n::tf("Inserted {n} slides", &[("n", &picked.len())]));
                 true
             }
             Err(e) => {
@@ -457,7 +457,7 @@ impl SlideApp {
             if let Some(path) = pick(&suggested) {
                 match self.session.execute("file.saveAs", &json!({"path": path})) {
                     Ok(_) => {
-                        self.set_status(format!("Saved {path}"));
+                        self.set_status(crate::i18n::tf("Saved {path}", &[("path", &path)]));
                         self.ui.recent.retain(|p| *p != path);
                         self.ui.recent.insert(0, path);
                     }
@@ -524,12 +524,12 @@ impl SlideApp {
         };
         let saved = save_bytes(&d.doc, format_for_path(&name)).map_err(|e| e.to_string()).and_then(|bytes| {
             let host = self.services.host_save.as_mut().ok_or("no page to save to")?;
-            host(&name, &bytes, save_as).map_err(|e| format!("Couldn't save {name}: {e}"))?;
+            host(&name, &bytes, save_as).map_err(|e| crate::i18n::tf("Couldn't save {name}: {e}", &[("name", &name), ("e", &e)]))?;
             mark_saved(&mut self.session, Some(name.clone())).map_err(|e| e.to_string())
         });
         match saved {
             Ok(()) => {
-                self.set_status(format!("Saved {name}"));
+                self.set_status(crate::i18n::tf("Saved {name}", &[("name", &name)]));
                 Ok(name)
             }
             Err(e) => {

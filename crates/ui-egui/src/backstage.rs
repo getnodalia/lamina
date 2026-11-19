@@ -420,18 +420,21 @@ pub fn show(app: &mut SlideApp, ui: &mut Ui) {
 // ---------------------------------------------------------------- shared pieces
 
 fn heading(ui: &mut Ui, text: &str) {
+    let text = crate::i18n::t(text);
     let t = Tokens::get(ui.ctx());
     ui.label(RichText::new(text).font(theme::bold(16.0)).color(t.text));
     ui.add_space(8.0);
 }
 
 fn dim(ui: &mut Ui, text: &str) {
+    let text = crate::i18n::t(text);
     let t = Tokens::get(ui.ctx());
     ui.label(RichText::new(text).font(theme::font(12.5)).color(t.text_dim));
 }
 
 /// A link with an arrow (More themes →): true when clicked.
 fn arrow_link(ui: &mut Ui, text: &str) -> bool {
+    let text = crate::i18n::t(text);
     let t = Tokens::get(ui.ctx());
     ui.add(egui::Label::new(RichText::new(format!("{text}  →")).font(theme::font(12.5)).color(t.accent)).sense(Sense::click()))
         .on_hover_cursor(egui::CursorIcon::PointingHand)
@@ -440,11 +443,13 @@ fn arrow_link(ui: &mut Ui, text: &str) -> bool {
 
 /// A search box; true when its text changed.
 fn search(ui: &mut Ui, query: &mut String, hint: &str, width: f32) -> bool {
+    let hint = crate::i18n::t(hint);
     ui.add(egui::TextEdit::singleline(query).hint_text(hint).desired_width(width)).changed()
 }
 
 /// Draw a labelled icon button and return whether it was clicked while enabled.
 fn icon_button(ui: &mut Ui, icon: Icon, label: &str, enabled: bool) -> bool {
+    let label = crate::i18n::t(label);
     let t = Tokens::get(ui.ctx());
     let (r, resp) = ui.allocate_exact_size(vec2(22.0, 22.0), if enabled { Sense::click() } else { Sense::hover() });
     resp.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, enabled, label));
@@ -458,6 +463,7 @@ fn icon_button(ui: &mut Ui, icon: Icon, label: &str, enabled: bool) -> bool {
 fn bullets(ui: &mut Ui, items: &[&str]) {
     ui.add_space(4.0);
     for b in items {
+        let b = crate::i18n::t(b);
         ui.horizontal(|ui| {
             ui.add_space(6.0);
             ui.label(RichText::new(format!("•  {b}")).font(theme::font(12.5)));

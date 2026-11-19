@@ -29,7 +29,7 @@ pub fn status_bar(app: &mut SlideApp, ui: &mut Ui) {
         let right_x = rect.max.x - 560.0;
         // The selection's proofing language; a click opens Review › Language.
         let (lang, no_proof) = crate::dialogs::selected_language(app);
-        let name = crate::squiggles::display_lang_name(ui.ctx(), &lang) + if no_proof { " (not checked)" } else { "" };
+        let name = crate::squiggles::display_lang_name(ui.ctx(), &lang) + if no_proof { crate::i18n::t(" (not checked)") } else { "" };
         let lx = (rect.min.x + 120.0).max(sr.max.x + 16.0);
         let lclip = Rect::from_min_max(pos2(lx - 3.0, rect.min.y), pos2(right_x.max(lx - 3.0), rect.max.y));
         let lr = p.with_clip_rect(lclip).text(pos2(lx, rect.center().y), Align2::LEFT_CENTER, &name, theme::font(12.0), t.text_dim);
@@ -79,7 +79,10 @@ pub fn status_bar(app: &mut SlideApp, ui: &mut Ui) {
         // technology only, leaving its geometry unchanged. Its value is the percentage shown.
         let shown = format!("{}%", zp.round());
         let enabled = s.enabled();
-        s.widget_info(|| egui::WidgetInfo { current_text_value: Some(shown.clone()), ..egui::WidgetInfo::slider(enabled, f64::from(zp), "Zoom") });
+        s.widget_info(|| egui::WidgetInfo {
+            current_text_value: Some(shown.clone()),
+            ..egui::WidgetInfo::slider(enabled, f64::from(zp), crate::i18n::t("Zoom"))
+        });
         if s.changed() {
             z = zp / 100.0;
             app.ui.zoom = Some(z);
@@ -117,6 +120,7 @@ pub fn status_bar(app: &mut SlideApp, ui: &mut Ui) {
 
 /// Draw a small status icon with a tooltip and return its interaction response.
 fn small_icon(ui: &mut Ui, icon: Icon, tip: &str, on: bool) -> egui::Response {
+    let tip = crate::i18n::t(tip);
     let resp = icon_button(ui, icon, on);
     resp.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, tip));
     resp.on_hover_text(tip)
@@ -124,6 +128,7 @@ fn small_icon(ui: &mut Ui, icon: Icon, tip: &str, on: bool) -> egui::Response {
 
 /// A view button: screen readers hear its name and whether its view is the one shown.
 fn view_icon(ui: &mut Ui, icon: Icon, tip: &str, on: bool) -> egui::Response {
+    let tip = crate::i18n::t(tip);
     let resp = icon_button(ui, icon, on);
     resp.widget_info(|| egui::WidgetInfo::selected(egui::Role::Button, true, on, tip));
     resp.on_hover_text(tip)
@@ -141,7 +146,7 @@ fn icon_button(ui: &mut Ui, icon: Icon, on: bool) -> egui::Response {
 
 /// A clickable status-bar text: screen readers hear `label` as its name and `text` as its value.
 fn named_with_value(label: &str, text: &str) -> egui::WidgetInfo {
-    egui::WidgetInfo { current_text_value: Some(text.to_string()), ..egui::WidgetInfo::labeled(egui::Role::Button, true, label) }
+    egui::WidgetInfo { current_text_value: Some(text.to_string()), ..egui::WidgetInfo::labeled(egui::Role::Button, true, crate::i18n::t(label)) }
 }
 
 /// Painted status-bar text: screen readers read `text` from a label over `rect`.

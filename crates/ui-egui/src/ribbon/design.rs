@@ -23,7 +23,7 @@ pub(super) fn design(app: &mut SlideApp, ui: &mut Ui) {
                     paint_theme_tile(p, r, th);
                 }
             },
-            |i| names.get(i).cloned().unwrap_or_default(),
+            |i| names.get(i).map(|n| crate::i18n::t(n).to_string()).unwrap_or_default(),
         ) && let Some(n) = names.get(i)
         {
             run(app, "design.theme", json!({"name": n}));
@@ -49,7 +49,7 @@ pub(super) fn design(app: &mut SlideApp, ui: &mut Ui) {
                         paint_theme_tile(p, r, t);
                     }
                 },
-                |i| names.get(i).cloned().unwrap_or_default(),
+                |i| names.get(i).map(|n| crate::i18n::t(n).to_string()).unwrap_or_default(),
             ) {
                 run(app, "design.variant", json!({"index": i}));
             }
@@ -57,7 +57,7 @@ pub(super) fn design(app: &mut SlideApp, ui: &mut Ui) {
     }
     group(ui, |ui| {
         let r = big_button(ui, Icon::Colors, "Colors", true);
-        r.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, "Colors"));
+        r.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, crate::i18n::t("Colors")));
         egui::Popup::menu(&r).width(240.0).show(|ui| {
             for cs in lamina_model::theme::builtin_color_schemes() {
                 ui.horizontal(|ui| {
@@ -70,7 +70,13 @@ pub(super) fn design(app: &mut SlideApp, ui: &mut Ui) {
                             theme::to_color32(*c),
                         );
                     }
-                    p.text(rect.min + vec2(104.0, 10.0), Align2::LEFT_CENTER, &cs.name, theme::font(12.0), Tokens::get(ui.ctx()).text);
+                    p.text(
+                        rect.min + vec2(104.0, 10.0),
+                        Align2::LEFT_CENTER,
+                        crate::i18n::t(&cs.name),
+                        theme::font(12.0),
+                        Tokens::get(ui.ctx()).text,
+                    );
                     if resp.clicked() {
                         run(app, "design.colors", json!({"name": cs.name}));
                         ui.close();
@@ -84,10 +90,10 @@ pub(super) fn design(app: &mut SlideApp, ui: &mut Ui) {
             }
         });
         let r = big_button(ui, Icon::Fonts, "Fonts", true);
-        r.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, "Fonts"));
+        r.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, crate::i18n::t("Fonts")));
         egui::Popup::menu(&r).width(220.0).show(|ui| {
             for fs in lamina_model::theme::builtin_font_schemes() {
-                if ui.button(format!("{}\n   {} / {}", fs.name, fs.major.latin, fs.minor.latin)).clicked() {
+                if ui.button(format!("{}\n   {} / {}", crate::i18n::t(&fs.name), fs.major.latin, fs.minor.latin)).clicked() {
                     run(app, "design.fonts", json!({"name": fs.name}));
                 }
             }
@@ -98,10 +104,10 @@ pub(super) fn design(app: &mut SlideApp, ui: &mut Ui) {
             }
         });
         let r = big_button(ui, Icon::ShapeEffects, "Effects", true);
-        r.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, "Effects"));
+        r.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, crate::i18n::t("Effects")));
         egui::Popup::menu(&r).width(180.0).show(|ui| {
             for fs in lamina_model::theme::builtin_format_schemes() {
-                if ui.button(&fs.name).clicked() {
+                if ui.button(crate::i18n::t(&fs.name)).clicked() {
                     run(app, "design.effects", json!({"name": fs.name}));
                     ui.close();
                 }
@@ -122,7 +128,7 @@ pub(super) fn design(app: &mut SlideApp, ui: &mut Ui) {
                     };
                     let (rect, resp) = ui.allocate_exact_size(vec2(48.0, 28.0), Sense::click());
                     ui.painter().rect(rect, CornerRadius::same(2), shade, Stroke::new(1.0, Tokens::get(ui.ctx()).border), egui::StrokeKind::Inside);
-                    if resp.on_hover_text(format!("Style {i}")).clicked() {
+                    if resp.on_hover_text(crate::i18n::tf("Style {n}", &[("n", &i)])).clicked() {
                         run(app, "design.background", json!({"style": i, "all": true}));
                         ui.close();
                     }

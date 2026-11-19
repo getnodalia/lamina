@@ -33,7 +33,7 @@ pub(super) fn transitions(app: &mut SlideApp, ui: &mut Ui) {
             vec2(54.0, 56.0),
             sel,
             |p, r, i| paint_transition_tile(p, r, shown.get(i).map(|x| (x.0, x.1)).unwrap_or(("", ""))),
-            |i| shown.get(i).map(|x| x.1.to_string()).unwrap_or_default(),
+            |i| shown.get(i).map(|x| crate::i18n::t(x.1).to_string()).unwrap_or_default(),
         ) && let Some(x) = shown.get(i)
         {
             run(app, "transition.set", json!({"kind": x.0}));
@@ -41,7 +41,7 @@ pub(super) fn transitions(app: &mut SlideApp, ui: &mut Ui) {
         let more = widgets::drop_button(ui, "", vec2(14.0, 52.0), true);
         egui::Popup::menu(&more).width(480.0).show(|ui| {
             for cat in ["Subtle", "Exciting", "Dynamic Content"] {
-                ui.label(egui::RichText::new(cat).font(theme::bold(12.0)));
+                ui.label(egui::RichText::new(crate::i18n::t(cat)).font(theme::bold(12.0)));
                 ui.horizontal_wrapped(|ui| {
                     for x in list.iter().filter(|x| x.2 == cat) {
                         let (r, resp) = ui.allocate_exact_size(vec2(56.0, 58.0), Sense::click());
@@ -64,7 +64,7 @@ pub(super) fn transitions(app: &mut SlideApp, ui: &mut Ui) {
         let r = big_button(ui, Icon::EffectOptions, "Effect\nOptions", !rows.is_empty());
         egui::Popup::menu(&r).show(|ui| {
             for &(o, on) in &rows {
-                if ui.selectable_label(on, lamina_model::anim::transition_option_label(&kind, o)).clicked() {
+                if ui.selectable_label(on, crate::i18n::t(&lamina_model::anim::transition_option_label(&kind, o))).clicked() {
                     run(app, "transition.options", json!({"option": o}));
                     ui.close();
                 }
@@ -235,7 +235,7 @@ pub fn paint_transition_tile(p: &egui::Painter, r: Rect, (id, label): (&str, &st
         }
     }
     p.rect_stroke(pic, CornerRadius::same(2), Stroke::new(1.0, Color32::from_rgb(0x9B, 0xB4, 0xDB)), egui::StrokeKind::Inside);
-    p.text(pos2(r.center().x, r.max.y - 7.0), Align2::CENTER_CENTER, label, theme::font(10.0), t.text);
+    p.text(pos2(r.center().x, r.max.y - 7.0), Align2::CENTER_CENTER, crate::i18n::t(label), theme::font(10.0), t.text);
 }
 
 /// One row of Transitions ▸ Effect Options: the stored option and whether it is the current one.
