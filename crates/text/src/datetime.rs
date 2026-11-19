@@ -4,8 +4,9 @@
 //! The field types and their formats follow ECMA-376 Part 1, §21.1.2.2.4 (`fld`): `datetime1`
 //! to `datetime13`, written as in PowerPoint's English (United States) Date and Time list.
 //! `datetime` and `datetimeFigureOut` show the language's short date. Numeric dates follow the
-//! run's language; formats with month or day names, or AM/PM, are only computed for English, so
-//! other languages keep the text the file was saved with.
+//! run's language; formats with month or day names, or AM/PM, are computed for English, Spanish,
+//! French, German, Italian and Portuguese, so other languages keep the text the file was saved
+//! with.
 
 /// A local date and time: what the clock read, or a fixed moment (tests, deterministic output).
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -59,6 +60,136 @@ impl DateTime {
 const MONTHS: [&str; 12] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const DAYS: [&str; 7] = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
+/// Month and day names and the date layout of a language other than English.
+struct Names {
+    months: [&'static str; 12],
+    /// Abbreviated months, as written between a day and a year ("9 oct 2026").
+    mons: [&'static str; 12],
+    /// Sunday first.
+    days: [&'static str; 7],
+    /// What joins the day, month and year in a long date: `" de "` in Spanish and Portuguese.
+    of: &'static str,
+    /// Written after a weekday name.
+    weekday_sep: &'static str,
+    /// German writes an ordinal dot after the day ("9. Oktober").
+    day_dot: bool,
+    /// `a. m.` / `p. m.` where the language keeps the 12-hour clock for times, `None` for 24-hour.
+    ampm: Option<(&'static str, &'static str)>,
+}
+
+const ES: Names = Names {
+    months: ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
+    mons: ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"],
+    days: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
+    of: " de ",
+    weekday_sep: ", ",
+    day_dot: false,
+    ampm: Some(("a. m.", "p. m.")),
+};
+const FR: Names = Names {
+    months: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"],
+    mons: ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."],
+    days: ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"],
+    of: " ",
+    weekday_sep: " ",
+    day_dot: false,
+    ampm: None,
+};
+const DE: Names = Names {
+    months: ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
+    mons: ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"],
+    days: ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
+    of: " ",
+    weekday_sep: ", ",
+    day_dot: true,
+    ampm: None,
+};
+const IT: Names = Names {
+    months: ["gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre"],
+    mons: ["gen", "feb", "mar", "apr", "mag", "giu", "lug", "ago", "set", "ott", "nov", "dic"],
+    days: ["domenica", "lunedì", "martedì", "mercoledì", "giovedì", "venerdì", "sabato"],
+    of: " ",
+    weekday_sep: " ",
+    day_dot: false,
+    ampm: None,
+};
+const PT: Names = Names {
+    months: ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"],
+    mons: ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"],
+    days: ["domingo", "segunda-feira", "terça-feira", "quarta-feira", "quinta-feira", "sexta-feira", "sábado"],
+    of: " de ",
+    weekday_sep: ", ",
+    day_dot: false,
+    ampm: None,
+};
+
+/// The names of the non-English language `lang` (lower case) that has them.
+fn names_of(lang: &str) -> Option<&'static Names> {
+    match lang.split(['-', '_']).next().unwrap_or("") {
+        "es" => Some(&ES),
+        "fr" => Some(&FR),
+        "de" => Some(&DE),
+        "it" => Some(&IT),
+        "pt" => Some(&PT),
+        _ => None,
+    }
+}
+
+/// The long and clock formats of a language with [`Names`].
+fn named_other(kind: &str, n: &Names, now: DateTime, short: &str) -> Option<String> {
+    let month = n.months.get(now.month.checked_sub(1)? as usize)?;
+    let mon = n.mons.get(now.month.checked_sub(1)? as usize)?;
+    let day = n.days.get(now.weekday())?;
+    let (d, y, yy) = (now.day, now.year, now.year.rem_euclid(100));
+    let dot = if n.day_dot { "." } else { "" };
+    let (of, sep) = (n.of, n.weekday_sep);
+    let (hour, mi, s) = (now.hour, now.minute, now.second);
+    let h12 = match hour % 12 {
+        0 => 12,
+        h => h,
+    };
+    // Times: the 12-hour clock with the language's AM/PM marks, or the 24-hour clock.
+    let clock = |secs: bool| match n.ampm {
+        Some((am, pm)) => {
+            let mark = if hour < 12 { am } else { pm };
+            if secs { format!("{h12}:{mi:02}:{s:02} {mark}") } else { format!("{h12}:{mi:02} {mark}") }
+        }
+        None if secs => format!("{hour:02}:{mi:02}:{s:02}"),
+        None => format!("{hour:02}:{mi:02}"),
+    };
+    Some(match kind {
+        "datetime2" => format!("{day}{sep}{d}{dot}{of}{month}{of}{y}"),
+        "datetime3" => format!("{d}{dot}{of}{month}{of}{y}"),
+        "datetime4" => format!("{d}{dot} {mon} {y}"),
+        "datetime5" => format!("{d}-{mon}-{yy:02}"),
+        "datetime6" => format!("{month} {yy:02}"),
+        "datetime7" => format!("{mon}-{yy:02}"),
+        "datetime8" => format!("{short} {}", clock(false)),
+        "datetime9" => format!("{short} {}", clock(true)),
+        "datetime12" => clock(false),
+        "datetime13" => clock(true),
+        _ => return None,
+    })
+}
+
+/// The date languages Date & Time offers, from a BCP 47 tag in any case (`en_gb`, `es`, `PT-BR`):
+/// `en-US`, `en-GB`, `es-ES`, `es-MX`, `fr-FR`, `de-DE`, `it-IT`, `pt-BR`, `ja-JP` or `sv-SE`.
+pub fn canonical_language(raw: &str) -> Option<&'static str> {
+    match raw.trim().to_ascii_lowercase().replace('_', "-").as_str() {
+        "en" | "en-us" => Some("en-US"),
+        "en-gb" => Some("en-GB"),
+        "es" | "es-es" => Some("es-ES"),
+        "es-mx" => Some("es-MX"),
+        "fr" | "fr-fr" => Some("fr-FR"),
+        "de" | "de-de" => Some("de-DE"),
+        "it" | "it-it" => Some("it-IT"),
+        "pt" | "pt-br" => Some("pt-BR"),
+        "ja" | "ja-jp" => Some("ja-JP"),
+        "sv" | "sv-se" => Some("sv-SE"),
+        _ => None,
+    }
+}
+
 /// Is field `kind` a date/time field?
 pub fn is_date_field(kind: &str) -> bool {
     kind.starts_with("datetime")
@@ -110,6 +241,12 @@ pub fn field_text(kind: &str, lang: Option<&str>, now: DateTime) -> Option<Strin
     // English writes the weekday form day first too.
     let day_first = matches!(lang.as_str(), "en-gb" | "en-au" | "en-nz" | "en-ie" | "en-in");
     let named = |text: String| english.then_some(text);
+    if !english && let Some(n) = names_of(&lang) {
+        // The numeric formats below are the same in every language; the named ones come from here.
+        if let Some(text) = named_other(kind, n, now, &short) {
+            return Some(text);
+        }
+    }
     match kind {
         "datetime" | "datetimeFigureOut" | "datetime1" => Some(short),
         "datetime2" if lang == "en-ie" => named(format!("{day} {d} {month} {y}")),
@@ -189,9 +326,9 @@ mod tests {
         assert_eq!(field_text("datetime1", Some("ja-JP"), FRI).as_deref(), Some("2026/10/9"));
         assert_eq!(field_text("datetime1", Some("sv-SE"), FRI).as_deref(), Some("2026-10-09"));
         assert_eq!(field_text("datetime10", Some("fr-FR"), FRI).as_deref(), Some("20:05"));
-        // Month names in another language: not computed (the field keeps its saved text).
-        assert_eq!(field_text("datetime2", Some("de-DE"), FRI), None);
-        assert_eq!(field_text("datetime12", Some("fr-FR"), FRI), None);
+        // Month names in a language without a table: not computed (the field keeps its saved text).
+        assert_eq!(field_text("datetime2", Some("ja-JP"), FRI), None);
+        assert_eq!(field_text("datetime12", Some("sv-SE"), FRI), None);
         assert_eq!(field_text("datetime4", Some("en-GB"), FRI).as_deref(), Some("9 October 2026"));
         assert_eq!(field_text("datetime2", Some("en-GB"), FRI).as_deref(), Some("Friday, 9 October 2026"));
         assert_eq!(field_text("datetime4", Some("en-AU"), FRI).as_deref(), Some("9 October 2026"));
@@ -218,6 +355,51 @@ mod tests {
             assert_eq!(field_text("datetime4", Some(lang), tue).as_deref(), Some(d4), "{lang}");
         }
         assert_eq!(field_text("datetime2", Some("en-ZA"), tue).as_deref(), Some("Tuesday, 27 October 2026"));
+    }
+
+    /// Friday 9 October 2026, 20:05:07, in each language that has names.
+    #[test]
+    fn named_formats_in_spanish_french_german_italian_and_portuguese() {
+        let rows = [
+            ("es-ES", ["viernes, 9 de octubre de 2026", "9 de octubre de 2026", "9 oct 2026", "9-oct-26", "octubre 26", "oct-26"]),
+            ("es-MX", ["viernes, 9 de octubre de 2026", "9 de octubre de 2026", "9 oct 2026", "9-oct-26", "octubre 26", "oct-26"]),
+            ("fr-FR", ["vendredi 9 octobre 2026", "9 octobre 2026", "9 oct. 2026", "9-oct.-26", "octobre 26", "oct.-26"]),
+            ("de-DE", ["Freitag, 9. Oktober 2026", "9. Oktober 2026", "9. Okt 2026", "9-Okt-26", "Oktober 26", "Okt-26"]),
+            ("it-IT", ["venerdì 9 ottobre 2026", "9 ottobre 2026", "9 ott 2026", "9-ott-26", "ottobre 26", "ott-26"]),
+            ("pt-BR", ["sexta-feira, 9 de outubro de 2026", "9 de outubro de 2026", "9 out 2026", "9-out-26", "outubro 26", "out-26"]),
+        ];
+        for (lang, want) in rows {
+            for (kind, want) in ["datetime2", "datetime3", "datetime4", "datetime5", "datetime6", "datetime7"].into_iter().zip(want) {
+                assert_eq!(field_text(kind, Some(lang), FRI).as_deref(), Some(want), "{lang} {kind}");
+            }
+        }
+        let f = |lang: &str, k: &str| field_text(k, Some(lang), FRI);
+        assert_eq!(f("es-ES", "datetime8").as_deref(), Some("09/10/2026 8:05 p. m."));
+        assert_eq!(f("es-ES", "datetime13").as_deref(), Some("8:05:07 p. m."));
+        assert_eq!(f("fr-FR", "datetime9").as_deref(), Some("09/10/2026 20:05:07"));
+        assert_eq!(f("de-DE", "datetime12").as_deref(), Some("20:05"));
+        assert_eq!(f("it-IT", "datetime8").as_deref(), Some("09/10/2026 20:05"));
+        // Midnight reads 12 a. m. on the 12-hour Spanish clock, and the weekday follows the date.
+        let midnight = DateTime::new(2026, 10, 11, 0, 0, 0);
+        assert_eq!(field_text("datetime12", Some("es-ES"), midnight).as_deref(), Some("12:00 a. m."));
+        assert_eq!(field_text("datetime2", Some("es-ES"), midnight).as_deref(), Some("domingo, 11 de octubre de 2026"));
+        // Other languages still keep their saved text for named formats, and every month is named.
+        assert_eq!(field_text("datetime3", Some("ja-JP"), FRI), None);
+        for month in 1..=12 {
+            assert!(field_text("datetime3", Some("de-DE"), DateTime::new(2026, month, 1, 0, 0, 0)).is_some(), "{month}");
+        }
+    }
+
+    #[test]
+    fn languages_are_read_in_any_case_and_unknown_ones_are_refused() {
+        for (raw, want) in
+            [("EN", "en-US"), ("en_gb", "en-GB"), (" es ", "es-ES"), ("es-MX", "es-MX"), ("PT-br", "pt-BR"), ("de", "de-DE"), ("sv_SE", "sv-SE")]
+        {
+            assert_eq!(canonical_language(raw), Some(want), "{raw}");
+        }
+        for bad in ["", "xx-YY", "es-AR", "english", "\u{0}"] {
+            assert_eq!(canonical_language(bad), None, "{bad:?}");
+        }
     }
 
     #[test]

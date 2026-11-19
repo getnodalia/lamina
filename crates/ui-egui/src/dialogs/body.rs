@@ -1,7 +1,7 @@
 use super::about::about;
 use super::alt_text::alt_text_starts_decorative;
 use super::columns::columns_dialog;
-use super::date_time::{date_rows, date_time_dialog};
+use super::date_time::{date_rows, date_time_dialog, default_date_language};
 use super::equation::pretty_equation;
 use super::export::gif_options;
 use super::find::find_dialog;
@@ -147,7 +147,8 @@ fn dlg_header_footer(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) -> bool {
     let fmt_now = if hf.date_format.is_empty() { "datetime1".to_string() } else { hf.date_format.clone() };
     // Not `d.get`: that stores the default as if the user had picked it.
     let fmt = d.fields.get("dateFormat").cloned().unwrap_or_else(|| fmt_now.clone());
-    let rows = date_rows("en-US");
+    let date_language = default_date_language();
+    let rows = date_rows(date_language);
     let label = rows.iter().find(|(k, _)| *k == fmt).map(|(_, s)| s.clone()).unwrap_or_else(|| fmt.clone());
     ui.add_enabled_ui(date && automatic, |ui| {
         ui.horizontal(|ui| {
@@ -185,6 +186,8 @@ fn dlg_header_footer(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) -> bool {
         // existing date field (an imported datetime4, say) to datetime1.
         if d.fields.contains_key("dateFormat") {
             params.insert("dateFormat".into(), json!(d.get("dateFormat", &fmt_now)));
+            // The date reads in the language the list showed it in.
+            params.insert("language".into(), json!(date_language));
         }
         params.insert("slideNumber".into(), json!(num_on));
         params.insert("footer".into(), json!(foot));
@@ -1081,6 +1084,15 @@ fn dlg_spelling(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) -> bool {
     ok || cancel
 }
 
+/// An issue of `review.accessibility` in the interface language. The engine words are stable ids;
+/// the contrast one carries its ratio, so it is translated as a template.
+pub(super) fn accessibility_issue(issue: &str) -> String {
+    match issue.strip_prefix("Hard-to-read text contrast (").and_then(|r| r.strip_suffix(":1)")) {
+        Some(ratio) => crate::i18n::tf("Hard-to-read text contrast ({ratio}:1)", &[("ratio", &ratio)]),
+        None => crate::i18n::t(issue).to_string(),
+    }
+}
+
 fn dlg_accessibility(app: &mut SlideApp, ui: &mut Ui, _d: &mut Dialog) -> bool {
     let v = app.session.execute("review.accessibility", &json!({})).unwrap_or_default();
     let list = v.as_array().cloned().unwrap_or_default();
@@ -1094,7 +1106,7 @@ fn dlg_accessibility(app: &mut SlideApp, ui: &mut Ui, _d: &mut Dialog) -> bool {
                     "Slide {n}: {issue}{name}",
                     &[
                         ("n", &(item.get("slide").and_then(Value::as_u64).unwrap_or(0) + 1)),
-                        ("issue", &crate::i18n::t(item.get("issue").and_then(Value::as_str).unwrap_or(""))),
+                        ("issue", &accessibility_issue(item.get("issue").and_then(Value::as_str).unwrap_or(""))),
                         ("name", &item.get("name").and_then(Value::as_str).map(|n| format!(" — {n}")).unwrap_or_default()),
                     ],
                 ));

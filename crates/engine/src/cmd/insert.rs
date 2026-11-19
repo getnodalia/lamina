@@ -98,7 +98,7 @@ pub fn specs() -> Vec<CommandSpec> {
             "Date & Time",
             ["Insert", "Text"],
             None,
-            "{format?: datetime1..datetime13, update?: bool, language?: en-US|en-GB|fr-FR|ja-JP|sv-SE} — no keys opens the dialog; in the Handout or Notes Master view it fills the selected date placeholder (else the master's own) and answers where: \"master\"",
+            "{format?: datetime1..datetime13, update?: bool, language?: en-US|en-GB|es-ES|es-MX|fr-FR|de-DE|it-IT|pt-BR|ja-JP|sv-SE} — no keys opens the dialog; in the Handout or Notes Master view it fills the selected date placeholder (else the master's own) and answers where: \"master\"",
             has_slide,
             date_time
         ),
@@ -448,6 +448,21 @@ mod tests {
         assert_eq!(undo(&s), before + 1);
     }
 
+    /// A Spanish date names the month in Spanish, and the field keeps its language as it updates.
+    #[test]
+    fn a_spanish_date_names_the_month_in_spanish() {
+        let mut s = session();
+        edit_title(&mut s);
+        let v = s.execute("insert.dateTime", &json!({"format": "datetime3", "update": true, "language": "es-ES"})).unwrap();
+        let text = v["text"].as_str().unwrap().to_string();
+        let months = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+        assert!(months.iter().any(|m| text.contains(&format!(" de {m} de "))), "{text}");
+        let title = s.doc().unwrap().current_slide().unwrap().shapes[0].text.clone().unwrap();
+        let run = title.paragraphs[0].runs.iter().find(|r| r.text == text).cloned().unwrap();
+        assert_eq!(run.props.lang.as_deref(), Some("es-ES"));
+        assert!(matches!(run.kind, RunKind::Field { ref field } if field == "datetime3"), "{run:?}");
+    }
+
     #[test]
     fn a_long_british_date_puts_the_day_first() {
         let mut s = session();
@@ -460,12 +475,12 @@ mod tests {
     }
 
     #[test]
-    fn a_named_format_in_french_and_a_bad_value_change_nothing() {
+    fn a_named_format_in_japanese_and_a_bad_value_change_nothing() {
         let mut s = session();
         edit_title(&mut s);
         let rev = s.doc().unwrap().revision;
         let undos = undo(&s);
-        let err = s.execute("insert.dateTime", &json!({"format": "datetime2", "language": "fr-FR"})).unwrap_err();
+        let err = s.execute("insert.dateTime", &json!({"format": "datetime2", "language": "ja-JP"})).unwrap_err();
         assert!(err.to_string().contains("isn't available"), "{err}");
         assert_eq!(s.doc().unwrap().revision, rev);
         assert_eq!(undo(&s), undos);
@@ -473,7 +488,7 @@ mod tests {
             json!({"format": "datetime14"}),
             json!({"format": "nope"}),
             json!({"update": "yes"}),
-            json!({"language": "de-DE"}),
+            json!({"language": "xx-YY"}),
             json!({"language": ""}),
         ] {
             let err = s.execute("insert.dateTime", &p).unwrap_err();

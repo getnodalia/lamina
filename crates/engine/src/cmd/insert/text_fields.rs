@@ -74,17 +74,6 @@ fn date_time_apply(p: &Value) -> bool {
     p.as_object().is_some_and(|o| o.contains_key("format") || o.contains_key("update") || o.contains_key("language"))
 }
 
-fn canon_lang(raw: &str) -> Option<&'static str> {
-    match raw.trim().to_ascii_lowercase().replace('_', "-").as_str() {
-        "en" | "en-us" => Some("en-US"),
-        "en-gb" => Some("en-GB"),
-        "fr" | "fr-fr" => Some("fr-FR"),
-        "ja" | "ja-jp" => Some("ja-JP"),
-        "sv" | "sv-se" => Some("sv-SE"),
-        _ => None,
-    }
-}
-
 fn date_opts(p: &Value) -> Result<DateOpts> {
     if p.get("format").is_some() {
         let f = str_param(p, "format").filter(|f| DATE_FORMATS.contains(f));
@@ -98,9 +87,13 @@ fn date_opts(p: &Value) -> Result<DateOpts> {
     let lang = if p.get("language").is_some() {
         let raw = str_param(p, "language").filter(|l| !l.trim().is_empty());
         let Some(raw) = raw else {
-            return Err(bad("insert.dateTime", "`language` must be en-US, en-GB, fr-FR, ja-JP or sv-SE"));
+            return Err(bad("insert.dateTime", "`language` must be en-US, en-GB, es-ES, es-MX, fr-FR, de-DE, it-IT, pt-BR, ja-JP or sv-SE"));
         };
-        Some(canon_lang(raw).ok_or_else(|| bad("insert.dateTime", "`language` must be en-US, en-GB, fr-FR, ja-JP or sv-SE"))?.to_string())
+        Some(
+            lamina_text::datetime::canonical_language(raw)
+                .ok_or_else(|| bad("insert.dateTime", "`language` must be en-US, en-GB, es-ES, es-MX, fr-FR, de-DE, it-IT, pt-BR, ja-JP or sv-SE"))?
+                .to_string(),
+        )
     } else {
         None
     };
@@ -110,7 +103,7 @@ fn date_opts(p: &Value) -> Result<DateOpts> {
 }
 
 /// The text `format` shows now in `lang`. Errors when that language has no names for the format
-/// (month names and AM/PM are English only). An empty string where there is no clock (wasm).
+/// (month names are computed for English, Spanish, French, German, Italian and Portuguese). An empty string where there is no clock (wasm).
 fn date_sample(format: &str, lang: Option<&str>) -> Result<String> {
     use lamina_text::datetime::{DateTime, field_text};
     let probe = DateTime::new(2026, 10, 9, 20, 5, 7);

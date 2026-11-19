@@ -81,7 +81,7 @@ pub fn specs() -> Vec<CommandSpec> {
             "Header and Footer…",
             ["Insert", "Text"],
             None,
-            "{date?: bool, dateText?: fixed text, slideNumber?: bool, footer?: bool, footerText?, hideOnTitle?: bool, all?: bool (default true)}",
+            "{date?: bool, dateText?: fixed text, dateFormat?: datetime1..datetime13, language?: en-US|en-GB|es-ES|es-MX|fr-FR|de-DE|it-IT|pt-BR|ja-JP|sv-SE (the language of a date it writes), slideNumber?: bool, footer?: bool, footerText?, hideOnTitle?: bool, all?: bool (default true)}",
             has_doc,
             header_footer
         ),
