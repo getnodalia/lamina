@@ -318,7 +318,7 @@ pub fn slide_menu(app: &mut SlideApp, ui: &mut Ui, i: usize) {
         ("Copy", "edit.copy", json!({"scope": "slides"})),
         ("Paste", "edit.paste", json!({"scope": "slides"})),
     ] {
-        if ui.button(l).clicked() {
+        if ui.button(crate::i18n::t(l)).clicked() {
             let _ = app.run(id, p);
             ui.close();
         }
@@ -348,7 +348,7 @@ pub fn slide_menu(app: &mut SlideApp, ui: &mut Ui, i: usize) {
             .and_then(|d| d.doc.masters.first().map(|m| m.layouts.iter().map(|l| (l.name.clone(), l.id.0)).collect()))
             .unwrap_or_default();
         for (n, id) in layouts {
-            if ui.button(n).clicked() {
+            if ui.button(crate::i18n::t(&n)).clicked() {
                 let _ = app.run("slide.layout", json!({"layout": id}));
                 ui.close();
             }

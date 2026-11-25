@@ -52,7 +52,7 @@ pub(super) fn glow_row(ui: &mut Ui, current: f64) -> Option<f64> {
     let mut picked = None;
     ui.horizontal_wrapped(|ui| {
         for r in std::iter::once(0.0).chain(GLOWS) {
-            let label = if r == 0.0 { "No glow".to_string() } else { format!("{r} pt glow") };
+            let label = if r == 0.0 { "No glow".to_string() } else { crate::i18n::tf("{r} pt glow", &[("r", &r)]) };
             if tile(ui, &label, r == current, |p, rect| paint_glow(p, rect, r)).clicked() {
                 picked = Some(r);
             }
@@ -66,7 +66,7 @@ pub(super) fn soft_edge_row(ui: &mut Ui, current: f64) -> Option<f64> {
     let mut picked = None;
     ui.horizontal_wrapped(|ui| {
         for r in SOFT_EDGES {
-            let label = if r == 0.0 { "No soft edges".to_string() } else { format!("{r} pt soft edges") };
+            let label = if r == 0.0 { "No soft edges".to_string() } else { crate::i18n::tf("{r} pt soft edges", &[("r", &r)]) };
             if tile(ui, &label, r == current, |p, rect| paint_soft(p, rect, r)).clicked() {
                 picked = Some(r);
             }

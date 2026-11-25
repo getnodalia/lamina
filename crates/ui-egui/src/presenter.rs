@@ -209,7 +209,7 @@ impl View {
             ui.heading(&snapshot.elapsed);
             ui.label(crate::i18n::slide_of(snapshot.slide.saturating_add(1), snapshot.total));
             for (label, name) in [("◀ Previous", "ArrowLeft"), ("Next ▶", "ArrowRight")] {
-                if ui.button(label).clicked() {
+                if ui.button(crate::i18n::t(label)).clicked() {
                     commands.push(key(name));
                 }
             }
@@ -226,7 +226,7 @@ impl View {
                 ("All slides", "G"),
                 ("Zoom", "Z"),
             ] {
-                if ui.button(label).clicked() {
+                if ui.button(crate::i18n::t(label)).clicked() {
                     commands.push(key(name));
                 }
             }
