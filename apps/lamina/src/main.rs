@@ -144,6 +144,7 @@ fn services(native_wayland: bool) -> Services {
                     "Audio",
                     &["wav", "mp3", "m4a", "m4b", "aac", "flac", "ogg", "oga", "opus", "aif", "aiff", "aifc", "caf", "wma", "weba", "mka"],
                 ),
+                "sheet" => d.add_filter("Spreadsheets", &["xlsx", "xlsm", "xlsb", "csv", "tsv", "txt"]),
                 "video" => d.add_filter("Video", &["mp4", "m4v", "mov", "webm", "mkv", "wmv"]),
                 "theme" => d.add_filter("Themes and presentations", &["thmx", "pptx", "potx", "ppsx"]).add_filter("Office Theme", &["thmx"]),
                 _ => d

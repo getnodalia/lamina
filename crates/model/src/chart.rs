@@ -393,6 +393,9 @@ pub struct Chart {
     /// A histogram's bin width (`cx:binSize`).
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bin_size: Option<f64>,
+    /// Where the numbers came from (a spreadsheet range), so they can be read again.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source: Option<ChartSource>,
     /// Original chart XML part kept for round-trip of unmodelled options.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub raw: Option<String>,
@@ -403,6 +406,29 @@ pub struct Chart {
     /// The PPTX writer clears this before comparing modelled state. Native saves keep it too.
     #[serde(skip_serializing_if = "ChartKept::is_empty")]
     pub kept: ChartKept,
+}
+
+/// The spreadsheet range a chart's numbers were read from (`.xlsx`, `.csv` or `.tsv`): enough to
+/// read them again with Update from source. The file itself is not kept.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default, rename_all = "camelCase")]
+pub struct ChartSource {
+    /// The file's path when it was read from disk; empty when the data came in with the command.
+    pub path: String,
+    /// The workbook's sheet; `None` is the first one.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sheet: Option<String>,
+    /// The range in A1 notation; `None` is everything the sheet holds.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub range: Option<String>,
+    /// Each row is a series (instead of each column).
+    pub by_rows: bool,
+    /// The first row (first column when `by_rows`) holds the series names; `None` decides from the data.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub first_row: Option<bool>,
+    /// The first column (first row when `by_rows`) holds the category labels; `None` decides from the data.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub first_column: Option<bool>,
 }
 
 /// One legend entry's own text (`c:legendEntry/c:txPr`): what it sets wins over the legend's.
@@ -507,6 +533,7 @@ impl Default for Chart {
             up_down_bars: false,
             bin_count: None,
             bin_size: None,
+            source: None,
             raw: None,
             verbatim: false,
             kept: ChartKept::default(),

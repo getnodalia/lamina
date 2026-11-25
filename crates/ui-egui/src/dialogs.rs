@@ -67,6 +67,7 @@ fn title(id: &str) -> &'static str {
         "language" => "Language",
         "customShow" => "Custom Shows",
         "chartData" => "Chart Data",
+        "chartFromSheet" => "Chart from Spreadsheet",
         "trim" => "Trim Media",
         "smartart" => "Choose a Diagram Graphic",
         "bullets" => "Bullets and Numbering",
@@ -225,6 +226,7 @@ use lamina_text::datetime::DATE_KINDS;
 mod about;
 mod alt_text;
 mod body;
+mod chart_from_sheet;
 mod columns;
 mod date_time;
 mod equation;

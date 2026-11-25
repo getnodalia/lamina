@@ -75,15 +75,41 @@ pub fn content_type(name: &str, bytes: &[u8]) -> &'static str {
 
 /// Natural size of an image in points (96 dpi), fitted inside the slide.
 fn fitted(s: &Session, bytes: &[u8]) -> (f64, f64) {
-    let (w, h) = image::ImageReader::new(std::io::Cursor::new(bytes))
-        .with_guessed_format()
-        .ok()
-        .and_then(|r| r.into_dimensions().ok())
-        .map(|(w, h)| (w as f64 * 0.75, h as f64 * 0.75))
+    // The picture's own size at 96 dpi (an SVG's width and height, a raster's resolution), as points.
+    let (w, h) = lamina_render::picture_natural_size(bytes)
+        .or_else(|| {
+            image::ImageReader::new(std::io::Cursor::new(bytes))
+                .with_guessed_format()
+                .ok()
+                .and_then(|r| r.into_dimensions().ok())
+                .map(|(w, h)| (w as f64, h as f64))
+        })
+        .map(|(w, h)| (w * 0.75, h * 0.75))
         .unwrap_or((288.0, 216.0));
     let size = s.active().map(|d| d.doc.slide_size).unwrap_or(lamina_model::defaults::WIDE);
     let k = (size.width * 0.9 / w.max(1.0)).min(size.height * 0.9 / h.max(1.0)).min(1.0);
     (w * k, h * k)
+}
+
+/// Add a picture's bytes to the presentation. An SVG goes in as PowerPoint keeps it: the vector, and
+/// a PNG drawn from it as the fallback every other program shows; the PNG is the picture's media
+/// and the SVG its source (`PictureFill::svg`).
+pub(crate) fn add_picture_media(
+    doc: &mut lamina_model::Presentation,
+    name: &str,
+    ct: &str,
+    bytes: Vec<u8>,
+) -> Option<(lamina_model::MediaId, Option<lamina_model::MediaId>)> {
+    if ct != "image/svg+xml" {
+        return doc.add_media(name, ct, bytes).map(|m| (m, None));
+    }
+    let raster = lamina_render::decode_image(&bytes)?;
+    let mut png = Vec::new();
+    raster.write_to(&mut std::io::Cursor::new(&mut png), image::ImageFormat::Png).ok()?;
+    let stem = name.rsplit_once('.').map_or(name, |(s, _)| s);
+    let fallback = doc.add_media(&format!("{stem}.png"), "image/png", png)?;
+    let vector = doc.add_media(name, ct, bytes)?;
+    Some((fallback, Some(vector)))
 }
 
 pub(super) fn picture(s: &mut Session, p: &Value) -> Result<Value> {
@@ -92,7 +118,7 @@ pub(super) fn picture(s: &mut Session, p: &Value) -> Result<Value> {
     if !ct.starts_with("image/") {
         return Err(bad("insert.picture", format!("{name} is not a picture")));
     }
-    if ct != "image/svg+xml" && lamina_render::decode_image(&bytes).is_none() {
+    if lamina_render::decode_image(&bytes).is_none() {
         return Err(EngineError::Other(format!("{name}: the picture can't be read")));
     }
     let (w, h) = fitted(s, &bytes);
@@ -126,10 +152,10 @@ pub(super) fn picture(s: &mut Session, p: &Value) -> Result<Value> {
         }
         _ => [0.0; 4],
     };
-    let media = s.edit(|doc, _| doc.add_media(&name, ct, bytes).ok_or_else(|| bad("insert.picture", NO_ID_SPACE)))?;
+    let (media, svg) = s.edit(|doc, _| add_picture_media(doc, &name, ct, bytes).ok_or_else(|| bad("insert.picture", NO_ID_SPACE)))?;
     let shape = Shape {
         xfrm: Some(rect),
-        kind: ShapeKind::Picture { fill: PictureFill { media, crop, ..Default::default() } },
+        kind: ShapeKind::Picture { fill: PictureFill { media, svg, crop, ..Default::default() } },
         descr: name.clone(),
         ..Default::default()
     };

@@ -18,6 +18,7 @@ mod album;
 mod chart;
 mod links;
 mod picture;
+mod sheet_chart;
 mod text_fields;
 
 use album::{photo_album, photo_album_edit};
@@ -25,8 +26,9 @@ pub use chart::chart_type;
 use chart::{chart, chart_data, chart_options, chart_type_cmd};
 use links::{action_button, hyperlink, shape_action};
 pub use picture::content_type;
-pub(crate) use picture::media_bytes;
+pub(crate) use picture::{add_picture_media, media_bytes};
 use picture::{audio, picture, video};
+use sheet_chart::{chart_from_sheet, chart_refresh};
 use text_fields::{date_time, slide_number, symbol, word_art};
 
 pub fn specs() -> Vec<CommandSpec> {
@@ -89,6 +91,15 @@ pub fn specs() -> Vec<CommandSpec> {
             has_slide,
             chart
         ),
+        cmd!(
+            "insert.chart.fromSheet",
+            "Chart from Spreadsheet…",
+            ["Insert", "Illustrations"],
+            None,
+            "{path | data: base64 + name, sheet?: name or number, range?: A1:D9 (or Sheet2!A1:D9), type?: column|line|pie|…, series?: columns|rows, firstRow?: bool, firstColumn?: bool (decided from the data when omitted), title?, rect?} — an .xlsx, .csv or .tsv; the chart remembers its source for chart.refreshFromSource. No keys opens the dialog",
+            has_slide,
+            chart_from_sheet
+        ),
         cmd!("insert.audio", "Audio from File…", ["Insert", "Media", "Audio"], None, "{path? | data: base64, name?, rect?}", has_slide, audio),
         cmd!("insert.video", "Video from File…", ["Insert", "Media", "Video"], None, "{path? | data: base64, name?, rect?}", has_slide, video),
         cmd!("insert.wordArt", "Decorative Text", ["Insert", "Text"], None, "{text?, style?: 0..}", has_slide, word_art),
@@ -130,6 +141,15 @@ pub fn specs() -> Vec<CommandSpec> {
             "{categories?: [..], levels?: [[..]] (outer category levels, innermost first), series?: [{name, values}], id?}",
             has_selection,
             chart_data
+        ),
+        cmd!(
+            "chart.refreshFromSource",
+            "Update from Source",
+            ["Chart Design", "Data"],
+            None,
+            "{path?: another file for the same range, id?} — reads the chart's spreadsheet range again; series keep their formatting by position",
+            has_selection,
+            chart_refresh
         ),
         cmd!(
             "chart.options",

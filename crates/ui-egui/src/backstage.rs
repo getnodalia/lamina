@@ -164,6 +164,35 @@ pub enum ExportTask {
     FileType,
 }
 
+/// The system's printers. The spooler can be slow to answer, so they are asked on another thread
+/// and the page shows what has arrived.
+#[derive(Clone, Debug, Default)]
+pub struct Printers {
+    slot: std::sync::Arc<std::sync::Mutex<Option<Vec<lamina_engine::cmd::print::PrinterInfo>>>>,
+    asked: bool,
+}
+
+impl Printers {
+    /// Ask the spooler, once. Nothing happens where there is none (the web).
+    pub fn ask(&mut self, ctx: &egui::Context) {
+        if self.asked || !lamina_engine::cmd::print::available() {
+            return;
+        }
+        self.asked = true;
+        let (slot, ctx) = (self.slot.clone(), ctx.clone());
+        let _ = std::thread::Builder::new().name("printers".into()).spawn(move || {
+            let list = lamina_engine::cmd::print::list_printers();
+            *slot.lock().unwrap_or_else(std::sync::PoisonError::into_inner) = Some(list);
+            ctx.request_repaint();
+        });
+    }
+
+    /// The printers found, or `None` while the spooler hasn't answered.
+    pub fn found(&self) -> Option<Vec<lamina_engine::cmd::print::PrinterInfo>> {
+        self.slot.lock().unwrap_or_else(std::sync::PoisonError::into_inner).clone()
+    }
+}
+
 /// The File tab's state while it is open.
 #[derive(Clone, Debug)]
 pub struct Backstage {
@@ -187,6 +216,15 @@ pub struct Backstage {
     /// Notes and handouts: a paper id from [`lamina_engine::cmd::file::PAPERS`] and its orientation.
     pub print_paper: &'static str,
     pub print_landscape: bool,
+    /// The printer's name; empty prints on the system's default one.
+    pub print_printer: String,
+    pub print_copies: u32,
+    pub print_collate: bool,
+    /// `""` leaves two-sided printing to the printer, else `off`, `longEdge` or `shortEdge`.
+    pub print_sides: &'static str,
+    pub print_grayscale: bool,
+    /// The system's printers, asked once when the Print page is first shown.
+    pub printers: Printers,
     pub preview_page: usize,
     pub export: ExportTask,
     /// Export › Change File Type / Save As: the chosen type (an [`SAVE_TYPES`] id).
@@ -215,6 +253,12 @@ impl Backstage {
             print_frame: true,
             print_paper: "letter",
             print_landscape: false,
+            print_printer: String::new(),
+            print_copies: 1,
+            print_collate: true,
+            print_sides: "",
+            print_grayscale: false,
+            printers: Printers::default(),
             preview_page: 0,
             export: ExportTask::Pdf,
             file_type: "pptx",

@@ -9,18 +9,18 @@
 > **Previously (2026-11-01):** Locked-shape and no-outline regressions added for #1621; fill row re-assessed: remains D; No Fill hit-testing now follows resolved appearance. Scores unchanged.
 
 The summary between `<!-- SUMMARY -->
-**Weighted breadth parity: 84%** over 191 features.
+**Weighted breadth parity: 85%** over 192 features.
 
 | Priority | Features | Done | Partial | Missing | Parity |
 |---|---|---|---|---|---|
 | P0 | 72 | 61 | 11 | 0 | 92% |
-| P1 | 65 | 45 | 16 | 4 | 82% |
+| P1 | 66 | 47 | 17 | 2 | 84% |
 | P2 | 54 | 18 | 24 | 12 | 56% |
 
 | Area | Parity |
 |---|---|
 | Application shell | 81% |
-| Files | 76% |
+| Files | 79% |
 | Slides | 92% |
 | Views | 98% |
 | Masters & themes | 92% |
@@ -29,9 +29,9 @@ The summary between `<!-- SUMMARY -->
 | Arrange | 100% |
 | Text | 83% |
 | Tables | 97% |
-| Charts | 65% |
+| Charts | 71% |
 | SmartArt | 50% |
-| Pictures | 60% |
+| Pictures | 69% |
 | Media | 67% |
 | Transitions | 100% |
 | Animations | 85% |
@@ -72,7 +72,7 @@ Open P0 items: Contextual tabs (Shape Format, Picture Format, Table Design/Layou
 | Files | Export slides as PNG/JPEG | P0 | D |
 | Files | Export outline / RTF | P2 | D |
 | Files | Export video (MP4) / animated GIF (GIF: one frame per slide, no transitions; no video) | P2 | P |
-| Files | Print (slides, handouts, notes, outline) | P1 | M |
+| Files | Print (slides, handouts, notes, outline) | P1 | P |
 | Files | Password protection | P2 | M |
 | Files | Reuse slides from another file | P1 | P |
 | Files | Drag and drop files onto the window | P1 | D |
@@ -180,12 +180,13 @@ Open P0 items: Contextual tabs (Shape Format, Picture Format, Table Design/Layou
 | Charts | Insert chart (column, bar, line, area, pie, doughnut, scatter) | P0 | D |
 | Charts | Other chart types (radar, stock, combo, waterfall, funnel, treemap, sunburst, histogram, box) | P2 | P |
 | Charts | Edit chart data | P0 | P |
+| Charts | Chart from a spreadsheet range (.xlsx, .csv, .tsv) with Update from Source | P1 | D |
 | Charts | Chart elements (title, legend, labels, axes, gridlines) | P1 | P |
 | Charts | Chart styles and colours | P2 | P |
 | SmartArt | Insert SmartArt (lists, processes, cycles, hierarchy) | P1 | P |
 | SmartArt | Text pane and layout switching | P2 | P |
 | Pictures | Insert picture (PNG, JPEG, GIF, WebP, BMP, TIFF) | P0 | D |
-| Pictures | SVG pictures | P1 | M |
+| Pictures | SVG pictures | P1 | D |
 | Pictures | Crop (and crop to shape, aspect ratio) | P0 | P |
 | Pictures | Corrections, colour, transparency (recolor and Set Transparent Color done; sharpen/soften and colour temperature pending) | P1 | P |
 | Pictures | Artistic effects | P2 | P |

@@ -158,6 +158,12 @@ pub fn blip_fill(imp: &mut Imp, part: &Part, bf: &El) -> Option<PictureFill> {
     {
         pf.artistic = Some(lamina_model::style::Artistic { effect, original });
     }
+    // PowerPoint's SVG icons and graphics: the blip is the PNG fallback, the SVG rides in an extension.
+    if let Some(vector) = blip.and_then(|b| b.child("extLst")).and_then(|x| x.find("svgBlip"))
+        && let Some(svg) = media_ref(imp, part, vector)
+    {
+        pf.svg = Some(svg);
+    }
     if let Some(b) = blip {
         for e in b.elements() {
             match e.local() {

@@ -20,6 +20,7 @@ pub(super) fn chart_design(app: &mut SlideApp, ui: &mut Ui) {
             }
         });
         big(app, ui, Icon::EditData, "Edit\nData", "app.dialog", json!({"id": "chartData"}));
+        big(app, ui, Icon::UpdateSource, "Update from\nSource", "chart.refreshFromSource", json!({}));
     });
     arrange_group(app, ui);
 }

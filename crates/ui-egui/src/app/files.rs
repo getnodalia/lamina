@@ -294,6 +294,22 @@ impl SlideApp {
         }
     }
 
+    /// File › Print to a printer of the system's spooler: copies, sides and colour as the Print
+    /// page set them. The pages are the PDF `file.export` writes.
+    pub fn print_direct(&mut self, params: Value) -> bool {
+        match self.run("file.print", params) {
+            Ok(v) => {
+                let msg = match v.get("printer").and_then(Value::as_str) {
+                    Some(p) => crate::i18n::tf("Sent to {printer}", &[("printer", &p)]),
+                    None => crate::i18n::t("Sent to the default printer").to_string(),
+                };
+                self.set_status(msg);
+                true
+            }
+            Err(_) => false,
+        }
+    }
+
     pub(crate) fn pick_and_open(&mut self) {
         if let Some(pick) = self.services.pick_open.as_mut() {
             if let Some(path) = pick("open") {

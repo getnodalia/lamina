@@ -85,6 +85,10 @@ pub(super) fn insert(app: &mut SlideApp, ui: &mut Ui) {
                     run(app, "insert.chart", json!({"type": format!("{k:?}")}));
                 }
             }
+            ui.separator();
+            if ui.button(crate::i18n::t("From Spreadsheet…")).clicked() {
+                run(app, "insert.chart.fromSheet", json!({}));
+            }
         });
     });
     group(ui, |ui| {

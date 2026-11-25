@@ -154,6 +154,7 @@ app's JSON control channel (`lamina --control PORT`).
 
 | Date | What landed |
 |---|---|
+| 2026-11-25 | 0.3.0: SVG pictures draw at the size the slide needs and insert from `.svg`/`.svgz` (PowerPoint's icons draw from their SVG); Insert ▸ Chart ▸ From Spreadsheet… builds a chart from a `.xlsx`, `.csv` or `.tsv` range and Update from Source re-reads it keeping the formatting; Backstage ▸ Print sends slides, handouts or notes to a printer with range, copies and two-sided; six more starter decks in English and Spanish |
 | 2026-11-19 | Spanish: an audit of the running interface found and fixed untranslated text in the dialogs, the ribbon galleries, the panes, the status bar, the Backstage pages (Info, Save As, Print) and fixed strings in the code; the table grows to ~1,800 entries and a test keeps the Backstage pages in Spanish |
 | 2026-11-19 | Date & Time names in Spanish, French, German, Italian and Portuguese; the accessibility checker's messages in Spanish; Header and Footer writes its date in the interface language (0.2.0) |
 | 2026-11-14 | Slide show: a slide the show advances to again (click, →, Space, automatic advance or a loop) starts over, so its animations play again, as in PowerPoint. Back and links still show it as it was left (#2090) |
@@ -345,6 +346,7 @@ app's JSON control channel (`lamina --control PORT`).
 
 | Date | Change | Summary |
 |---|---|---|
+| 2026-11-25 | minor | Progress log and checklist: SVG pictures, charts from a spreadsheet, direct printing and six starter decks (0.3.0) |
 | 2026-11-19 | trivial | Progress log: Spanish interface audit and fixes; parity scores unchanged |
 | 2026-11-19 | minor | Progress log: date languages and accessibility messages (0.2.0); parity scores unchanged |
 | 2026-11-14 | trivial | Progress log: a slide the show advances to again plays its animations again (#2090); parity scores unchanged |

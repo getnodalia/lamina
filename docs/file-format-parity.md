@@ -30,7 +30,7 @@ PowerPoint opens and saves; Viewer = opens only).
 | TIFF / BMP / GIF slide images | export | n/a | no | Easy (the `image` crate writes them) | none |
 | Animated GIF of the deck | export | n/a | yes (`file.export` format `gif`, Export…, `lamina-cli`, MCP `export`) | One frame per slide from the slide renderer; size small/medium/large/extra large or 16–3840 px wide, 0.1–600 s per slide, loop forever or play once, slide range, hidden slides skipped; a 256-colour palette per frame (exact, or NeuQuant above 256 colours). Transitions and build animations are not animated | `crates/engine/src/gif_export.rs` tests (decoded frames, size, delay, loop, hidden slides, hostile params), MCP, CLI and export dialog tests |
 | MP4 / MOV video of the deck | export | n/a | no | Needs timeline render + H.264 encode | none |
-| Print | yes | n/a | no | PR #66 (browser) open | none |
+| Print | yes | n/a | yes (`file.print`, `file.printers`; Backstage ▸ Print) | Slides, handouts or notes pages to a chosen printer through the system queue (`lp` on Linux and macOS, XPS on Windows), with range, copies and two-sided; the PDF viewer is the fallback. No outline print, no OS print dialog | `crates/engine/tests/it/print.rs` (job building, ranges, copies, hostile params; the queue itself is not run in CI) |
 
 ## Pictures and media inside decks
 
@@ -53,7 +53,7 @@ intermediate build that required inline `bytes` cannot read the new referenced r
 | Kind | PowerPoint | Lámina | Notes |
 |---|---|---|---|
 | PNG, JPEG, GIF (animated), BMP, TIFF, WebP | yes | yes | `image` 0.25; animated GIFs play since #39 |
-| SVG | yes (with PNG fallback) | **no** | The PNG fallback shows; SVG files can't be inserted |
+| SVG, SVGZ | yes (SVG with PNG fallback) | yes | Drawn as vectors through `nodalia-svg` (bounded size, nesting, entities and embedded images) at the size the slide needs; SVG files insert as pictures, PowerPoint's icons draw from the SVG and keep the PNG fallback (`asvg:svgBlip`). Text is drawn only when the file turns it into paths. `crates/engine/tests/it/svg_picture.rs`, `crates/render/src/svgpic.rs` tests |
 | EMF / WMF | yes | partial | Drawn as vectors (paths, pens, pattern and hatch brushes, bitmaps, text in the document's fonts with the file's character advances). Rectangle clip regions (`INTERSECTCLIPRECT`, `EXCLUDECLIPRECT`, `EXTSELECTCLIPRGN`) limit later drawing. EMF+ only pictures play every EMF+ drawing record (brushes incl. gradients and textures, pens, paths, curves, images, strings, transforms, clipping; see `crates/metafile/src/emfplus.rs` for the few exceptions). Legacy OLE objects (VML preview) and ActiveX controls show their pictures |
 | HEIC | yes (macOS) | no | |
 | Audio: MP3, AAC/M4A, ALAC, WAV, AIFF, CAF, FLAC, Ogg Vorbis, Opus | yes (Ogg/Opus partly) | yes | Pure-Rust decoders in `crates/media`; Opus from nodalia-audio (nodalia-libs) |
@@ -113,12 +113,13 @@ the round trip even though Lámina doesn't model it.
    tables, charts, animations, media, sections and masters/layouts among them. Still needed:
    render checks and a PowerPoint reference render for each (owner runs PowerPoint).
 2. The round-trip losses above (#70, #74).
-3. SVG rendering. EMF+ records inside EMF/WMF are still not drawn.
+3. EMF+ records inside EMF/WMF are still not drawn.
 
 ## Revision history
 
 | Date | Change | Summary |
 |---|---|---|
+| 2026-11-25 | minor | SVG pictures draw and insert; Print goes straight to the printer (0.3.0) |
 | 2026-11-07 | trivial | A slide-list entry whose relationship is missing is reported in `lostSlides` like an unreadable slide part, so the deck opens as a repaired copy; slide lists over 10,000 entries are refused with an import-limit error rather than silently truncated (#1910) |
 | 2026-11-02 | minor | Optional table RTL direction is read and written as `a:tblPr/@rtl`; native and two PPTX saves preserve true, false and absent values with distinguishable column text |
 | 2026-11-02 | minor | Text runs preserve alternate-language metadata in native and PPTX round trips |

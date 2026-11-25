@@ -49,7 +49,7 @@ use vello_common::filter_effects::{EdgeMode, Filter, FilterPrimitive};
 use vello_cpu::{RenderContext, Resources, peniko};
 
 pub use extent::{Region, TILE, layout_extent, pasteboard_region, slide_extent};
-pub use images::{decode as decode_image, gif_frame};
+pub use images::{decode as decode_image, gif_frame, natural_size as picture_natural_size};
 pub use lamina_anim::{transition_frame, transition_layers, uses_slide_parts};
 pub use morph_path::PathMorph;
 pub use morph_text::TextMorph;
@@ -66,6 +66,7 @@ mod raster;
 mod renderer;
 mod slide;
 mod stroke;
+mod svgpic;
 mod text_draw;
 
 use geometry::shade;

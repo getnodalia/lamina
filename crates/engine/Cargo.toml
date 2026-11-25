@@ -27,10 +27,18 @@ thiserror = { workspace = true }
 log = { workspace = true }
 image = { workspace = true }
 chrono = { workspace = true }
+nodalia-xlsx = { workspace = true }
+nodalia-sheet = { workspace = true }
+nodalia-csv = { workspace = true }
 
 [dev-dependencies]
 lamina-anim = { workspace = true }
 zip = { workspace = true }
+nodalia-xlsx = { workspace = true, features = ["test-support"] }
+
+# The system's spooler: there is none in a browser.
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+nodalia-print = { workspace = true }
 
 # The browser clock for comment timestamps (wasm has no std::time::SystemTime).
 [target.'cfg(target_arch = "wasm32")'.dependencies]
