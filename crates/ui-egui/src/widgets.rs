@@ -467,7 +467,7 @@ pub fn color_grid(ui: &mut Ui, scheme: &ColorScheme, none_label: Option<&str>) -
     });
     ui.separator();
     if let Some(n) = none_label
-        && ui.button(n).clicked()
+        && ui.button(crate::i18n::t(n)).clicked()
     {
         out = Some(None);
     }
@@ -534,7 +534,9 @@ pub fn spinner(ui: &mut Ui, id: &str, label: &str, value: f64, step: f64, suffix
     let mut out = None;
     ui.horizontal(|ui| {
         ui.spacing_mut().item_spacing.x = 0.0;
-        let r = ui.add(egui::TextEdit::singleline(&mut text).desired_width(width).font(theme::font(12.0))).accessible_name(format!("{label} value"));
+        let r = ui
+            .add(egui::TextEdit::singleline(&mut text).desired_width(width).font(theme::font(12.0)))
+            .accessible_name(crate::i18n::tf("{label} value", &[("label", &label)]));
         if r.has_focus() {
             ui.data_mut(|d| d.insert_temp(key, text.clone()));
         } else {
@@ -548,9 +550,9 @@ pub fn spinner(ui: &mut Ui, id: &str, label: &str, value: f64, step: f64, suffix
         }
         let (rect, _) = ui.allocate_exact_size(vec2(12.0, 22.0), Sense::hover());
         let up = ui.interact(Rect::from_min_max(rect.min, pos2(rect.max.x, rect.center().y)), key.with("up"), Sense::click());
-        up.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, format!("Increase {label}")));
+        up.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, crate::i18n::tf("Increase {label}", &[("label", &label)])));
         let down = ui.interact(Rect::from_min_max(pos2(rect.min.x, rect.center().y), rect.max), key.with("dn"), Sense::click());
-        down.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, format!("Decrease {label}")));
+        down.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, true, crate::i18n::tf("Decrease {label}", &[("label", &label)])));
         let p = ui.painter();
         let c = rect.center();
         p.line_segment([pos2(c.x - 3.0, c.y - 3.0), pos2(c.x, c.y - 6.0)], Stroke::new(1.0, t.text_dim));

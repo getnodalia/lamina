@@ -12,7 +12,7 @@ pub(super) fn picture_format(app: &mut SlideApp, ui: &mut Ui) {
         let r = big_button(ui, Icon::RemoveBackground, "Remove\nBackground", enabled(app, "picture.removeBackground"));
         egui::Popup::menu(&r).show(|ui| {
             for (label, tol) in [("Remove Background", 20.0), ("Remove More (looser)", 35.0), ("Remove Less (tighter)", 10.0)] {
-                if ui.button(label).clicked() {
+                if ui.button(crate::i18n::t(label)).clicked() {
                     run(app, "picture.removeBackground", json!({"tolerance": tol}));
                 }
             }
@@ -162,7 +162,7 @@ pub(super) fn picture_format(app: &mut SlideApp, ui: &mut Ui) {
                     ("Dash Dot", "dashDot"),
                     ("Long Dash", "lgDash"),
                 ] {
-                    if ui.button(l).clicked() {
+                    if ui.button(crate::i18n::t(l)).clicked() {
                         run(app, "shape.line", json!({"dash": d}));
                     }
                 }
@@ -183,7 +183,7 @@ pub(super) fn picture_format(app: &mut SlideApp, ui: &mut Ui) {
             }
             ui.separator();
             for (l, v) in [("Crop 10% each side", 0.1), ("Crop 20% each side", 0.2), ("Reset Crop", 0.0)] {
-                if ui.button(l).clicked() {
+                if ui.button(crate::i18n::t(l)).clicked() {
                     run(app, "picture.crop", json!({"left": v, "top": v, "right": v, "bottom": v}));
                 }
             }

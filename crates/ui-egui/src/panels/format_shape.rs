@@ -76,7 +76,7 @@ fn effects_tab(app: &mut SlideApp, ui: &mut Ui, sh: &lamina_model::Shape) {
     ui.label(egui::RichText::new(crate::i18n::t("Reflection")).font(theme::bold(13.0)));
     ui.horizontal_wrapped(|ui| {
         for (l, v) in [("None", "none"), ("Tight", "tight"), ("Half", "half"), ("Full", "full")] {
-            if ui.button(l).clicked() {
+            if ui.button(crate::i18n::t(l)).clicked() {
                 run(app, "shape.effects", json!({"reflection": v}));
             }
         }
@@ -125,7 +125,7 @@ fn effects_tab(app: &mut SlideApp, ui: &mut Ui, sh: &lamina_model::Shape) {
     if let Some(r) = effect_presets::soft_edge_row(ui, s) {
         run(app, "shape.effects", json!({"softEdges": r}));
     }
-    if ui.add(egui::Slider::new(&mut s, 0.0..=50.0).text("size (pt)")).drag_stopped() {
+    if ui.add(egui::Slider::new(&mut s, 0.0..=50.0).text(crate::i18n::t("size (pt)"))).drag_stopped() {
         run(app, "shape.effects", json!({"softEdges": s}));
     }
     let raw3d = sh.effects.as_ref().and_then(|e| e.raw3d.clone());
@@ -178,7 +178,7 @@ fn size_tab(app: &mut SlideApp, ui: &mut Ui, sh: &lamina_model::Shape, x: lamina
     let mut fields = |ui: &mut Ui, label: &str, id: &str, v: f64, key: &str, cmd: &str, angle: bool| {
         let (unit, suffix) = if angle { (1.0, "°") } else { (len.points_per_unit(), len.suffix()) };
         ui.horizontal(|ui| {
-            ui.add_sized(vec2(90.0, 20.0), egui::Label::new(label));
+            ui.add_sized(vec2(90.0, 20.0), egui::Label::new(crate::i18n::t(label)));
             if let Some(nv) = widgets::spinner(ui, id, label, v / unit, 0.1, suffix, 70.0) {
                 let mut p = json!({key: nv * unit});
                 if cmd == "shape.resize" && locked {
@@ -195,7 +195,7 @@ fn size_tab(app: &mut SlideApp, ui: &mut Ui, sh: &lamina_model::Shape, x: lamina
     for (label, id, cur, base, key) in [("Scale Height", "fsh", x.h, base_h, "h"), ("Scale Width", "fsw", x.w, base_w, "w")] {
         ui.add_enabled_ui(single, |ui| {
             ui.horizontal(|ui| {
-                ui.add_sized(vec2(90.0, 20.0), egui::Label::new(label));
+                ui.add_sized(vec2(90.0, 20.0), egui::Label::new(crate::i18n::t(label)));
                 let pct = if base > 0.0 { cur / base * 100.0 } else { 100.0 };
                 if let Some(nv) = widgets::spinner(ui, id, label, pct, 1.0, "%", 70.0)
                     && nv > 0.0
@@ -217,8 +217,9 @@ fn size_tab(app: &mut SlideApp, ui: &mut Ui, sh: &lamina_model::Shape, x: lamina
     ui.add_enabled_ui(single, |ui| {
         ui.horizontal(|ui| {
             ui.add_sized(vec2(90.0, 20.0), egui::Label::new(crate::i18n::t("From")));
-            let combo =
-                nodalia_ui::ComboBox::from_id_salt("fmt-origin").selected_text(if center { "Center" } else { "Top Left Corner" }).show_ui(ui, |ui| {
+            let combo = nodalia_ui::ComboBox::from_id_salt("fmt-origin")
+                .selected_text(crate::i18n::t(if center { "Center" } else { "Top Left Corner" }))
+                .show_ui(ui, |ui| {
                     ui.selectable_value(&mut center, false, crate::i18n::t("Top Left Corner"));
                     ui.selectable_value(&mut center, true, crate::i18n::t("Center"));
                 });
@@ -234,7 +235,7 @@ fn size_tab(app: &mut SlideApp, ui: &mut Ui, sh: &lamina_model::Shape, x: lamina
     let (px, py) = (x.x + dx, x.y + dy);
     let mut pos = |ui: &mut Ui, label: &str, id: &str, v: f64, off: f64, key: &str| {
         ui.horizontal(|ui| {
-            ui.add_sized(vec2(90.0, 20.0), egui::Label::new(label));
+            ui.add_sized(vec2(90.0, 20.0), egui::Label::new(crate::i18n::t(label)));
             if let Some(nv) = widgets::spinner(ui, id, label, v / len.points_per_unit(), 0.1, len.suffix(), 70.0) {
                 run(app, "shape.move", json!({key: nv * len.points_per_unit() - off}));
             }
@@ -283,14 +284,14 @@ pub(super) fn format_shape(app: &mut SlideApp, ui: &mut Ui) {
             ui.horizontal(|ui| {
                 ui.label(crate::i18n::t("Vertical alignment"));
                 for (l, a) in [("Top", "top"), ("Middle", "middle"), ("Bottom", "bottom")] {
-                    if ui.small_button(l).clicked() {
+                    if ui.small_button(crate::i18n::t(l)).clicked() {
                         run(app, "format.anchor", json!({"anchor": a}));
                     }
                 }
             });
             ui.horizontal_wrapped(|ui| {
                 for (l, m) in [("Do not Autofit", "none"), ("Shrink text on overflow", "shrink"), ("Resize shape to fit text", "resize")] {
-                    if ui.small_button(l).clicked() {
+                    if ui.small_button(crate::i18n::t(l)).clicked() {
                         run(app, "format.autofit", json!({"mode": m}));
                     }
                 }
@@ -309,7 +310,7 @@ pub(super) fn format_shape(app: &mut SlideApp, ui: &mut Ui) {
                 ("Bottom", "bottom", b.inset_b.unwrap_or(3.6)),
             ] {
                 ui.horizontal(|ui| {
-                    ui.add_sized(vec2(60.0, 20.0), egui::Label::new(l));
+                    ui.add_sized(vec2(60.0, 20.0), egui::Label::new(crate::i18n::t(l)));
                     if let Some(nv) = widgets::spinner(ui, &format!("m{k}"), l, v, 1.0, " pt", 60.0) {
                         run(app, "format.margins", json!({k: nv.max(0.0)}));
                     }
@@ -378,7 +379,7 @@ pub(super) fn format_shape(app: &mut SlideApp, ui: &mut Ui) {
                 if k == "background" && !background_ok {
                     continue;
                 }
-                if ui.radio(kind == k, l).clicked() {
+                if ui.radio(kind == k, crate::i18n::t(l)).clicked() {
                     match k {
                         "none" => run(app, "shape.fill", json!({"none": true})),
                         "solid" => run(app, "shape.fill", json!({"color": "accent1"})),
@@ -477,7 +478,7 @@ pub(super) fn format_shape(app: &mut SlideApp, ui: &mut Ui) {
             ui.horizontal_wrapped(|ui| {
                 ui.label(crate::i18n::t("Dash"));
                 for (l, d) in [("—", "solid"), ("···", "sysDot"), ("- -", "dash"), ("-·-", "dashDot"), ("— —", "lgDash")] {
-                    if ui.small_button(l).clicked() {
+                    if ui.small_button(crate::i18n::t(l)).clicked() {
                         run(app, "shape.line", json!({"dash": d}));
                     }
                 }
@@ -564,7 +565,7 @@ fn fx_slider(
     scale: f64,
 ) {
     ui.horizontal(|ui| {
-        let label = ui.add_sized(vec2(90.0, 20.0), egui::Label::new(label));
+        let label = ui.add_sized(vec2(90.0, 20.0), egui::Label::new(crate::i18n::t(label)));
         // Hold the value while dragging; otherwise follow the shape.
         let sid = ui.scope_id().with(id);
         let mut v: f64 = ui.data_mut(|d| d.get_temp(sid)).unwrap_or(value);
@@ -610,7 +611,7 @@ fn pick_fill_picture(app: &mut SlideApp) {
 fn pic_drag(app: &mut SlideApp, ui: &mut Ui, label: &str, value: f64, suffix: &str, key: &str, scale: f64) {
     let label = crate::i18n::t(label);
     ui.horizontal(|ui| {
-        let field = ui.add_sized(vec2(90.0, 20.0), egui::Label::new(label));
+        let field = ui.add_sized(vec2(90.0, 20.0), egui::Label::new(crate::i18n::t(label)));
         let mut v = value;
         let r = ui.add(egui::DragValue::new(&mut v).suffix(suffix).max_decimals(1)).labelled_by(field.id);
         if r.drag_stopped() || r.lost_focus() || (r.changed() && !r.dragged()) {
@@ -652,11 +653,11 @@ fn picture_fill_options(app: &mut SlideApp, ui: &mut Ui, id: u32, pf: &lamina_mo
             let mirrors = [("none", "None"), ("x", "Horizontal"), ("y", "Vertical"), ("xy", "Both")];
             for (label, key, opts, cur) in [("Alignment", "align", &aligns[..], align), ("Mirror type", "mirror", &mirrors[..], flip)] {
                 ui.horizontal(|ui| {
-                    let field = ui.add_sized(vec2(90.0, 20.0), egui::Label::new(label));
-                    let shown = opts.iter().find(|(k, _)| k == cur).map_or(opts[0].1, |(_, l)| *l);
+                    let field = ui.add_sized(vec2(90.0, 20.0), egui::Label::new(crate::i18n::t(label)));
+                    let shown = crate::i18n::t(opts.iter().find(|(k, _)| k == cur).map_or(opts[0].1, |(_, l)| *l));
                     let combo = nodalia_ui::ComboBox::from_id_salt(("picfill", id, key)).selected_text(shown).show_ui(ui, |ui| {
                         for (k, l) in opts {
-                            if ui.selectable_label(*k == cur.as_str(), *l).clicked() {
+                            if ui.selectable_label(*k == cur.as_str(), crate::i18n::t(l)).clicked() {
                                 run(app, "shape.fill", json!({"pictureProps": {key: k}}));
                             }
                         }
@@ -668,7 +669,7 @@ fn picture_fill_options(app: &mut SlideApp, ui: &mut Ui, id: u32, pf: &lamina_mo
         PictureMode::Stretch { fill_rect } => {
             for (i, label) in ["Offset left", "Offset top", "Offset right", "Offset bottom"].into_iter().enumerate() {
                 ui.horizontal(|ui| {
-                    let field = ui.add_sized(vec2(90.0, 20.0), egui::Label::new(label));
+                    let field = ui.add_sized(vec2(90.0, 20.0), egui::Label::new(crate::i18n::t(label)));
                     let mut v = fill_rect[i] * 100.0;
                     let r = ui.add(egui::DragValue::new(&mut v).suffix("%").max_decimals(0)).labelled_by(field.id);
                     if r.drag_stopped() || r.lost_focus() || (r.changed() && !r.dragged()) {
@@ -688,6 +689,10 @@ fn picture_fill_options(app: &mut SlideApp, ui: &mut Ui, id: u32, pf: &lamina_mo
 
 /// "perspectiveHeroicLeftFacing" → "Perspective heroic left facing".
 fn preset_label(name: &str) -> String {
+    // The material "clear" must not read as the "Clear" button.
+    if name == "clear" {
+        return crate::i18n::t("Clear material").to_string();
+    }
     let mut out = String::new();
     for (i, c) in name.chars().enumerate() {
         if i == 0 {
@@ -699,14 +704,14 @@ fn preset_label(name: &str) -> String {
             out.push(c);
         }
     }
-    out
+    crate::i18n::t(&out).to_string()
 }
 
 /// A drop-down of `options`; picking one runs `shape.effects` with `{threeD: {key: option}}`.
 fn three_d_combo(app: &mut SlideApp, ui: &mut Ui, id: u32, label: &str, key: &str, cur: &str, options: &[&str]) {
     let label = crate::i18n::t(label);
     ui.horizontal(|ui| {
-        let field = ui.add_sized(vec2(90.0, 20.0), egui::Label::new(label));
+        let field = ui.add_sized(vec2(90.0, 20.0), egui::Label::new(crate::i18n::t(label)));
         let combo = nodalia_ui::ComboBox::from_id_salt(("3d", id, key)).selected_text(preset_label(cur)).width(170.0).show_ui(ui, |ui| {
             for o in options {
                 if ui.selectable_label(*o == cur, preset_label(o)).clicked() {
@@ -722,7 +727,7 @@ fn three_d_combo(app: &mut SlideApp, ui: &mut Ui, id: u32, label: &str, key: &st
 fn three_d_drag(app: &mut SlideApp, ui: &mut Ui, label: &str, value: f64, suffix: &str, key: &str) {
     let label = crate::i18n::t(label);
     ui.horizontal(|ui| {
-        let field = ui.add_sized(vec2(90.0, 20.0), egui::Label::new(label));
+        let field = ui.add_sized(vec2(90.0, 20.0), egui::Label::new(crate::i18n::t(label)));
         let mut v = value;
         let r = ui.add(egui::DragValue::new(&mut v).suffix(suffix).max_decimals(1)).labelled_by(field.id);
         if r.drag_stopped() || r.lost_focus() || (r.changed() && !r.dragged()) {
