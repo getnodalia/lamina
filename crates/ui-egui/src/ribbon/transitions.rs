@@ -81,7 +81,7 @@ pub(super) fn transitions(app: &mut SlideApp, ui: &mut Ui) {
                     .as_ref()
                     .and_then(|t| t.sound)
                     .and_then(|m| app.session.active().and_then(|d| d.doc.media(m).map(|i| i.name.trim_end_matches(".wav").to_string())))
-                    .unwrap_or_else(|| if stop { "[Stop Previous Sound]".into() } else { "[No Sound]".into() });
+                    .unwrap_or_else(|| if stop { crate::i18n::t("[Stop Previous Sound]").into() } else { crate::i18n::t("[No Sound]").into() });
                 let combo = nodalia_ui::ComboBox::from_id_salt("transition_sound").width(140.0).selected_text(name).show_ui(ui, |ui| {
                     let none = cur.as_ref().is_none_or(|t| t.sound.is_none() && !t.stop_sound);
                     if ui.selectable_label(none, crate::i18n::t("[No Sound]")).clicked() {
@@ -92,7 +92,7 @@ pub(super) fn transitions(app: &mut SlideApp, ui: &mut Ui) {
                     }
                     ui.separator();
                     for (id, label) in lamina_engine::sounds::BUILTIN {
-                        if ui.button(label).clicked() {
+                        if ui.button(crate::i18n::t(label)).clicked() {
                             let lp = cur.as_ref().is_some_and(|t| t.sound_loop);
                             run(app, "transition.sound", json!({"builtin": id, "loop": lp}));
                         }

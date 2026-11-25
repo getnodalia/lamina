@@ -61,7 +61,7 @@ pub(super) fn table_design(app: &mut SlideApp, ui: &mut Ui) {
                     paint_table_style(p, r, id, &sc);
                 }
             },
-            |i| quick.get(i).map(|x| x.1.clone()).unwrap_or_default(),
+            |i| quick.get(i).map(|x| table_style_label(&x.1)).unwrap_or_default(),
         ) && let Some((id, _)) = quick.get(i)
         {
             run(app, "table.style", json!({"style": id}));
@@ -72,7 +72,7 @@ pub(super) fn table_design(app: &mut SlideApp, ui: &mut Ui) {
                 for (id, label) in &styles {
                     let (r, resp) = ui.allocate_exact_size(vec2(48.0, 36.0), Sense::click());
                     paint_table_style(ui.painter(), r.shrink(2.0), id, &sc);
-                    if resp.on_hover_text(label).clicked() {
+                    if resp.on_hover_text(table_style_label(label)).clicked() {
                         run(app, "table.style", json!({"style": id}));
                         ui.close();
                     }
@@ -129,7 +129,7 @@ pub(super) fn table_design(app: &mut SlideApp, ui: &mut Ui) {
             ui.menu_button(crate::i18n::t("Pen Style"), |ui| {
                 for (l, d) in [("Solid", "solid"), ("Dash", "dash"), ("Dot", "sysDot"), ("Dash Dot", "dashDot"), ("Long Dash", "lgDash")] {
                     let cur = app.table_pen.get("dash").and_then(Value::as_str).unwrap_or("solid") == d;
-                    if ui.radio(cur, l).clicked() {
+                    if ui.radio(cur, crate::i18n::t(l)).clicked() {
                         app.table_pen["dash"] = json!(d);
                     }
                 }
@@ -230,7 +230,7 @@ pub(super) fn table_layout(app: &mut SlideApp, ui: &mut Ui) {
                 }
                 ui.menu_button(crate::i18n::t("Cell Margins"), |ui| {
                     for (l, preset) in [("Normal", "normal"), ("None", "none"), ("Narrow", "narrow"), ("Wide", "wide")] {
-                        if ui.button(l).clicked() {
+                        if ui.button(crate::i18n::t(l)).clicked() {
                             run(app, "table.cellMargins", json!({"preset": preset}));
                             ui.close();
                         }
@@ -240,4 +240,13 @@ pub(super) fn table_layout(app: &mut SlideApp, ui: &mut Ui) {
         });
     });
     arrange_group(app, ui);
+}
+
+/// A built-in table style's name in the interface language: "Medium Style 2 - Accent 3" is the
+/// translated style followed by the translated accent.
+fn table_style_label(label: &str) -> String {
+    match label.split_once(" - Accent ") {
+        Some((style, n)) => crate::i18n::tf("{style} - Accent {n}", &[("style", &crate::i18n::t(style)), ("n", &n)]),
+        None => crate::i18n::t(label).to_string(),
+    }
 }

@@ -32,7 +32,7 @@ pub(super) fn font_dialog(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) -> bo
             .show_ui(ui, |ui| {
                 egui::ScrollArea::vertical().max_height(280.0).show(ui, |ui| {
                     for f in &fams {
-                        if ui.selectable_label(family == *f, f).clicked() {
+                        if ui.selectable_label(family == *f, crate::i18n::t(f)).clicked() {
                             d.fields.insert("family".into(), f.clone());
                         }
                     }
@@ -87,7 +87,7 @@ pub(super) fn font_dialog(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) -> bo
             .width(120.0)
             .show_ui(ui, |ui| {
                 for (v, l) in [("-3", "Very tight"), ("-1.5", "Tight"), ("0", "Normal"), ("3", "Loose"), ("6", "Very loose")] {
-                    if ui.selectable_label(spacing == v, l).clicked() {
+                    if ui.selectable_label(spacing == v, crate::i18n::t(l)).clicked() {
                         picked = Some(v.to_string());
                     }
                 }
