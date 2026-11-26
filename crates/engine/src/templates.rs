@@ -762,6 +762,477 @@ const STARTERS: &[Starter] = &[
             ],
         },
     },
+    Starter {
+        id: "retrospective",
+        theme: "Slate",
+        en: Text {
+            name: "Retrospective",
+            summary: "A team look-back: what to keep, what to change, and one experiment to try next",
+            slides: &[
+                seed(
+                    "title",
+                    "Retrospective",
+                    &["What worked, what didn't, and what we try next"],
+                    "Say the rule out loud: we talk about the work, not about people.",
+                ),
+                seed("sectionHeader", "Looking back", &["Facts first, opinions second"], ""),
+                seed(
+                    "comparison",
+                    "Keep and change",
+                    &[
+                        "Keep",
+                        "The habit that made the work easier\nThe meeting that was worth everyone's time",
+                        "Change",
+                        "The step everyone quietly skips\nThe handoff that gets lost",
+                    ],
+                    "Let each person add one card before anyone discusses any.",
+                ),
+                seed(
+                    "titleAndContent",
+                    "One experiment",
+                    &["Pick one change, not five\n\tSay how we will know it worked\nGive it an owner and a date\n\tLook at it again next time"],
+                    "",
+                ),
+                seed("title", "Thank you", &["Small changes that stick beat big ones we forget"], ""),
+            ],
+        },
+        es: Text {
+            name: "Retrospectiva",
+            summary: "Una mirada atrás del equipo: qué conservar, qué cambiar y un experimento para probar",
+            slides: &[
+                seed(
+                    "title",
+                    "Retrospectiva",
+                    &["Qué funcionó, qué no y qué probamos ahora"],
+                    "Di la regla en voz alta: hablamos del trabajo, no de las personas.",
+                ),
+                seed("sectionHeader", "Mirando atrás", &["Primero los hechos, después las opiniones"], ""),
+                seed(
+                    "comparison",
+                    "Conservar y cambiar",
+                    &[
+                        "Conservar",
+                        "El hábito que hizo el trabajo más fácil\nLa reunión que mereció el tiempo de todos",
+                        "Cambiar",
+                        "El paso que todos se saltan sin decirlo\nEl traspaso que se pierde",
+                    ],
+                    "Deja que cada persona añada una nota antes de comentar ninguna.",
+                ),
+                seed(
+                    "titleAndContent",
+                    "Un experimento",
+                    &["Elige un cambio, no cinco\n\tDi cómo sabremos que funcionó\nDale responsable y fecha\n\tVolvemos a mirarlo la próxima vez"],
+                    "",
+                ),
+                seed("title", "Gracias", &["Los cambios pequeños que se quedan valen más que los grandes que olvidamos"], ""),
+            ],
+        },
+    },
+    Starter {
+        id: "year in review",
+        theme: "Harbor",
+        en: Text {
+            name: "Year in Review",
+            summary: "A calm look back at the year: highlights, three numbers, and what comes next",
+            slides: &[
+                seed(
+                    "title",
+                    "The year in review",
+                    &["Where we started, what we learned, where we go next"],
+                    "Start with one sentence about how the year felt.",
+                ),
+                seed(
+                    "titleAndContent",
+                    "Highlights",
+                    &[
+                        "What we are proudest of\n\tWhy it mattered to the people it was for\nWhat surprised us\n\tAnd what we did about it\nWhat we would redo\n\tAnd what we would change",
+                    ],
+                    "",
+                ),
+                seed("sectionHeader", "By the numbers", &["Three numbers are enough"], "Name each number, say what it measures, and move on."),
+                seed(
+                    "twoContent",
+                    "What went well, what was hard",
+                    &[
+                        "Went well\n\tThe work that found its people\n\tThe habits that held",
+                        "Was hard\n\tThe weeks that ran long\n\tThe things we learned late",
+                    ],
+                    "",
+                ),
+                seed(
+                    "titleAndContent",
+                    "Next year",
+                    &["One thing to start\nOne thing to stop\nOne thing to keep doing, exactly as we do it now"],
+                    "",
+                ),
+                seed("title", "Thank you", &["For the year, and for the next one"], ""),
+            ],
+        },
+        es: Text {
+            name: "Balance del año",
+            summary: "Una mirada tranquila al año: lo más destacado, tres números y lo que viene",
+            slides: &[
+                seed(
+                    "title",
+                    "El año en revisión",
+                    &["De dónde partimos, qué aprendimos y adónde vamos"],
+                    "Empieza con una frase sobre cómo se sintió el año.",
+                ),
+                seed(
+                    "titleAndContent",
+                    "Lo más destacado",
+                    &[
+                        "De lo que más orgullo sentimos\n\tPor qué importó a quienes iba dirigido\nLo que nos sorprendió\n\tY lo que hicimos al respecto\nLo que repetiríamos\n\tY lo que cambiaríamos",
+                    ],
+                    "",
+                ),
+                seed("sectionHeader", "En números", &["Con tres números basta"], "Nombra cada número, di qué mide y sigue."),
+                seed(
+                    "twoContent",
+                    "Lo que fue bien, lo que costó",
+                    &[
+                        "Fue bien\n\tEl trabajo que encontró a su gente\n\tLos hábitos que se mantuvieron",
+                        "Costó\n\tLas semanas que se alargaron\n\tLo que aprendimos tarde",
+                    ],
+                    "",
+                ),
+                seed(
+                    "titleAndContent",
+                    "El año que viene",
+                    &["Una cosa que empezar\nUna cosa que dejar\nUna cosa que seguir haciendo exactamente igual"],
+                    "",
+                ),
+                seed("title", "Gracias", &["Por este año y por el siguiente"], ""),
+            ],
+        },
+    },
+    Starter {
+        id: "decision brief",
+        theme: "Paper",
+        en: Text {
+            name: "Decision Brief",
+            summary: "The choice, two options side by side, and a recommendation people can say yes or no to",
+            slides: &[
+                seed(
+                    "title",
+                    "Decision brief",
+                    &["The choice, the options and what we recommend"],
+                    "State the decision in one sentence before anything else.",
+                ),
+                seed(
+                    "titleAndContent",
+                    "The decision",
+                    &["What we are deciding\n\tIn one sentence\nWhy now\n\tAnd what changes if we wait\nWho decides\n\tAnd by when"],
+                    "",
+                ),
+                seed(
+                    "comparison",
+                    "Two options",
+                    &[
+                        "Option A",
+                        "What it costs\nWhat it gives us\nWhat could go wrong",
+                        "Option B",
+                        "What it costs\nWhat it gives us\nWhat could go wrong",
+                    ],
+                    "Keep both options the same length: the shape of the page should not argue for one.",
+                ),
+                seed(
+                    "titleAndContent",
+                    "Recommendation",
+                    &["We recommend one option, and why\n\tThe one reason that settles it\nWhat we do first\n\tAnd how we will know it was right"],
+                    "",
+                ),
+                seed("title", "Decide by Friday", &["A yes, a no, or the one question that is still open"], ""),
+            ],
+        },
+        es: Text {
+            name: "Nota de decisión",
+            summary: "La decisión, dos opciones lado a lado y una recomendación a la que se pueda decir sí o no",
+            slides: &[
+                seed(
+                    "title",
+                    "Nota de decisión",
+                    &["La decisión, las opciones y lo que recomendamos"],
+                    "Enuncia la decisión en una frase antes que nada.",
+                ),
+                seed(
+                    "titleAndContent",
+                    "La decisión",
+                    &["Qué estamos decidiendo\n\tEn una sola frase\nPor qué ahora\n\tY qué cambia si esperamos\nQuién decide\n\tY para cuándo"],
+                    "",
+                ),
+                seed(
+                    "comparison",
+                    "Dos opciones",
+                    &[
+                        "Opción A",
+                        "Lo que cuesta\nLo que nos da\nLo que podría salir mal",
+                        "Opción B",
+                        "Lo que cuesta\nLo que nos da\nLo que podría salir mal",
+                    ],
+                    "Mantén las dos opciones igual de largas: la forma de la página no debe inclinar la balanza.",
+                ),
+                seed(
+                    "titleAndContent",
+                    "Recomendación",
+                    &["Recomendamos una opción, y por qué\n\tLa razón que lo decide\nQué hacemos primero\n\tY cómo sabremos que acertamos"],
+                    "",
+                ),
+                seed("title", "Decidir el viernes", &["Un sí, un no, o la pregunta que sigue abierta"], ""),
+            ],
+        },
+    },
+    Starter {
+        id: "how-to guide",
+        theme: "Meadow",
+        en: Text {
+            name: "How-to Guide",
+            summary: "Four short steps, what you need beforehand, and what to do when it goes wrong",
+            slides: &[
+                seed("title", "How to set up your workspace", &["Four steps, about ten minutes"], ""),
+                seed(
+                    "titleAndContent",
+                    "Before you start",
+                    &["You will need\n\tAn account\n\tTen quiet minutes\nYou will end with\n\tA workspace you can share"],
+                    "",
+                ),
+                seed("sectionHeader", "The four steps", &["One thing at a time, in this order"], ""),
+                seed(
+                    "twoContent",
+                    "Steps one and two",
+                    &[
+                        "1. Create it\n\tGive it a name people will recognise\n\tPick where it lives",
+                        "2. Invite people\n\tStart with the two you work with most\n\tAdd the rest later",
+                    ],
+                    "",
+                ),
+                seed(
+                    "twoContent",
+                    "Steps three and four",
+                    &[
+                        "3. Set it up\n\tChoose what you see first\n\tTurn off what you don't need",
+                        "4. Try it\n\tDo one real task in it\n\tNote what felt slow",
+                    ],
+                    "",
+                ),
+                seed(
+                    "titleAndContent",
+                    "If something goes wrong",
+                    &[
+                        "It will not let you in\n\tCheck the address, then ask for a new link\nA person is missing\n\tSend the invitation again\nSomething looks wrong\n\tUndo once and look again",
+                    ],
+                    "",
+                ),
+                seed("title", "You are done", &["Ask early. Everyone gets stuck on step three."], ""),
+            ],
+        },
+        es: Text {
+            name: "Guía paso a paso",
+            summary: "Cuatro pasos breves, lo que necesitas antes y qué hacer cuando algo sale mal",
+            slides: &[
+                seed("title", "Cómo preparar tu espacio de trabajo", &["Cuatro pasos, unos diez minutos"], ""),
+                seed(
+                    "titleAndContent",
+                    "Antes de empezar",
+                    &["Vas a necesitar\n\tUna cuenta\n\tDiez minutos de calma\nAl final tendrás\n\tUn espacio de trabajo que puedes compartir"],
+                    "",
+                ),
+                seed("sectionHeader", "Los cuatro pasos", &["Una cosa cada vez, en este orden"], ""),
+                seed(
+                    "twoContent",
+                    "Pasos uno y dos",
+                    &[
+                        "1. Créalo\n\tPonle un nombre que la gente reconozca\n\tElige dónde vive",
+                        "2. Invita a gente\n\tEmpieza por las dos personas con las que más trabajas\n\tAñade al resto después",
+                    ],
+                    "",
+                ),
+                seed(
+                    "twoContent",
+                    "Pasos tres y cuatro",
+                    &[
+                        "3. Ajústalo\n\tElige qué ves primero\n\tApaga lo que no necesitas",
+                        "4. Pruébalo\n\tHaz en él una tarea de verdad\n\tAnota lo que se sintió lento",
+                    ],
+                    "",
+                ),
+                seed(
+                    "titleAndContent",
+                    "Si algo sale mal",
+                    &[
+                        "No te deja entrar\n\tComprueba la dirección y pide un enlace nuevo\nFalta una persona\n\tVuelve a enviar la invitación\nAlgo se ve raro\n\tDeshaz una vez y vuelve a mirar",
+                    ],
+                    "",
+                ),
+                seed("title", "Listo", &["Pregunta pronto. Todo el mundo se atasca en el paso tres."], ""),
+            ],
+        },
+    },
+    Starter {
+        id: "portfolio",
+        theme: "Slate",
+        en: Text {
+            name: "Portfolio",
+            summary: "A short introduction to you, two pieces of work, and how you like to work",
+            slides: &[
+                seed("title", "Hello, I'm Alex", &["Designer, maker, fond of quiet interfaces"], "Replace the name and one line with your own."),
+                seed(
+                    "titleAndContent",
+                    "About",
+                    &[
+                        "What I do\n\tI make things people use every day\nWhat I care about\n\tClear words and calm screens\nWhere I have worked\n\tA studio, a school and a small shop",
+                    ],
+                    "",
+                ),
+                seed("sectionHeader", "Selected work", &["Two pieces I would show first"], ""),
+                seed(
+                    "twoContent",
+                    "Two projects",
+                    &[
+                        "A booking tool\n\tThe problem it solved\n\tWhat I made\n\tWhat changed afterwards",
+                        "A neighbourhood guide\n\tThe problem it solved\n\tWhat I made\n\tWhat changed afterwards",
+                    ],
+                    "",
+                ),
+                seed(
+                    "titleAndContent",
+                    "How I work",
+                    &[
+                        "Listen first\n\tTalk to the people who will use it\nMake it small\n\tShow something real early\nFinish properly\n\tThe last ten percent is the work",
+                    ],
+                    "",
+                ),
+                seed("title", "Let's talk", &["hello@example.com"], ""),
+            ],
+        },
+        es: Text {
+            name: "Portafolio",
+            summary: "Una presentación breve de ti, dos trabajos y cómo te gusta trabajar",
+            slides: &[
+                seed(
+                    "title",
+                    "Hola, soy Alex",
+                    &["Diseñador, hacedor, amigo de las interfaces tranquilas"],
+                    "Cambia el nombre y la línea por los tuyos.",
+                ),
+                seed(
+                    "titleAndContent",
+                    "Sobre mí",
+                    &[
+                        "A qué me dedico\n\tHago cosas que la gente usa cada día\nQué me importa\n\tLas palabras claras y las pantallas serenas\nDónde he trabajado\n\tUn estudio, una escuela y una tienda pequeña",
+                    ],
+                    "",
+                ),
+                seed("sectionHeader", "Trabajos escogidos", &["Dos que enseñaría primero"], ""),
+                seed(
+                    "twoContent",
+                    "Dos proyectos",
+                    &[
+                        "Una herramienta de reservas\n\tEl problema que resolvía\n\tLo que hice\n\tQué cambió después",
+                        "Una guía del barrio\n\tEl problema que resolvía\n\tLo que hice\n\tQué cambió después",
+                    ],
+                    "",
+                ),
+                seed(
+                    "titleAndContent",
+                    "Cómo trabajo",
+                    &[
+                        "Escuchar primero\n\tHablar con quienes lo van a usar\nHacerlo pequeño\n\tEnseñar algo real pronto\nTerminarlo bien\n\tEl último diez por ciento es el trabajo",
+                    ],
+                    "",
+                ),
+                seed("title", "Hablemos", &["hola@ejemplo.com"], ""),
+            ],
+        },
+    },
+    Starter {
+        id: "launch plan",
+        theme: "Coral Reef",
+        en: Text {
+            name: "Launch Plan",
+            summary: "Who does what and when for a calm release, and the answers to what could go wrong",
+            slides: &[
+                seed(
+                    "title",
+                    "Launch plan",
+                    &["Who does what, and when, for a calm release"],
+                    "Share the date first. Everything else hangs from it.",
+                ),
+                seed(
+                    "titleAndContent",
+                    "The goal",
+                    &[
+                        "What launching means\n\tIn one sentence\nWho it is for\n\tAnd what they can do on day one\nHow we will know it went well\n\tOne number, one week after",
+                    ],
+                    "",
+                ),
+                seed("sectionHeader", "The timeline", &["Work backwards from the day"], ""),
+                seed(
+                    "twoContent",
+                    "Before and after launch",
+                    &[
+                        "Before\n\tFreeze what ships\n\tTell the people who will answer questions\n\tRehearse once",
+                        "After\n\tWatch the first day closely\n\tAnswer every question within a day\n\tWrite down what we would change",
+                    ],
+                    "",
+                ),
+                seed(
+                    "comparison",
+                    "Risks and answers",
+                    &[
+                        "If this happens",
+                        "People can't find it\nIt is slower than we said",
+                        "We do this",
+                        "Point them to one clear page\nSay so, and give the real number",
+                    ],
+                    "",
+                ),
+                seed("title", "Ready", &["One date, one owner for each step"], ""),
+            ],
+        },
+        es: Text {
+            name: "Plan de lanzamiento",
+            summary: "Quién hace qué y cuándo para un lanzamiento sereno, y qué hacer si algo sale mal",
+            slides: &[
+                seed(
+                    "title",
+                    "Plan de lanzamiento",
+                    &["Quién hace qué, y cuándo, para un lanzamiento sereno"],
+                    "Comparte primero la fecha. Todo lo demás cuelga de ella.",
+                ),
+                seed(
+                    "titleAndContent",
+                    "El objetivo",
+                    &[
+                        "Qué significa lanzar\n\tEn una sola frase\nPara quién es\n\tY qué podrá hacer el primer día\nCómo sabremos que fue bien\n\tUn número, una semana después",
+                    ],
+                    "",
+                ),
+                seed("sectionHeader", "El calendario", &["Trabaja hacia atrás desde el día"], ""),
+                seed(
+                    "twoContent",
+                    "Antes y después del lanzamiento",
+                    &[
+                        "Antes\n\tCongelar lo que se entrega\n\tAvisar a quienes responderán dudas\n\tEnsayar una vez",
+                        "Después\n\tVigilar de cerca el primer día\n\tResponder cada duda en un día\n\tAnotar lo que cambiaríamos",
+                    ],
+                    "",
+                ),
+                seed(
+                    "comparison",
+                    "Riesgos y respuestas",
+                    &[
+                        "Si ocurre esto",
+                        "La gente no lo encuentra\nVa más lento de lo que dijimos",
+                        "Hacemos esto",
+                        "Llevarles a una página clara\nDecirlo y dar la cifra real",
+                    ],
+                    "",
+                ),
+                seed("title", "Listos", &["Una fecha, un responsable para cada paso"], ""),
+            ],
+        },
+    },
 ];
 
 /// The starter gallery, in the order File › New shows it.

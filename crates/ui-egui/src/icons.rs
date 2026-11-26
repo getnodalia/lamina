@@ -267,6 +267,7 @@ icons! {
     ChartStyles => "chart-styles",
     SwitchRowCol => "switch-row-col",
     EditData => "edit-data",
+    UpdateSource => "update-source",
     ChangeChartType => "change-chart-type",
     // Media
     Play => "play",
@@ -369,6 +370,7 @@ impl Icon {
         let name = self.name();
         match name {
             "account" => "user",
+            "update-source" => "refresh",
             "align-obj-bottom" => "align-objects-bottom",
             "align-obj-center" => "align-objects-center",
             "align-obj-left" => "align-objects-left",

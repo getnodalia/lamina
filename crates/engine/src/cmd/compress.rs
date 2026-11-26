@@ -174,6 +174,10 @@ fn compress(s: &mut Session, p: &Value) -> Result<Value> {
             let mut touched = false;
             for (sh, w, h) in pics {
                 let ShapeKind::Picture { fill } = &mut sh.kind else { continue };
+                // A picture drawn from its SVG has nothing to compress: the vector is already small.
+                if fill.svg.is_some() {
+                    continue;
+                }
                 let PictureFill { media, crop, .. } = fill.clone();
                 let key = (media.0, crop.map(f64::to_bits), w.to_bits(), h.to_bits());
                 let hit = match cache.get(&key) {

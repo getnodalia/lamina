@@ -118,7 +118,7 @@ fn duotone_rgb(a: &PictureAdjust) -> Option<(lamina_color::Rgba, lamina_color::R
     Some((rgb(d, lamina_color::Rgba::BLACK), rgb(l, lamina_color::Rgba::WHITE)))
 }
 
-/// Decode encoded bytes (PNG, JPEG, GIF, WebP, BMP, TIFF; WMF and EMF drawn at
+/// Decode encoded bytes (PNG, JPEG, GIF, WebP, BMP, TIFF; SVG, WMF and EMF drawn at
 /// [`crate::metafile::DEFAULT_SIDE`]) to straight RGBA.
 pub fn decode(bytes: &[u8]) -> Option<image::RgbaImage> {
     decode_at(bytes, crate::metafile::DEFAULT_SIDE)
@@ -131,6 +131,9 @@ fn decode_at(bytes: &[u8], side: u32) -> Option<image::RgbaImage> {
     }
     if crate::metafile::is_metafile(bytes) {
         return crate::metafile::rasterize(bytes, side);
+    }
+    if crate::svgpic::is_svg(bytes) {
+        return crate::svgpic::rasterize(bytes, side);
     }
     decode_raster(bytes, MAX_RGBA)
 }
@@ -180,10 +183,14 @@ fn decode_raster(bytes: &[u8], max: u64) -> Option<image::RgbaImage> {
 
 /// A raster picture's own size in 96-dpi pixels (so 0.75 pt each), read from its header: its
 /// pixel size, scaled by the resolution it records (PNG `pHYs`, JPEG JFIF density) when that
-/// isn't 96 dpi, as PowerPoint sizes pictures. `None` for metafiles and anything unreadable.
+/// isn't 96 dpi, as PowerPoint sizes pictures; an SVG's own width and height. `None` for metafiles
+/// and anything unreadable.
 pub fn natural_size(bytes: &[u8]) -> Option<(f64, f64)> {
     if crate::metafile::is_metafile(bytes) {
         return None;
+    }
+    if crate::svgpic::is_svg(bytes) {
+        return crate::svgpic::natural_size(bytes);
     }
     let (w, h) = image::ImageReader::new(std::io::Cursor::new(bytes)).with_guessed_format().ok()?.into_dimensions().ok()?;
     if w == 0 || h == 0 {
@@ -317,6 +324,12 @@ fn png_crc(data: &[u8]) -> u32 {
         }
     }
     !c
+}
+
+/// Whether `bytes` decode at all, remembered like any other decode so a vector that can't be drawn
+/// is tried once and not on every frame.
+pub fn decodes(bytes: &Arc<Vec<u8>>) -> bool {
+    decode_for(bytes, 16.0, &PictureAdjust::default()).is_some()
 }
 
 /// A premultiplied pixmap of the picture, downsampled so its longer side is near `want` px.

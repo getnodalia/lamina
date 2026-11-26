@@ -1,5 +1,6 @@
 use super::about::about;
 use super::alt_text::alt_text_starts_decorative;
+use super::chart_from_sheet::chart_from_sheet_dialog;
 use super::columns::columns_dialog;
 use super::date_time::{date_rows, date_time_dialog, default_date_language};
 use super::equation::pretty_equation;
@@ -54,6 +55,7 @@ pub(super) fn body(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) -> bool {
         "language" => dlg_language(app, ui, d),
         "customShow" => dlg_custom_show(app, ui, d),
         "chartData" => dlg_chart_data(app, ui, d),
+        "chartFromSheet" => chart_from_sheet_dialog(app, ui, d),
         "trim" => dlg_trim(app, ui, d),
         "smartart" => dlg_smartart(app, ui, d),
         "about" => dlg_about(app, ui, d),

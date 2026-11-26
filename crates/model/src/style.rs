@@ -167,6 +167,10 @@ impl Default for PictureMode {
 #[serde(default, rename_all = "camelCase")]
 pub struct PictureFill {
     pub media: MediaId,
+    /// The vector SVG a PowerPoint icon or graphic was made from (`asvg:svgBlip`). `media` stays
+    /// the bitmap fallback; the picture is drawn from this when it can be.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub svg: Option<MediaId>,
     /// Source crop as fractions of the image (left, top, right, bottom); negative values pad.
     pub crop: [f64; 4],
     pub mode: PictureMode,

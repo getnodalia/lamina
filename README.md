@@ -42,8 +42,10 @@ and shares its start screen, Preferences and look with Letra and Celdas, the oth
   </tr>
 </table>
 
-- **Full presentations:** slides and sections, masters, shapes, text, tables, charts, pictures, audio and video, transitions and animations.
-- **`.pptx` first:** opens and saves PowerPoint files by default, and exports to PDF, images and the web.
+- **Full presentations:** slides and sections, masters, shapes, text, tables, charts, pictures (SVG included), audio and video, transitions and animations.
+- **Charts from your sheets:** build a chart from an `.xlsx`, `.csv` or `.tsv` range and update it when the file changes.
+- **Eighteen starter decks:** calm, original presentations in English and Spanish, ready to edit.
+- **`.pptx` first:** opens and saves PowerPoint files by default, and exports to PDF, images and the web, and prints handouts and notes.
 - **Present:** Presenter View with notes, a timer and the next slide; rehearsed timings and custom shows.
 - **Nodalia Design:** rounded islands, bold icons, light and dark themes, and Nodalia's own window controls on Linux.
 - **Agent control:** every action is a command, reachable from the command line, the control channel and MCP.

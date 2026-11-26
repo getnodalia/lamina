@@ -61,6 +61,11 @@ pub fn run(root: &Path) -> Result<(), String> {
     Ok(())
 }
 
+/// `hayro-*` crates that decode pictures, not PDF files. The exporter reaches `hayro-jpeg2000`
+/// through the SVG renderer (`nodalia-svg` → `nodalia-image-codecs`), which bounds the pictures an
+/// SVG embeds. Every PDF reader or interpreter crate stays refused.
+const IMAGE_DECODERS: [&str; 1] = ["hayro-jpeg2000"];
+
 fn validate(metadata: &Value) -> Result<(), String> {
     let packages = metadata.get("packages").and_then(Value::as_array).ok_or("cargo metadata has no packages")?;
     let nodes = metadata.get("resolve").and_then(|r| r.get("nodes")).and_then(Value::as_array).ok_or("cargo metadata has no resolved nodes")?;
@@ -102,7 +107,7 @@ fn validate(metadata: &Value) -> Result<(), String> {
         }
         let package = by_id.get(id).ok_or_else(|| format!("unresolved package {id}"))?;
         let name = package.get("name").and_then(Value::as_str).ok_or("resolved package has no name")?;
-        if name == "hayro" || name.starts_with("hayro-") {
+        if (name == "hayro" || name.starts_with("hayro-")) && !IMAGE_DECODERS.contains(&name) {
             return Err(format!("unexpected production reader dependency {name}"));
         }
         let node = nodes.iter().find(|n| n.get("id").and_then(Value::as_str) == Some(id)).ok_or_else(|| format!("no resolved node for {id}"))?;
@@ -212,6 +217,21 @@ mod tests {
         let mut m = metadata();
         m["resolve"]["nodes"][2]["deps"] = json!([{"pkg":"parser", "dep_kinds":[{"kind":null}]}]);
         assert!(validate(&m).is_err());
+    }
+
+    #[test]
+    fn allows_the_image_decoder_the_svg_renderer_brings_but_not_a_pdf_reader() {
+        let mut m = metadata();
+        m["packages"].as_array_mut().unwrap().push(json!({"id":"jp2", "name":"hayro-jpeg2000", "version":"0.3.5", "source":REGISTRY}));
+        m["resolve"]["nodes"].as_array_mut().unwrap().push(json!({"id":"jp2", "features":[], "deps":[]}));
+        m["resolve"]["nodes"][2]["deps"] = json!([{"pkg":"jp2", "dep_kinds":[{"kind":null}]}]);
+        assert!(validate(&m).is_ok(), "a picture decoder reached through the SVG renderer is fine");
+        let last = m["packages"].as_array().map_or(0, |p| p.len() - 1);
+        for reader in ["hayro", "hayro-syntax", "hayro-interpret"] {
+            let mut m = m.clone();
+            m["packages"][last]["name"] = json!(reader);
+            assert!(validate(&m).is_err(), "{reader} is a PDF reader and stays refused");
+        }
     }
 
     #[test]

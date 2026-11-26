@@ -12,6 +12,7 @@ workspace = true
 lamina-geom = { workspace = true }
 lamina-color = { workspace = true }
 nodalia-metafile = { workspace = true }
+nodalia-svg = { workspace = true }
 lamina-model = { workspace = true }
 lamina-anim = { workspace = true }
 lamina-fonts = { workspace = true }
