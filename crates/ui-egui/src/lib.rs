@@ -61,7 +61,6 @@ use app::{OBJECTS_MARKER, system_clipboard_text, web_image_files};
 use canvas::preview;
 pub use canvas::squiggles;
 pub use clock::{monotonic_secs, now_ms};
-pub use dialogs::credits;
 #[cfg(not(target_arch = "wasm32"))]
 use dialogs::updates_ui;
 pub use ime_hooks::install_ime_pass_hooks;

@@ -318,7 +318,6 @@ fn inches_text(v: Option<&Value>) -> String {
     crate::widgets::fmt_num(v.and_then(Value::as_f64).filter(|n| n.is_finite()).unwrap_or(0.0) / 72.0, "")
 }
 
-pub mod credits;
 #[cfg(test)]
 mod font_dialog_tests;
 #[cfg(not(target_arch = "wasm32"))]
