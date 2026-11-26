@@ -32,6 +32,7 @@ Coordinates are slide points (1/72 inch; a 16:9 slide is 960 × 540) unless note
 | `engine.execute` / `ui.menu.invoke` / `command` | `{command, params}` | Run any command (see `engine.commands`; `lamina-cli describe COMMAND` documents one) |
 | `engine.commands` | — | Every command: id, label, menu path, shortcut, params doc, enabled / disabled reason |
 | `document.inspect` | — | Slides, sections, layouts, shapes, selection |
+| `ui.assistant` | `open?` | Opens, closes or (without `open`) switches the AI assistant chat; answers `{open}` |
 | `ui.inspect` | — | UI state, active tool, window/canvas/slide rects, dialog, `home` (the File tab over an open presentation), `backstage` (the current File page, including the start screen), slide show state (`grid`, `zoomArm`, `zoom`, `blank`, `presenterPaused`, `presenterSecs`, `notesPx`, `custom`, `goto`; `cells` when See All Slides is open), `animPreview` (canvas playback: slide, time, duration), documents, perf (fps, render ms) |
 | `ui.tool.select` | `{tool, preset?}` | `select`, `text`, `shape` + preset, any preset name, `curve`, `freeform`, `scribble`, `pen`, `highlighter`, `eraser` |
 | `ui.pointer` | `{events: [{kind: down\|drag\|up\|move\|doubleclick\|tripleclick\|contextclick, x, y, mods?, pressure?}], mods?}` | Send slide-point pointer events through the active tool's mouse path. `contextclick` performs the right-click selection used by context menus; `pressure` is `0..=1` for a pen and can be omitted for a mouse |

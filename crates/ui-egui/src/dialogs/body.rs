@@ -1461,6 +1461,11 @@ pub(crate) fn preference_controls(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialo
         // unnamed input in egui 0.37's accessibility tree.
         let _ = ui.add(egui::TextEdit::singleline(&mut app.session.prefs.author)).labelled_by(label.id);
     });
+    #[cfg(not(target_arch = "wasm32"))]
+    {
+        ui.add_space(18.0);
+        crate::assistant::preferences(app, ui);
+    }
     true
 }
 

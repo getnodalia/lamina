@@ -90,6 +90,8 @@ impl SlideApp {
             print_previews: files::PrintPreviews::default(),
             #[cfg(not(target_arch = "wasm32"))]
             updates_rt: updates_ui::Runtime::default(),
+            #[cfg(not(target_arch = "wasm32"))]
+            assistant: None,
             pending_copy: None,
             capture: capture::Capture::default(),
             styled: false,
@@ -316,6 +318,8 @@ impl SlideApp {
             self.ui_end(&ctx);
             return;
         }
+        #[cfg(not(target_arch = "wasm32"))]
+        self.poll_assistant(&ctx);
         self.sync_backstage();
         self.keyboard(&ctx);
         self.sync_backstage();
@@ -347,6 +351,9 @@ impl SlideApp {
             if self.session.active().is_none() {
                 return;
             }
+            // The assistant's chat keeps the right edge, so the task pane sits beside it.
+            #[cfg(not(target_arch = "wasm32"))]
+            crate::assistant::panel(self, ui);
             match self.ui.view {
                 ViewMode::Sorter => sorter::show(self, ui),
                 ViewMode::NotesPage => sorter::notes_page(self, ui),
