@@ -32,7 +32,7 @@ fn theme_font_choices(app: &SlideApp, selected: &str) -> Vec<String> {
 fn font_combo(ui: &mut Ui, label: &str, choices: &[String], selected: &mut String) {
     let resp = nodalia_ui::ComboBox::from_id_salt(label).selected_text(selected.as_str()).width(240.0).show_ui(ui, |ui| {
         for face in choices {
-            if ui.selectable_label(selected == face, face).clicked() {
+            if ui.selectable_label(selected == face, crate::i18n::t(face)).clicked() {
                 *selected = face.clone();
             }
         }

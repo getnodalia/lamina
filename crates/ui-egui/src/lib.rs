@@ -485,6 +485,8 @@ mod split_button_tests;
 #[cfg(test)]
 mod texture_limit_tests;
 #[cfg(test)]
+mod translated_interface_tests;
+#[cfg(test)]
 mod ui_soak_tests;
 #[cfg(test)]
 mod units_tests;

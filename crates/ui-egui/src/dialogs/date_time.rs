@@ -56,7 +56,7 @@ pub(super) fn date_time_dialog(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) 
     let format = d.get("format", "datetime1");
     egui::ScrollArea::vertical().max_height(280.0).min_scrolled_height(220.0).auto_shrink([false, false]).show(ui, |ui| {
         for (kind, sample) in &rows {
-            if ui.selectable_label(format == *kind, sample).clicked() {
+            if ui.selectable_label(format == *kind, crate::i18n::t(sample)).clicked() {
                 d.fields.insert("format".into(), (*kind).to_string());
             }
         }

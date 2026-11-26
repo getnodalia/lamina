@@ -99,7 +99,7 @@ fn the_dialog_starts_in_spanish_in_a_spanish_interface() {
     let sample = lamina_text::datetime::field_text("datetime2", Some("es-ES"), now).unwrap();
     h.get_by_label(&sample).click();
     h.run_steps(1);
-    h.get_by_label("OK").click();
+    h.get_by_label("Aceptar").click();
     h.run_steps(2);
     let run = date_run(&h).unwrap();
     assert_eq!(run.props.lang.as_deref(), Some("es-ES"));

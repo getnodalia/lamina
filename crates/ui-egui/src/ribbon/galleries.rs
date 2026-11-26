@@ -250,7 +250,7 @@ pub fn outline_menu(app: &mut SlideApp, ui: &mut Ui, sc: &lamina_color::ColorSch
             ("Long Dash", "lgDash"),
             ("Long Dash Dot", "lgDashDot"),
         ] {
-            if ui.button(l).clicked() {
+            if ui.button(crate::i18n::t(l)).clicked() {
                 run(app, "shape.line", json!({"dash": d}));
                 ui.close();
             }
@@ -265,7 +265,7 @@ pub fn outline_menu(app: &mut SlideApp, ui: &mut Ui, sc: &lamina_color::ColorSch
             ("Stealth end", "none", "stealth"),
             ("Oval ends", "oval", "oval"),
         ] {
-            if ui.button(l).clicked() {
+            if ui.button(crate::i18n::t(l)).clicked() {
                 run(app, "shape.line", json!({"head": h, "tail": tl}));
                 ui.close();
             }
@@ -283,14 +283,14 @@ pub fn effects_menu(app: &mut SlideApp, ui: &mut Ui) {
             ("Inner", "inner"),
             ("Perspective", "perspective"),
         ] {
-            if ui.button(l).clicked() {
+            if ui.button(crate::i18n::t(l)).clicked() {
                 run(app, "shape.effects", json!({"shadow": v}));
             }
         }
     });
     ui.menu_button(crate::i18n::t("Reflection"), |ui| {
         for (l, v) in [("No Reflection", "none"), ("Tight", "tight"), ("Half", "half"), ("Full", "full")] {
-            if ui.button(l).clicked() {
+            if ui.button(crate::i18n::t(l)).clicked() {
                 run(app, "shape.effects", json!({"reflection": v}));
             }
         }
@@ -300,14 +300,14 @@ pub fn effects_menu(app: &mut SlideApp, ui: &mut Ui) {
             run(app, "shape.effects", json!({"glow": null}));
         }
         for r in [5.0, 8.0, 11.0, 18.0] {
-            if ui.button(format!("{r} pt glow")).clicked() {
+            if ui.button(crate::i18n::tf("{r} pt glow", &[("r", &r)])).clicked() {
                 run(app, "shape.effects", json!({"glow": r}));
             }
         }
     });
     ui.menu_button(crate::i18n::t("Soft Edges"), |ui| {
         for r in [0.0, 1.0, 2.5, 5.0, 10.0, 25.0] {
-            if ui.button(if r == 0.0 { "No Soft Edges".to_string() } else { format!("{r} pt") }).clicked() {
+            if ui.button(if r == 0.0 { crate::i18n::t("No Soft Edges").to_string() } else { format!("{r} pt") }).clicked() {
                 run(app, "shape.effects", json!({"softEdges": r}));
             }
         }
@@ -328,7 +328,7 @@ pub fn effects_menu(app: &mut SlideApp, ui: &mut Ui) {
             "hardEdge",
             "artDeco",
         ] {
-            if ui.button(b).clicked() {
+            if ui.button(crate::i18n::t(b)).clicked() {
                 run(app, "shape.effects", json!({"bevel": b}));
             }
         }
