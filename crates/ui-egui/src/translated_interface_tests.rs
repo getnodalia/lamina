@@ -174,6 +174,8 @@ fn spanish_interface_has_no_untranslated_label() {
 /// machine rather than to the interface (a new deck's names, the example slide, font names).
 const SAME_IN_SPANISH: &[&str] = &[
     "Audio",
+    "Claude",
+    "claude-sonnet-5-5",
     "Color",
     "Color:",
     "Content Placeholder 2",

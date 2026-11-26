@@ -71,10 +71,10 @@ nodalia-video = { git = "https://github.com/getnodalia/foundation", rev = "46d6d
 nodalia-metafile = { git = "https://github.com/getnodalia/foundation", rev = "46d6d9970a609c064cb7f632477d4cf68c7e4eb0", version = "=0.1.0" }
 nodalia-pdf = { git = "https://github.com/getnodalia/foundation", rev = "46d6d9970a609c064cb7f632477d4cf68c7e4eb0", version = "=0.1.0", default-features = false, features = ["write", "write-simple-text"] }
 # In-app updates from this app's GitHub releases, with the update windows for egui.
-nodalia-update = { git = "https://github.com/danielmigueltejedor/nodalia-design", rev = "b7ea838717230837581971995cbcaea4e2d845b5", features = ["egui"] }
+nodalia-update = { git = "https://github.com/danielmigueltejedor/nodalia-design", rev = "7966cac1e786a14ca7e58b201fa6dd084b39f0a7", features = ["egui"] }
 # The AI assistant, shared by the office apps (nodalia-design packages/assistant).
-nodalia-assistant = { git = "https://github.com/danielmigueltejedor/nodalia-design", rev = "b7ea838717230837581971995cbcaea4e2d845b5", features = ["egui"] }
-nodalia-theme = { git = "https://github.com/danielmigueltejedor/nodalia-design", rev = "b7ea838717230837581971995cbcaea4e2d845b5", features = ["egui", "creator"] }
+nodalia-assistant = { git = "https://github.com/danielmigueltejedor/nodalia-design", rev = "7966cac1e786a14ca7e58b201fa6dd084b39f0a7", features = ["egui"] }
+nodalia-theme = { git = "https://github.com/danielmigueltejedor/nodalia-design", rev = "7966cac1e786a14ca7e58b201fa6dd084b39f0a7", features = ["egui", "creator"] }
 nodalia-ui = { git = "https://github.com/getnodalia/foundation", rev = "46d6d9970a609c064cb7f632477d4cf68c7e4eb0", version = "=0.1.0" }
 i_overlay = "9"
 quick-xml = "0.41"
