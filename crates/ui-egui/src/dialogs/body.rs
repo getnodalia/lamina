@@ -155,7 +155,7 @@ fn dlg_header_footer(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) -> bool {
             ui.label(crate::i18n::t("  Format:"));
             nodalia_ui::ComboBox::from_id_salt("hf-date-format").selected_text(label).width(200.0).show_ui(ui, |ui| {
                 for (kind, sample) in &rows {
-                    if ui.selectable_label(fmt == *kind, sample).clicked() {
+                    if ui.selectable_label(fmt == *kind, crate::i18n::t(sample)).clicked() {
                         d.fields.insert("dateFormat".into(), (*kind).to_string());
                     }
                 }
@@ -224,7 +224,7 @@ fn dlg_hyperlink(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) -> bool {
             let sel = d.get("slide", &slide_default).parse::<usize>().unwrap_or(0);
             egui::ScrollArea::vertical().max_height(180.0).show(ui, |ui| {
                 for (i, t) in titles.iter().enumerate() {
-                    if ui.selectable_label(sel == i, t).clicked() {
+                    if ui.selectable_label(sel == i, crate::i18n::t(t)).clicked() {
                         d.fields.insert("slide".into(), i.to_string());
                     }
                 }
@@ -275,7 +275,7 @@ fn dlg_setup_show(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) -> bool {
             d.fields.insert("custom".into(), String::new());
         }
         for n in &names {
-            if ui.selectable_label(&chosen == n, n).clicked() {
+            if ui.selectable_label(&chosen == n, crate::i18n::t(n)).clicked() {
                 d.fields.insert("custom".into(), n.clone());
             }
         }
@@ -382,7 +382,7 @@ fn dlg_bullets(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) -> bool {
     let tab = d.get("tab", if numbered { "numbered" } else { "bulleted" });
     ui.horizontal(|ui| {
         for (k, l) in [("bulleted", "Bulleted"), ("numbered", "Numbered")] {
-            if ui.selectable_label(tab == k, l).clicked() {
+            if ui.selectable_label(tab == k, crate::i18n::t(l)).clicked() {
                 d.fields.insert("tab".into(), k.into());
             }
         }
@@ -437,10 +437,10 @@ fn dlg_bullets(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) -> bool {
     ui.horizontal(|ui| {
         let field = ui.add_sized(vec2(120.0, 20.0), egui::Label::new(crate::i18n::t("Color:")));
         let combo = nodalia_ui::ComboBox::from_id_salt("bullet-color")
-            .selected_text(colors.iter().find(|c| c.0 == color).map_or("Automatic", |c| c.1))
+            .selected_text(crate::i18n::t(colors.iter().find(|c| c.0 == color).map_or("Automatic", |c| c.1)))
             .show_ui(ui, |ui| {
                 for (k, l) in colors {
-                    if ui.selectable_label(color == k, l).clicked() {
+                    if ui.selectable_label(color == k, crate::i18n::t(l)).clicked() {
                         d.fields.insert("color".into(), k.into());
                     }
                 }
@@ -560,7 +560,7 @@ fn dlg_action(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) -> bool {
             let sel = d.get("arg", if cur_kind == "slide" { &cur_arg } else { "0" }).parse::<usize>().unwrap_or(0);
             egui::ScrollArea::vertical().max_height(140.0).show(ui, |ui| {
                 for (i, (_, t)) in slides.iter().enumerate() {
-                    if ui.selectable_label(sel == i, t).clicked() {
+                    if ui.selectable_label(sel == i, crate::i18n::t(t)).clicked() {
                         d.fields.insert("arg".into(), i.to_string());
                     }
                 }
@@ -572,7 +572,7 @@ fn dlg_action(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) -> bool {
             }
             let sel = d.get("arg", if cur_kind == "customShow" { &cur_arg } else { shows.first().map_or("", String::as_str) });
             for n in &shows {
-                if ui.selectable_label(&sel == n, n).clicked() {
+                if ui.selectable_label(&sel == n, crate::i18n::t(n)).clicked() {
                     d.fields.insert("arg".into(), n.clone());
                 }
             }
@@ -1152,7 +1152,7 @@ fn dlg_language(app: &mut SlideApp, ui: &mut Ui, d: &mut Dialog) -> bool {
             // the tag is the explicit fallback (egui 0.37 aborts on a missing glyph).
             let name = crate::squiggles::display_lang_name(ui.ctx(), &tag);
             let installed = lamina_engine::spell::dictionary(&tag).is_some();
-            let label = if installed { format!("{name}  (dictionary)") } else { name };
+            let label = if installed { crate::i18n::tf("{name}  (dictionary)", &[("name", &name)]) } else { name };
             if ui.selectable_label(lang.eq_ignore_ascii_case(&tag), label).clicked() {
                 d.fields.insert("lang".into(), tag);
             }

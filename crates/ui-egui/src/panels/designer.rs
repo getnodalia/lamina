@@ -71,7 +71,7 @@ pub(super) fn designer(app: &mut SlideApp, ui: &mut Ui) {
             Stroke::new(if resp.hovered() { 2.5 } else { 1.0 }, if resp.hovered() { t.accent } else { t.border }),
             egui::StrokeKind::Outside,
         );
-        let clicked = resp.on_hover_text(tip).clicked();
+        let clicked = resp.on_hover_text(crate::i18n::t(tip)).clicked();
         ui.add_space(8.0);
         clicked
     };

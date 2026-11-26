@@ -41,7 +41,7 @@ fn edit_points_menu(app: &mut SlideApp, ui: &mut egui::Ui, sh: &lamina_model::Sh
     if let Some((path, index)) = app.session.tool.edit_segment {
         let cur = lamina_engine::cmd::points::segment_kind_of(sh, path, index);
         for (l, k) in [("Straight Segment", "straight"), ("Curved Segment", "curved")] {
-            if ui.radio(cur == Some(k), l).clicked() {
+            if ui.radio(cur == Some(k), crate::i18n::t(l)).clicked() {
                 let _ = app.run("shape.segmentType", json!({"path": path, "segment": index, "type": k}));
                 ui.close();
             }
@@ -64,7 +64,7 @@ fn edit_points_menu(app: &mut SlideApp, ui: &mut egui::Ui, sh: &lamina_model::Sh
             Some(false) => ("Close Path", "shape.closePath", index),
             _ => ("Open Path", "shape.openPath", lamina_engine::cmd::points::segment_start_of(sh, path, index).unwrap_or(index)),
         };
-        if ui.button(label).clicked() {
+        if ui.button(crate::i18n::t(label)).clicked() {
             let _ = app.run(id, json!({"path": path, "index": at}));
             app.session.tool.edit_segment = None;
             ui.close();
@@ -73,7 +73,7 @@ fn edit_points_menu(app: &mut SlideApp, ui: &mut egui::Ui, sh: &lamina_model::Sh
     } else if let Some((path, index)) = app.session.tool.edit_vertex {
         let cur = lamina_engine::cmd::points::kind_of(sh, path, index);
         for (l, k) in [("Smooth Point", "smooth"), ("Straight Point", "straight"), ("Corner Point", "corner")] {
-            if ui.radio(cur == Some(k), l).clicked() {
+            if ui.radio(cur == Some(k), crate::i18n::t(l)).clicked() {
                 let _ = app.run("shape.pointType", json!({"path": path, "index": index, "type": k}));
                 ui.close();
             }
@@ -87,7 +87,7 @@ fn edit_points_menu(app: &mut SlideApp, ui: &mut egui::Ui, sh: &lamina_model::Sh
             Some(false) => ("Close Path", "shape.closePath"),
             _ => ("Open Path", "shape.openPath"),
         };
-        if ui.button(label).clicked() {
+        if ui.button(crate::i18n::t(label)).clicked() {
             let _ = app.run(id, json!({"path": path, "index": index}));
             // The points are numbered from the new start now.
             app.session.tool.edit_vertex = None;
@@ -265,7 +265,7 @@ fn slide_items(app: &mut SlideApp, ui: &mut egui::Ui) {
             .and_then(|d| d.doc.masters.first().map(|m| m.layouts.iter().map(|l| (l.name.clone(), l.id.0)).collect()))
             .unwrap_or_default();
         for (n, id) in layouts {
-            if ui.button(n).clicked() {
+            if ui.button(crate::i18n::t(&n)).clicked() {
                 let _ = app.run("slide.layout", json!({"layout": id}));
                 ui.close();
             }
@@ -277,7 +277,7 @@ fn slide_items(app: &mut SlideApp, ui: &mut egui::Ui) {
             let _ = app.run("view.guides", json!({"on": on}));
         }
         for (label, vertical) in [("Add Vertical Guide", true), ("Add Horizontal Guide", false)] {
-            if ui.button(label).clicked() {
+            if ui.button(crate::i18n::t(label)).clicked() {
                 let _ = app.run("guide.add", json!({"vertical": vertical}));
                 let _ = app.run("view.guides", json!({"on": true}));
                 ui.close();

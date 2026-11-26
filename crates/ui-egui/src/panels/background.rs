@@ -24,7 +24,7 @@ pub(super) fn background(app: &mut SlideApp, ui: &mut Ui) {
         ("Pattern fill", "pattern"),
         ("Follow the layout", "auto"),
     ] {
-        if ui.radio(kind == k, l).clicked() && kind != k {
+        if ui.radio(kind == k, crate::i18n::t(l)).clicked() && kind != k {
             match k {
                 "solid" => run(app, "design.background", json!({"color": "bg1"})),
                 "gradient" => {
@@ -156,7 +156,7 @@ fn picture_background_options(app: &mut SlideApp, ui: &mut Ui, pf: &lamina_model
     };
     ui.horizontal(|ui| {
         let field = ui.add_sized(vec2(72.0, 20.0), egui::Label::new(crate::i18n::t("Alignment")));
-        let combo = nodalia_ui::ComboBox::from_id_salt("bg-align").selected_text(align_name).width(140.0).show_ui(ui, |ui| {
+        let combo = nodalia_ui::ComboBox::from_id_salt("bg-align").selected_text(crate::i18n::t(align_name)).width(140.0).show_ui(ui, |ui| {
             for (k, l) in [
                 ("tl", "Top Left"),
                 ("t", "Top"),
@@ -168,7 +168,7 @@ fn picture_background_options(app: &mut SlideApp, ui: &mut Ui, pf: &lamina_model
                 ("b", "Bottom"),
                 ("br", "Bottom Right"),
             ] {
-                if ui.selectable_label(align == k, l).clicked() {
+                if ui.selectable_label(align == k, crate::i18n::t(l)).clicked() {
                     run(app, "design.background", json!({"pictureProps": {"align": k}}));
                 }
             }
@@ -183,9 +183,9 @@ fn picture_background_options(app: &mut SlideApp, ui: &mut Ui, pf: &lamina_model
     };
     ui.horizontal(|ui| {
         let field = ui.add_sized(vec2(72.0, 20.0), egui::Label::new(crate::i18n::t("Mirror")));
-        let combo = nodalia_ui::ComboBox::from_id_salt("bg-mirror").selected_text(mirror_name).width(140.0).show_ui(ui, |ui| {
+        let combo = nodalia_ui::ComboBox::from_id_salt("bg-mirror").selected_text(crate::i18n::t(mirror_name)).width(140.0).show_ui(ui, |ui| {
             for (k, l) in [("none", "None"), ("x", "Horizontal"), ("y", "Vertical"), ("xy", "Both")] {
-                if ui.selectable_label(flip == k, l).clicked() {
+                if ui.selectable_label(flip == k, crate::i18n::t(l)).clicked() {
                     run(app, "design.background", json!({"pictureProps": {"mirror": k}}));
                 }
             }
