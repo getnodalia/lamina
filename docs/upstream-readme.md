@@ -98,7 +98,7 @@ Today it can:
 </table>
 
 <p align="center">
-  <img alt="All eight slides of the Northern Lights sample deck" src="docs/images/sample-deck.png" width="900"><br>
+  <img alt="The nine slides of the Northern Lights sample deck" src="docs/images/sample-deck.png" width="900"><br>
   <sub>The built-in sample deck, rendered by <code>deckcraft-cli render --sample --all</code></sub>
 </p>
 
