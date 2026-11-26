@@ -183,8 +183,8 @@ the `ROADMAP.md` progress log, and update each touched doc's status line and rev
 
 ## CI workflows
 
-- Workflows call [getnodalia/foundation](https://github.com/getnodalia/foundation)'s reusable workflows, pinned by commit. Release,
-  packaging and the upstream sync are this repository's own workflows.
+- Workflows call [getnodalia/foundation](https://github.com/getnodalia/foundation)'s reusable workflows, pinned by commit. Release
+  and packaging are this repository's own workflows.
 - Pin every action to a full commit SHA, give each job the least permissions it needs, and use only
   standard GitHub-hosted runners (Foundation's [CI standard](https://github.com/getnodalia/foundation/blob/main/standards/ci.md)).
 - Keep CI changes in their own pull request unless a change cannot work without them.

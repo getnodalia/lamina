@@ -254,7 +254,7 @@ Carried from the 2026-10-07 ROADMAP status and updated with what has landed sinc
   one reachable from `lamina-cli`, the JSON control channel and MCP. The menu-bar measurement
   and the d556ff9 snapshot still count 226.
 - **Platforms:** signed releases for macOS (universal), Windows x64/x86/arm64, Linux
-  (AppImage/deb/rpm/tar.gz/Flatpak, x86_64 and aarch64), FreeBSD and the web (v0.4.0, 2026-10-09).
+  (AppImage/deb/rpm/tar.gz/x86_64 and aarch64), FreeBSD and the web (v0.4.0, 2026-10-09).
 
 ## Calibration: how the hours were derived
 

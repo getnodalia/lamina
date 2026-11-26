@@ -148,8 +148,8 @@ fn services(native_wayland: bool) -> Services {
                 "video" => d.add_filter("Video", &["mp4", "m4v", "mov", "webm", "mkv", "wmv"]),
                 "theme" => d.add_filter("Themes and presentations", &["thmx", "pptx", "potx", "ppsx"]).add_filter("Office Theme", &["thmx"]),
                 _ => d
-                    .add_filter("Presentations", &["pptx", "potx", "ppsx", "lamina", "deckcraft"]) // rebrand: keep
-                    .add_filter("Lámina", &["lamina", "deckcraft"]) // rebrand: keep
+                    .add_filter("Presentations", &["pptx", "potx", "ppsx", "lamina", "deckcraft"])
+                    .add_filter("Lámina", &["lamina", "deckcraft"])
                     .add_filter("PowerPoint", &["pptx", "potx", "ppsx"])
                     .add_filter("Outline", &["txt", "md"]),
             };

@@ -9,6 +9,3 @@ plan/
 /.claude/
 /nodalia-fonts/
 packaging/env.sh
-/packaging/linux/flatpak/cargo-sources.json
-/build-flatpak/
-/.flatpak-builder/
