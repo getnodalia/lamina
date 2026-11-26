@@ -13,6 +13,38 @@ fn last_id(v: &Value) -> u64 {
     v.get("id").and_then(Value::as_u64).unwrap_or(0)
 }
 
+// NASA astronaut photographs of the aurora from the International Space Station, public domain
+// (`assets/sample/`, credited in `ATTRIBUTION.md`), cropped to the slide's 16:9.
+static SKY: &[u8] = include_bytes!("../../../assets/sample/aurora-atlantic.jpg");
+static ORBIT: &[u8] = include_bytes!("../../../assets/sample/aurora-space.jpg");
+static NIGHT: &[u8] = include_bytes!("../../../assets/sample/aurora-midwest.jpg");
+
+/// The current slide's background becomes `photo`.
+fn photo_background(s: &mut Session, photo: &[u8]) -> Result<()> {
+    run(s, "design.background", json!({"picture": crate::cmd::base64_encode(photo)}))?;
+    Ok(())
+}
+
+/// A calm, mostly transparent dark panel behind the text, sent to the back of the slide's shapes.
+fn veil(s: &mut Session, rect: [f64; 4], transparency: f64) -> Result<()> {
+    let v = run(s, "shape.insert", json!({"preset": "rect", "rect": rect}))?;
+    let id = last_id(&v);
+    run(s, "shape.fill", json!({"id": id, "color": "#050A18", "transparency": transparency}))?;
+    run(s, "shape.line", json!({"id": id, "none": true}))?;
+    run(s, "shape.rename", json!({"id": id, "name": "Veil"}))?;
+    run(s, "edit.select", json!({"ids": [id]}))?;
+    run(s, "arrange.sendToBack", json!({}))?;
+    Ok(())
+}
+
+/// Every shape of the current slide gets `color` as its text colour.
+fn paint_text(s: &mut Session, color: &str) -> Result<()> {
+    let ids: Vec<u64> = s.doc()?.current_slide().map(|x| x.shapes.iter().map(|s| s.id.0 as u64).collect()).unwrap_or_default();
+    run(s, "edit.select", json!({"ids": ids}))?;
+    run(s, "format.color", json!({"color": color}))?;
+    Ok(())
+}
+
 /// Open the sample presentation in a new document.
 pub fn open_sample(s: &mut Session) -> Result<()> {
     run(s, "file.new", json!({"theme": "Lámina"}))?;
@@ -22,11 +54,11 @@ pub fn open_sample(s: &mut Session) -> Result<()> {
     run(s, "text.set", json!({"id": title, "text": "Northern Lights"}))?;
     run(s, "text.set", json!({"id": sub, "text": "A short tour of the aurora — where it comes from, when to look, and how to photograph it"}))?;
     run(s, "slide.notes", json!({"text": "Welcome everyone. This deck was made in Lámina."}))?;
-    // A quiet band of aurora green along the foot of the title slide.
-    let b = run(s, "shape.insert", json!({"preset": "rect", "rect": [0, 516, 960, 24]}))?;
-    run(s, "shape.fill", json!({"id": last_id(&b), "color": "accent3"}))?;
-    run(s, "shape.line", json!({"id": last_id(&b), "none": true}))?;
-    run(s, "shape.rename", json!({"id": last_id(&b), "name": "Aurora Band"}))?;
+    // The aurora seen from orbit, full bleed, with the title in the starry sky above it.
+    photo_background(s, SKY)?;
+    run(s, "shape.setBounds", json!({"ids": [title], "x": 80, "y": 96, "w": 800, "h": 100}))?;
+    run(s, "shape.setBounds", json!({"ids": [sub], "x": 150, "y": 206, "w": 660, "h": 70}))?;
+    paint_text(s, "#FFFFFF")?;
     run(s, "transition.set", json!({"kind": "fade"}))?;
 
     // Agenda.
@@ -44,11 +76,9 @@ pub fn open_sample(s: &mut Session) -> Result<()> {
 
     // Section header.
     run(s, "slide.new", json!({"layout": "sectionHeader", "title": "The Science", "body": "Charged particles, magnetic fields and glowing gases"}))?;
-    run(s, "design.background", json!({"color": "dk2"}))?;
-    let st = s.doc()?;
-    let ids: Vec<u64> = st.current_slide().map(|x| x.shapes.iter().map(|s| s.id.0 as u64).collect()).unwrap_or_default();
-    run(s, "edit.select", json!({"ids": ids}))?;
-    run(s, "format.color", json!({"color": "#FFFFFF"}))?;
+    photo_background(s, ORBIT)?;
+    veil(s, [0.0, 290.0, 960.0, 130.0], 0.42)?;
+    paint_text(s, "#FFFFFF")?;
     run(s, "transition.set", json!({"kind": "wipe", "option": "r"}))?;
 
     // Process diagram from shapes.
@@ -83,6 +113,22 @@ pub fn open_sample(s: &mut Session) -> Result<()> {
     run(s, "format.italic", json!({"on": true}))?;
     run(s, "transition.set", json!({"kind": "morph"}))?;
 
+    // A photograph: the same aurora, seen over the lights of a continent.
+    run(s, "slide.new", json!({"layout": "titleOnly", "title": "Seen from the Space Station"}))?;
+    run(s, "insert.picture", json!({"data": crate::cmd::base64_encode(NIGHT), "name": "Aurora over the Midwest", "rect": [60, 140, 560, 315]}))?;
+    let note = run(
+        s,
+        "insert.textBox",
+        json!({"rect": [660, 150, 250, 230], "text": "The Midwest at night, 29 September 2011. A green arc of aurora follows the curve of the Earth, above the city lights of the Great Lakes."}),
+    )?;
+    run(s, "edit.select", json!({"ids": [last_id(&note)]}))?;
+    run(s, "format.size", json!({"size": 18}))?;
+    let credit = run(s, "insert.textBox", json!({"rect": [660, 400, 250, 40], "text": "Photo: NASA Earth Observatory"}))?;
+    run(s, "edit.select", json!({"ids": [last_id(&credit)]}))?;
+    run(s, "format.size", json!({"size": 12}))?;
+    run(s, "format.italic", json!({"on": true}))?;
+    run(s, "transition.set", json!({"kind": "fade"}))?;
+
     // Chart.
     run(s, "slide.new", json!({"layout": "titleOnly", "title": "Best months to look (clear nights)"}))?;
     run(
@@ -116,14 +162,13 @@ pub fn open_sample(s: &mut Session) -> Result<()> {
 
     // Closing.
     run(s, "slide.new", json!({"layout": "title", "title": "Clear skies!", "body": "Made with Lámina — free and open source"}))?;
-    let moon = run(s, "shape.insert", json!({"preset": "moon", "rect": [820, 40, 80, 120]}))?;
-    run(s, "shape.fill", json!({"id": last_id(&moon), "color": "accent6"}))?;
-    run(s, "shape.line", json!({"id": last_id(&moon), "none": true}))?;
+    photo_background(s, SKY)?;
+    paint_text(s, "#FFFFFF")?;
     run(s, "transition.set", json!({"kind": "fade"}))?;
 
     run(s, "section.add", json!({"name": "Introduction", "at": 0}))?;
     run(s, "section.add", json!({"name": "Science", "at": 2}))?;
-    run(s, "section.add", json!({"name": "In the Field", "at": 5}))?;
+    run(s, "section.add", json!({"name": "In the Field", "at": 6}))?;
     run(s, "slide.go", json!({"index": 0}))?;
     run(s, "edit.deselect", json!({}))?;
     run(s, "edit.deselect", json!({}))?;
