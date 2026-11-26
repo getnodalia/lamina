@@ -62,7 +62,7 @@ jobs:
   # Every git dependency in Cargo.lock comes from getnodalia or nodalia-design.
   git-sources:
     name: git-sources
-    uses: getnodalia/foundation/.github/workflows/git-sources.yml@c0d77c11d649cd5293834a544ef18031270d4d54 # foundation main
+    uses: getnodalia/foundation/.github/workflows/git-sources.yml@4debdfe28cf5820d1748864efbd8d6996922d1ac # foundation main
 
 
   # Lámina's own names everywhere; upstream's arrive renamed by the weekly sync.
