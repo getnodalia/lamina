@@ -1088,6 +1088,11 @@ fn draw_arrange_to_media(p: &Pen<'_>, icon: Icon) -> bool {
             p.table((2.5, 3.0, 18.0, 16.0), 3, 3, B);
             p.tool(((11.0, 21.5), -45.0), (14.0, 2.2, 3.8), Y, K, (2.5, R));
         }
+        I::UpdateSource => {
+            p.table((2.5, 3.0, 17.0, 14.0), 3, 3, B);
+            p.line(&arc_pts((16.5, 16.5), 4.6, 4.6, -40.0, 220.0), K);
+            p.head((12.5, 18.8), 140.0, 3.2, K);
+        }
         I::ChangeChartType => {
             p.circle((8.0, 8.0), 5.8, t(B), B);
             let mut wedge = vec![(8.0, 8.0)];

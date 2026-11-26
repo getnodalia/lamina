@@ -13,25 +13,24 @@ tests (calibration in [target-app-parity.md](target-app-parity.md#calibration-ho
 When a gap closes, delete its entry, update the parity doc it points to, and add a line to the
 revision history.
 
-## Ranked: the top 15
+## Ranked: the top 14
 
 | # | Gap | Category | Beta | Hours | Doc |
 |---|---|---|:-:|---|---|
 | 1 | PPTX corpus is only decks we author (no PowerPoint reference renders) | File format | B | 20–35 | [file-format-parity.md](file-format-parity.md) |
 | 2 | Data loss and crashes on common paths (#60, #40, #59) | Stability | B | 6–12 | this file |
 | 3 | PPTX round trip drops media playback options (#74) | File format | B | 2–4 | [file-format-parity.md](file-format-parity.md) |
-| 4 | SVG pictures don't render (EMF/WMF do) | File format | B | 4–8 | [file-format-parity.md](file-format-parity.md) |
-| 5 | No localization: English only | Localization | B (infra + 5 languages) | 55–90 | [localization-parity.md](localization-parity.md) |
-| 6 | No printing | Feature | B | 5–8 | [file-format-parity.md](file-format-parity.md) |
-| 7 | Fonts: only Regular, Bold and Italic faces (#69) | Feature | B | 3–5 | [ui-parity.md](ui-parity.md) |
-| 8 | Image paste fails on Windows (#1414); Linux not re-checked | Feature | B | 2–4 | [ui-parity.md](ui-parity.md) |
-| 9 | Presenter view isn't placed on the second display | Hardware | B | 3–5 | [slideshow-parity.md](slideshow-parity.md) |
-| 10 | Animation Pane: 64 of ~190 effects, effect options (timeline and Play From done) | Feature | B (pane) | 7–13 | [animation-parity.md](animation-parity.md) |
-| 11 | Charts: data grid editing, elements, `chartex` types | Feature | B (data, elements) | 12–20 | [parity-checklist.md](parity-checklist.md) |
-| 12 | Format Shape pane thinner than PowerPoint's | UI/UX | B | 6–10 | [ui-parity.md](ui-parity.md) |
-| 13 | No native macOS menu bar | UI/UX | B | 3–5 | [ui-parity.md](ui-parity.md) |
-| 14 | PDF export rasterizes slide artwork | File format | B | 5–8 | [file-format-parity.md](file-format-parity.md) |
-| 15 | Slides rasterize on the CPU; no performance baseline | Performance / hardware | | 15–30 | [hardware-parity.md](hardware-parity.md) |
+| 4 | No localization: English only | Localization | B (infra + 5 languages) | 55–90 | [localization-parity.md](localization-parity.md) |
+| 5 | Printing has no OS print dialog or preview; no outline print | Feature | | 3–5 | [file-format-parity.md](file-format-parity.md) |
+| 6 | Fonts: only Regular, Bold and Italic faces (#69) | Feature | B | 3–5 | [ui-parity.md](ui-parity.md) |
+| 7 | Image paste fails on Windows (#1414); Linux not re-checked | Feature | B | 2–4 | [ui-parity.md](ui-parity.md) |
+| 8 | Presenter view isn't placed on the second display | Hardware | B | 3–5 | [slideshow-parity.md](slideshow-parity.md) |
+| 9 | Animation Pane: 64 of ~190 effects, effect options (timeline and Play From done) | Feature | B (pane) | 7–13 | [animation-parity.md](animation-parity.md) |
+| 10 | Charts: data grid editing, elements, `chartex` types | Feature | B (data, elements) | 12–20 | [parity-checklist.md](parity-checklist.md) |
+| 11 | Format Shape pane thinner than PowerPoint's | UI/UX | B | 6–10 | [ui-parity.md](ui-parity.md) |
+| 12 | No native macOS menu bar | UI/UX | B | 3–5 | [ui-parity.md](ui-parity.md) |
+| 13 | PDF export rasterizes slide artwork | File format | B | 5–8 | [file-format-parity.md](file-format-parity.md) |
+| 14 | Slides rasterize on the CPU; no performance baseline | Performance / hardware | | 15–30 | [hardware-parity.md](hardware-parity.md) |
 
 ## Stability
 
@@ -102,15 +101,6 @@ Detail in [file-format-parity.md](file-format-parity.md).
 - **Impact:** a deck opened and saved silently loses show behaviour.
 - **Estimate:** 2–4 h. **Beta blocker.**
 
-### SVG pictures don't render
-- **Evidence:** `crates/render/src/images.rs` decodes through `image` 0.25 (PNG, JPEG, WebP, GIF,
-  TIFF, BMP), and EMF/WMF through `lamina-metafile` (ported from Letra: paths, fills, pens,
-  pattern and hatch brushes, bitmaps and text; rectangle clip regions are applied, EMF+ only
-  pictures play their EMF+ records).
-  Nothing reads SVG; PowerPoint's Insert Icons stores SVG with a PNG fallback.
-- **Impact:** SVG icons show only their raster fallback, and SVG files can't be inserted.
-- **Estimate:** 4–8 h (an SVG renderer through `resvg`-style crates).
-
 ### Macro-enabled variants aren't recognized
 - **Evidence:** `.pptx`, `.potx` and `.ppsx` open and save with their own main content types
   (`crates/pptx/src/lib.rs` `export_as`); `.pptm`/`.potm`/`.ppsm` aren't recognized.
@@ -135,10 +125,15 @@ Detail in [file-format-parity.md](file-format-parity.md).
 - **Impact:** large PDFs; blurry when zoomed or printed.
 - **Estimate:** 5–8 h (vector paths, fills and text through the PDF writer). **Beta blocker.**
 
-### No printing
-- **Evidence:** checklist row "Print" is missing; PR #66 (browser print) is open.
-- **Impact:** handouts and speaker notes are printed in many workplaces.
-- **Estimate:** 5–8 h (print through the PDF path and each OS's print dialog). **Beta blocker.**
+### Printing has no OS print dialog or preview
+- **Evidence:** `file.print` (Backstage ▸ Print) sends slides, handouts or notes pages straight to
+  a chosen printer through the system print queue (`lp` on Linux and macOS, XPS on Windows) with a
+  range, copies and two-sided; where no queue is reachable it falls back to the PDF viewer. CI
+  covers the job it builds, not a real printer. There is no outline print and no operating-system
+  print dialog.
+- **Impact:** most people can print a handout; people who need a driver's own options still go
+  through the PDF viewer.
+- **Estimate:** 3–5 h (outline print, a preview in the Print page, per-printer options).
 
 ### No video export; the animated GIF has no transitions or builds
 - **Evidence:** checklist row "Export video (MP4) / animated GIF" is partial: `file.export` writes
@@ -368,6 +363,7 @@ Detail in [localization-parity.md](localization-parity.md).
 
 | Date | Change | Summary |
 |---|---|---|
+| 2026-11-25 | minor | SVG pictures (draw, insert, PowerPoint icons) and charts from a spreadsheet land and Print goes straight to the printer (0.4.0); the SVG gap is closed, the print gap narrowed |
 | 2026-11-02 | trivial | Run alternate-language metadata now survives native and PPTX saves; UI and proofing gaps remain; scores unchanged |
 | 2026-11-02 | trivial | PPTX reflection geometry is retained through native and PPTX resaves; no rendering parity claim |
 | 2026-11-02 | trivial | Reused slide geometry and content scale to the destination; picker thumbnails remain the reuse gap |

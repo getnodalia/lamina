@@ -187,6 +187,7 @@ fn artistic_effect(s: &mut Session, p: &Value) -> Result<Value> {
                 match (m, &effect2) {
                     (Some(m), Some(e)) => {
                         fill.media = m;
+                        fill.svg = None;
                         fill.artistic = Some(Artistic { effect: e.clone(), original });
                     }
                     _ => {

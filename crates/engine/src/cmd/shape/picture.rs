@@ -60,10 +60,12 @@ pub(super) fn picture_reset(s: &mut Session, p: &Value) -> Result<Value> {
 pub(super) fn picture_change(s: &mut Session, p: &Value) -> Result<Value> {
     let (name, bytes) = crate::cmd::insert::media_bytes(p, "picture.change")?;
     let ct = crate::cmd::insert::content_type(&name, &bytes);
-    let media = s.edit(|doc, _| doc.add_media(&name, ct, bytes).ok_or_else(|| bad("picture.change", NO_ID_SPACE)))?;
+    let (media, svg) =
+        s.edit(|doc, _| crate::cmd::insert::add_picture_media(doc, &name, ct, bytes).ok_or_else(|| bad("picture.change", NO_ID_SPACE)))?;
     edit_shapes(s, p, "picture.change", |sh| {
         if let lamina_model::ShapeKind::Picture { fill } = &mut sh.kind {
             fill.media = media;
+            fill.svg = svg;
             fill.crop = [0.0; 4];
             fill.artistic = None;
         }

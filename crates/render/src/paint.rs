@@ -186,7 +186,10 @@ pub fn circle_gradient(focus: [f64; 4], bounds: Rect, tile: Rect) -> peniko::Gra
 /// Draw a picture fill into `bounds` (shape-local) honouring crop and stretch/tile modes; an animated
 /// GIF shows its frame at `gif_time` seconds.
 pub fn picture(ctx: &mut RenderContext, pres: &Presentation, pf: &PictureFill, bounds: Rect, m: Affine, gif_time: Option<f64>) {
-    let Some(item) = pres.media(pf.media) else {
+    // A picture made from an SVG draws the vector, sharp at any size; the bitmap is its fallback
+    // when the SVG is missing or can't be drawn.
+    let vector = pf.svg.and_then(|id| pres.media(id)).filter(|v| images::decodes(&v.data));
+    let Some(item) = vector.or_else(|| pres.media(pf.media)) else {
         missing(ctx, bounds);
         return;
     };

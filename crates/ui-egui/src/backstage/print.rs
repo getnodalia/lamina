@@ -43,6 +43,70 @@ pub fn print_params(bs: &Backstage, slides: &[usize]) -> Value {
     })
 }
 
+/// The `file.print` params for the Print page's printer settings (they go with [`print_params`]).
+pub fn printer_params(bs: &Backstage) -> Value {
+    let mut p = json!({"copies": bs.print_copies, "collate": bs.print_collate, "grayscale": bs.print_grayscale});
+    if !bs.print_printer.is_empty() {
+        p["printer"] = json!(bs.print_printer);
+    }
+    if !bs.print_sides.is_empty() {
+        p["duplex"] = json!(bs.print_sides);
+    }
+    p
+}
+
+const SIDES: [(&str, &str); 4] = [
+    ("", "Printer's Own Setting"),
+    ("off", "Print on One Side"),
+    ("longEdge", "Print on Both Sides (long edge)"),
+    ("shortEdge", "Print on Both Sides (short edge)"),
+];
+
+/// The printer, copies and sides controls, when there is a printer to send the job to.
+fn printer_settings(ui: &mut Ui, bs: &mut Backstage, printers: &[lamina_engine::cmd::print::PrinterInfo]) {
+    heading(ui, "Printer");
+    let shown = printers.iter().find(|p| p.name == bs.print_printer).map_or("Default Printer", |p| p.label());
+    let label = if bs.print_printer.is_empty() { crate::i18n::t("Default Printer").to_string() } else { shown.to_string() };
+    nodalia_ui::ComboBox::from_id_salt("backstage_print_printer")
+        .width(240.0)
+        .selected_text(label)
+        .show_ui(ui, |ui| {
+            if ui.selectable_label(bs.print_printer.is_empty(), crate::i18n::t("Default Printer")).clicked() {
+                bs.print_printer.clear();
+            }
+            for p in printers {
+                if ui.selectable_label(bs.print_printer == p.name, p.label()).clicked() {
+                    bs.print_printer = p.name.clone();
+                }
+            }
+        })
+        .response
+        .widget_info(|| egui::WidgetInfo::labeled(egui::Role::ComboBox, true, crate::i18n::t("Printer")));
+    ui.add_space(4.0);
+    ui.horizontal(|ui| {
+        let l = ui.label(crate::i18n::t("Copies:"));
+        ui.add(egui::DragValue::new(&mut bs.print_copies).range(1..=lamina_engine::cmd::print::MAX_COPIES)).labelled_by(l.id);
+        ui.add_enabled(bs.print_copies > 1, egui::Checkbox::new(&mut bs.print_collate, crate::i18n::t("Collated")));
+    });
+    ui.add_space(4.0);
+    let sides = SIDES.iter().find(|s| s.0 == bs.print_sides).map_or("Printer's Own Setting", |s| s.1);
+    nodalia_ui::ComboBox::from_id_salt("backstage_print_sides")
+        .width(240.0)
+        .selected_text(crate::i18n::t(sides))
+        .show_ui(ui, |ui| {
+            for (id, label) in SIDES {
+                if ui.selectable_label(bs.print_sides == id, crate::i18n::t(label)).clicked() {
+                    bs.print_sides = id;
+                }
+            }
+        })
+        .response
+        .widget_info(|| egui::WidgetInfo::labeled(egui::Role::ComboBox, true, crate::i18n::t("Sides")));
+    ui.add_space(4.0);
+    ui.checkbox(&mut bs.print_grayscale, crate::i18n::t("Black and White"));
+    ui.add_space(14.0);
+}
+
 /// The printed page size in points: the slide size for full-page slides, else the chosen paper.
 pub fn print_page_size(bs: &Backstage, doc: &lamina_model::Presentation) -> (f32, f32) {
     if bs.print_layout == "slides" {
@@ -71,6 +135,13 @@ pub(super) fn print(app: &mut SlideApp, ui: &mut Ui, bs: &mut Backstage) {
         return;
     };
     let slides = print_slides(&doc, bs, current);
+    // On the desktop a job goes straight to a printer; with none found (or on the web) Lámina
+    // prints through the PDF as before.
+    bs.printers.ask(ui.ctx());
+    let found = bs.printers.found();
+    let desktop = app.services.pick_save.is_some() && lamina_engine::cmd::print::available();
+    let printers: Vec<_> = found.clone().filter(|_| desktop).unwrap_or_default();
+    let direct = !printers.is_empty();
     ui.horizontal_top(|ui| {
         ui.vertical(|ui| {
             ui.set_width(250.0);
@@ -78,18 +149,40 @@ pub(super) fn print(app: &mut SlideApp, ui: &mut Ui, bs: &mut Backstage) {
             if square_button(ui, Icon::Print, "Print", ok).clicked()
                 && let Ok(s) = &slides
             {
-                app.print_pdf(print_params(bs, s));
+                let mut params = print_params(bs, s);
+                if direct {
+                    if let (Some(o), Some(extra)) = (params.as_object_mut(), printer_params(bs).as_object()) {
+                        o.extend(extra.clone());
+                    }
+                    app.print_direct(params);
+                } else {
+                    app.print_pdf(params);
+                }
             }
             ui.add_space(6.0);
-            dim(
-                ui,
-                crate::i18n::t(if app.services.pick_save.is_some() {
-                    "Lámina prints through a PDF: it opens in your PDF viewer, where you choose the printer."
-                } else {
-                    "Lámina prints through a PDF: it downloads, ready to print from your browser or PDF viewer."
-                }),
-            );
-            ui.add_space(14.0);
+            if direct {
+                if ui.link(crate::i18n::t("Open as PDF Instead")).clicked()
+                    && let Ok(s) = &slides
+                {
+                    app.print_pdf(print_params(bs, s));
+                }
+                ui.add_space(10.0);
+                printer_settings(ui, bs, &printers);
+            } else {
+                dim(
+                    ui,
+                    crate::i18n::t(if desktop && found.is_none() {
+                        "Looking for printers…"
+                    } else if desktop {
+                        "No printer found: Lámina prints through a PDF, which opens in your PDF viewer."
+                    } else if app.services.pick_save.is_some() {
+                        "Lámina prints through a PDF: it opens in your PDF viewer, where you choose the printer."
+                    } else {
+                        "Lámina prints through a PDF: it downloads, ready to print from your browser or PDF viewer."
+                    }),
+                );
+                ui.add_space(14.0);
+            }
             heading(ui, "Settings");
             let scope = match bs.print_scope {
                 PrintScope::All => "Print All Slides",
