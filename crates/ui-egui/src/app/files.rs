@@ -74,9 +74,9 @@ fn purpose_of(purpose: &str) -> FilePurpose {
 }
 
 fn is_presentation_name(lower: &str) -> bool {
-    // `.deckcraft`: the native format's earlier name; those files open as they are (rebrand: keep).
+    // `.deckcraft`: the native format's earlier name; those files open as they are ().
     lower.ends_with(".lamina")
-        || lower.ends_with(".deckcraft") // rebrand: keep
+        || lower.ends_with(".deckcraft")
         || lower.ends_with(".slidecraft")
         || lower.ends_with(".pptx")
         || lower.ends_with(".potx")
