@@ -1,7 +1,7 @@
 # Next-level plan (2026-11-25)
 
 What Lámina already does well, where it still loses to Keynote and PowerPoint, and what the next
-release (0.3.0) takes on. The ranked shortfalls are in [gaps.md](gaps.md); this page is the
+release (0.4.0) takes on. The ranked shortfalls are in [gaps.md](gaps.md); this page is the
 decision: what is built now, in this order, and what waits.
 
 ## Audit
@@ -21,7 +21,7 @@ bites):
 4. **Starter decks are few and plain.** Twelve is a start; the gallery is the first thing a new user sees.
 5. PDF artwork is raster; fonts have only Regular/Bold/Italic; equations, video export, a presenter on the projector, password protection, legacy `.ppt`.
 
-## Decision: 0.3.0 takes the first four
+## Decision: 0.4.0 takes the first four
 
 Ranked by value for a person who presents, and by what can be proven in tests here.
 
@@ -36,7 +36,7 @@ All of it is a command first (`insert.chart.fromSheet`, `file.print`, …), so t
 channel and MCP get it together. No gradients or glows; colours come from theme tokens; every
 string is translated to Spanish in the same change.
 
-## After 0.3.0
+## After 0.4.0
 
 Vector PDF artwork; font weights (#69); equations on `nodalia-math`; presenter view on the second
 display; MP4 export; a live link that re-reads a Celdas workbook when it changes; per-object

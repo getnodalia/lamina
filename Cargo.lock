@@ -2781,7 +2781,7 @@ dependencies = [
 
 [[package]]
 name = "lamina"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "arboard",
  "chrono",
@@ -2804,7 +2804,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-anim"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "lamina-geom",
  "lamina-model",
@@ -2813,7 +2813,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-cli"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "lamina-engine",
  "lamina-mcp",
@@ -2823,14 +2823,14 @@ dependencies = [
 
 [[package]]
 name = "lamina-color"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "nodalia-drawingml 0.1.0 (git+https://github.com/getnodalia/foundation?rev=3bb28e2f1f15f61238a40b0fea3922ec56170f8f)",
 ]
 
 [[package]]
 name = "lamina-engine"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "chrono",
  "i_overlay",
@@ -2861,7 +2861,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-fonts"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "epaint_default_fonts",
  "harfrust 0.13.3",
@@ -2873,7 +2873,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-format"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "lamina-model",
  "nodalia-lamina-format",
@@ -2884,7 +2884,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-geom"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "kurbo",
  "nodalia-drawingml 0.1.0 (git+https://github.com/getnodalia/foundation?rev=3bb28e2f1f15f61238a40b0fea3922ec56170f8f)",
@@ -2893,7 +2893,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-mcp"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "lamina-engine",
  "lamina-render",
@@ -2903,7 +2903,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-media"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "image",
  "log",
@@ -2916,7 +2916,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-model"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "lamina-color",
  "lamina-geom",
@@ -2928,7 +2928,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-pdf"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "hayro-syntax",
  "krilla",
@@ -2946,7 +2946,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-pptx"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "image",
  "lamina-color",
@@ -2967,7 +2967,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-render"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "image",
  "kurbo",
@@ -2987,7 +2987,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-text"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "chrono",
  "lamina-color",
@@ -3001,7 +3001,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-ui-egui"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "egui",
  "egui_extras",
@@ -3029,7 +3029,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-web"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "eframe",
  "egui",
@@ -7749,7 +7749,7 @@ checksum = "9440ea3e5aeabb0ac63af70daf835274065238cdd0cec83418f417eae38bacee"
 
 [[package]]
 name = "xtask"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "serde_json",
 ]

@@ -363,7 +363,7 @@ Detail in [localization-parity.md](localization-parity.md).
 
 | Date | Change | Summary |
 |---|---|---|
-| 2026-11-25 | minor | SVG pictures (draw, insert, PowerPoint icons) and charts from a spreadsheet land and Print goes straight to the printer (0.3.0); the SVG gap is closed, the print gap narrowed |
+| 2026-11-25 | minor | SVG pictures (draw, insert, PowerPoint icons) and charts from a spreadsheet land and Print goes straight to the printer (0.4.0); the SVG gap is closed, the print gap narrowed |
 | 2026-11-02 | trivial | Run alternate-language metadata now survives native and PPTX saves; UI and proofing gaps remain; scores unchanged |
 | 2026-11-02 | trivial | PPTX reflection geometry is retained through native and PPTX resaves; no rendering parity claim |
 | 2026-11-02 | trivial | Reused slide geometry and content scale to the destination; picker thumbnails remain the reuse gap |
