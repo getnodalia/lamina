@@ -11,6 +11,8 @@
 pub const UPDATE_APP: nodalia_update::App =
     nodalia_update::App { name: "Lámina", repo: "getnodalia/lamina", bundle: "Lamina.app", version: env!("CARGO_PKG_VERSION"), edition: None };
 
+#[cfg(not(target_arch = "wasm32"))]
+mod assistant;
 pub mod backstage;
 pub mod canvas;
 pub mod capture;
@@ -303,6 +305,9 @@ pub struct SlideApp {
     print_previews: app::files::PrintPreviews,
     #[cfg(not(target_arch = "wasm32"))]
     updates_rt: updates_ui::Runtime,
+    /// The AI assistant (`assistant.rs`), made the first time it is shown.
+    #[cfg(not(target_arch = "wasm32"))]
+    assistant: Option<nodalia_assistant::Assistant>,
     /// Text for the system clipboard from a Copy or Cut command, handed over on the next frame.
     pending_copy: Option<String>,
     /// Bounded screenshot completion slots for the control channel (egui 0.37 callbacks).

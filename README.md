@@ -46,6 +46,7 @@ and shares its start screen, Preferences and look with Letra and Celdas, the oth
 - **`.pptx` first:** opens and saves PowerPoint files by default, and exports to PDF, images and the web.
 - **Present:** Presenter View with notes, a timer and the next slide; rehearsed timings and custom shows.
 - **Nodalia Design:** rounded islands, bold icons, light and dark themes, and Nodalia's own window controls on Linux.
+- **AI assistant:** a chat beside your slides, with the whole presentation as context, that builds slides, writes notes and tidies layouts. You bring your own key (Claude, OpenAI, Gemini or a local Ollama model), kept in the system keychain; every change waits for your approval and a turn undoes in one click. Nodalia has no servers in between.
 - **Agent control:** every action is a command, reachable from the command line, the control channel and MCP.
 
 > [!IMPORTANT]

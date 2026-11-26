@@ -146,6 +146,8 @@ pub fn handle(app: &mut SlideApp, ctx: &egui::Context, req: &ControlRequest) -> 
         "engine.commands" => ok(all_commands(app)),
         "document.inspect" => wrap(app.run("document.inspect", json!({}))),
         "ui.inspect" => ok(inspect(app, ctx)),
+        #[cfg(not(target_arch = "wasm32"))]
+        "ui.assistant" => ok(json!({"open": app.show_assistant(ctx, p.get("open").and_then(Value::as_bool))})),
         "ui.pointer" => {
             let Some(events) = p.get("events").and_then(Value::as_array) else { return err("missing `events`") };
             let base = p.get("mods").map(mods_from).unwrap_or_default();

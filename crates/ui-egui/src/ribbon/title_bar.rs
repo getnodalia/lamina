@@ -94,6 +94,10 @@ pub fn title_bar(app: &mut SlideApp, ui: &mut Ui) {
             let from = app.session.active().map(|d| d.selection.slide).unwrap_or(0);
             app.start_show(from, false);
         }
+        #[cfg(not(target_arch = "wasm32"))]
+        if crate::assistant::offered(app, right.ctx()) {
+            crate::assistant::button(app, &mut right);
+        }
         if icon_toggle(&mut right, Icon::CommentsBubble, "Comments", has_doc, app.ui.pane.as_deref() == Some("comments")).clicked() {
             let _ = app.run("view.pane", json!({"pane": "comments", "toggle": true}));
         }
