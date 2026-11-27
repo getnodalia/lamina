@@ -17,9 +17,7 @@ A new presentation is saved as PowerPoint (`.pptx`), the standard format, as Let
 (decision of 2026-11-13). Lámina's own format, which keeps everything, is `.lamina` and stays
 one choice away in Save As; `.deckcraft` and `.slidecraft` files still open.
 
-Resolved: the shared workflows (release, contributors refresh, Windows ARM64) is gone; fonts and
-the shared libraries come from getnodalia/foundation's vendor branches; the `[patch]` entries for
-`storytold/*` in `Cargo.toml` only name the old home of crates fetched from getnodalia/foundation.
+Resolved: fonts, translations and the shared libraries come from getnodalia/foundation's vendor branches, and nothing in `Cargo.toml` names another organisation.
 
 ## Technical debt
 
