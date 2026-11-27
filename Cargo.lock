@@ -259,7 +259,7 @@ dependencies = [
  "objc2-foundation 0.3.2",
  "parking_lot",
  "percent-encoding",
- "windows-sys 0.59.0",
+ "windows-sys 0.61.2",
  "wl-clipboard-rs",
  "x11rb",
 ]
@@ -1566,7 +1566,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "39cab71617ae0d63f51a36d69f866391735b51691dbda63cf6f96d042b63efeb"
 dependencies = [
  "libc",
- "windows-sys 0.59.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -2941,7 +2941,7 @@ dependencies = [
 
 [[package]]
 name = "lamina"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "arboard",
  "chrono",
@@ -2964,7 +2964,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-anim"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "lamina-geom",
  "lamina-model",
@@ -2973,7 +2973,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-cli"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "lamina-engine",
  "lamina-mcp",
@@ -2983,14 +2983,14 @@ dependencies = [
 
 [[package]]
 name = "lamina-color"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "nodalia-drawingml 0.1.0 (git+https://github.com/getnodalia/foundation?rev=3bb28e2f1f15f61238a40b0fea3922ec56170f8f)",
 ]
 
 [[package]]
 name = "lamina-engine"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "chrono",
  "i_overlay",
@@ -3021,7 +3021,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-fonts"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "epaint_default_fonts",
  "harfrust 0.13.3",
@@ -3033,7 +3033,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-format"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "lamina-model",
  "nodalia-lamina-format",
@@ -3044,7 +3044,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-geom"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "kurbo",
  "nodalia-drawingml 0.1.0 (git+https://github.com/getnodalia/foundation?rev=3bb28e2f1f15f61238a40b0fea3922ec56170f8f)",
@@ -3053,7 +3053,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-mcp"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "lamina-engine",
  "lamina-render",
@@ -3063,7 +3063,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-media"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "image",
  "log",
@@ -3076,7 +3076,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-model"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "lamina-color",
  "lamina-geom",
@@ -3088,7 +3088,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-pdf"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "hayro-syntax",
  "krilla",
@@ -3106,7 +3106,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-pptx"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "image",
  "lamina-color",
@@ -3127,7 +3127,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-render"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "image",
  "kurbo",
@@ -3147,7 +3147,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-text"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "chrono",
  "lamina-color",
@@ -3161,7 +3161,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-ui-egui"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "egui",
  "egui_extras",
@@ -3189,7 +3189,7 @@ dependencies = [
 
 [[package]]
 name = "lamina-web"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "eframe",
  "egui",
@@ -3520,7 +3520,7 @@ dependencies = [
 [[package]]
 name = "nodalia-assistant"
 version = "0.1.0-alpha.1"
-source = "git+https://github.com/danielmigueltejedor/nodalia-design?rev=7966cac1e786a14ca7e58b201fa6dd084b39f0a7#7966cac1e786a14ca7e58b201fa6dd084b39f0a7"
+source = "git+https://github.com/danielmigueltejedor/nodalia-design?rev=55ef2eccee0ca0fda67bd1d31bfabb1a82ea098f#55ef2eccee0ca0fda67bd1d31bfabb1a82ea098f"
 dependencies = [
  "egui",
  "keyring",
@@ -3788,7 +3788,7 @@ dependencies = [
 [[package]]
 name = "nodalia-theme"
 version = "0.1.0-alpha.1"
-source = "git+https://github.com/danielmigueltejedor/nodalia-design?rev=7966cac1e786a14ca7e58b201fa6dd084b39f0a7#7966cac1e786a14ca7e58b201fa6dd084b39f0a7"
+source = "git+https://github.com/danielmigueltejedor/nodalia-design?rev=55ef2eccee0ca0fda67bd1d31bfabb1a82ea098f#55ef2eccee0ca0fda67bd1d31bfabb1a82ea098f"
 dependencies = [
  "egui",
 ]
@@ -3825,7 +3825,7 @@ dependencies = [
 [[package]]
 name = "nodalia-update"
 version = "0.1.0-alpha.1"
-source = "git+https://github.com/danielmigueltejedor/nodalia-design?rev=7966cac1e786a14ca7e58b201fa6dd084b39f0a7#7966cac1e786a14ca7e58b201fa6dd084b39f0a7"
+source = "git+https://github.com/danielmigueltejedor/nodalia-design?rev=55ef2eccee0ca0fda67bd1d31bfabb1a82ea098f#55ef2eccee0ca0fda67bd1d31bfabb1a82ea098f"
 dependencies = [
  "egui",
  "serde_json",
@@ -3963,7 +3963,7 @@ version = "0.50.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7957b9740744892f114936ab4a57b3f487491bbeafaf8083688b16841a4240e5"
 dependencies = [
- "windows-sys 0.59.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -4906,7 +4906,7 @@ dependencies = [
  "once_cell",
  "socket2",
  "tracing",
- "windows-sys 0.52.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -5275,7 +5275,7 @@ dependencies = [
  "errno",
  "libc",
  "linux-raw-sys 0.12.1",
- "windows-sys 0.59.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -5334,7 +5334,7 @@ dependencies = [
  "security-framework",
  "security-framework-sys",
  "webpki-root-certs",
- "windows-sys 0.59.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -6354,7 +6354,7 @@ dependencies = [
  "getrandom 0.4.3",
  "once_cell",
  "rustix 1.1.5",
- "windows-sys 0.59.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -7466,7 +7466,7 @@ version = "0.1.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c2a7b1c03c876122aa43f3020e6c3c3ee5c05081c9a00739faf7503aeba10d22"
 dependencies = [
- "windows-sys 0.59.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -8056,7 +8056,7 @@ checksum = "9440ea3e5aeabb0ac63af70daf835274065238cdd0cec83418f417eae38bacee"
 
 [[package]]
 name = "xtask"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "serde_json",
 ]

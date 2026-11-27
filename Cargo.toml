@@ -4,7 +4,7 @@ members = ["crates/*", "apps/*", "xtask"]
 default-members = ["crates/*", "apps/lamina", "apps/lamina-cli"]
 
 [workspace.package]
-version = "0.5.0"
+version = "0.5.1"
 edition = "2024"
 license = "MIT OR Apache-2.0"
 rust-version = "1.95"
@@ -79,10 +79,10 @@ nodalia-csv = { git = "https://github.com/getnodalia/foundation", rev = "91ab24c
 nodalia-print = { git = "https://github.com/getnodalia/foundation", rev = "91ab24c9fe626e44641f8ba42b2557728b114446" }
 nodalia-pdf = { git = "https://github.com/getnodalia/foundation", rev = "46d6d9970a609c064cb7f632477d4cf68c7e4eb0", version = "=0.1.0", default-features = false, features = ["write", "write-simple-text"] }
 # In-app updates from this app's GitHub releases, with the update windows for egui.
-nodalia-update = { git = "https://github.com/danielmigueltejedor/nodalia-design", rev = "7966cac1e786a14ca7e58b201fa6dd084b39f0a7", features = ["egui"] }
+nodalia-update = { git = "https://github.com/danielmigueltejedor/nodalia-design", rev = "55ef2eccee0ca0fda67bd1d31bfabb1a82ea098f", features = ["egui"] }
 # The AI assistant, shared by the office apps (nodalia-design packages/assistant).
-nodalia-assistant = { git = "https://github.com/danielmigueltejedor/nodalia-design", rev = "7966cac1e786a14ca7e58b201fa6dd084b39f0a7", features = ["egui"] }
-nodalia-theme = { git = "https://github.com/danielmigueltejedor/nodalia-design", rev = "7966cac1e786a14ca7e58b201fa6dd084b39f0a7", features = ["egui", "creator"] }
+nodalia-assistant = { git = "https://github.com/danielmigueltejedor/nodalia-design", rev = "55ef2eccee0ca0fda67bd1d31bfabb1a82ea098f", features = ["egui"] }
+nodalia-theme = { git = "https://github.com/danielmigueltejedor/nodalia-design", rev = "55ef2eccee0ca0fda67bd1d31bfabb1a82ea098f", features = ["egui", "creator"] }
 nodalia-ui = { git = "https://github.com/getnodalia/foundation", rev = "46d6d9970a609c064cb7f632477d4cf68c7e4eb0", version = "=0.1.0" }
 i_overlay = "9"
 quick-xml = "0.41"
