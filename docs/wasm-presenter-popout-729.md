@@ -1,6 +1,6 @@
 # WASM presenter-view popout (#729)
 
-Tracks https://github.com/storytold/deckcraft/issues/729 (the reporter moved duplicate #726 here).
+Tracks the presenter-view popout request (the reporter moved duplicate #726 here).
 
 ## Implementation
 

@@ -92,7 +92,7 @@ Detail in [file-format-parity.md](file-format-parity.md).
   outside this repo.
 - **Impact:** the main reason to switch is "open my PowerPoint decks". Fidelity on real decks
   (corporate templates, SmartArt, `chartex` charts, embedded fonts, EMF) is still mostly unknown.
-- **Estimate:** 20–35 h: grow the owned corpus in `storytold/photocraft-corpus` style, add render checks, have the owner open outputs in PowerPoint, fix
+- **Estimate:** 20–35 h: grow the owned corpus in `getnodalia/nodalia-corpus`, add render checks, have the owner open outputs in PowerPoint, fix
   what breaks. **Beta blocker.**
 
 ### Round trip loses media playback options (#74)
