@@ -86,7 +86,7 @@ nodalia-theme = { git = "https://github.com/danielmigueltejedor/nodalia-design",
 nodalia-ui = { git = "https://github.com/getnodalia/foundation", rev = "46d6d9970a609c064cb7f632477d4cf68c7e4eb0", version = "=0.1.0" }
 i_overlay = "9"
 quick-xml = "0.41"
-zip = { version = "3", default-features = false, features = ["deflate"] }
+zip = { version = "9", default-features = false, features = ["deflate"] }
 
 # ui
 egui = { version = "0.37", default-features = false }

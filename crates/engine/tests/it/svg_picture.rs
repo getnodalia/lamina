@@ -83,7 +83,7 @@ fn an_svg_survives_a_pptx_save() {
     let mut slide = String::new();
     for i in 0..archive.len() {
         let mut f = archive.by_index(i).expect("entry");
-        if f.name().starts_with("ppt/slides/slide") && f.name().ends_with(".xml") {
+        if f.name().expect("valid zip entry name").starts_with("ppt/slides/slide") && f.name().expect("valid zip entry name").ends_with(".xml") {
             let mut text = String::new();
             std::io::Read::read_to_string(&mut f, &mut text).expect("read");
             if text.contains("svgBlip") {
